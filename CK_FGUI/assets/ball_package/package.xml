@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="bym47417">
+  <resources>
+    <component id="p3wc0" name="stone_comp.xml" path="/" exported="true"/>
+    <image id="yxoi1" name="stone.png" path="/ball_img/"/>
+    <image id="oktn2" name="高光（叠加_滤色减淡）.png" path="/ball_img/"/>
+    <image id="oktn3" name="阴影（正片叠底_强光）.png" path="/ball_img/"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

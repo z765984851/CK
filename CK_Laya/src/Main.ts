@@ -1,4 +1,5 @@
 import GameConfig from "./GameConfig";
+import { decodeRqstInt, encodeRqstInt, RqstInt } from "./GameLogic/RqstFully";
 class Main {
 	constructor() {
 		//根据IDE设置初始化引擎		
@@ -31,22 +32,14 @@ class Main {
 	onConfigLoaded(): void {
 		//加载IDE指定的场景
 		GameConfig.startScene && Laya.Scene.open(GameConfig.startScene);
-		
+		// let data:RqstInt ={
+		// 	value:5
+		// }
+		// let bytes=encodeRqstInt(data)
+		// console.log(bytes)
 
-		
-		let d = awesomepackage.AwesomeMessage.create();
-		d.awesome_field = 'ddd';
-		console.log("!!!!!!!!!!!",d);
-					
-		//请注意encode是异步的，如果需要即时调用最后一定要加finish()。
-		var buf = awesomepackage.AwesomeMessage.encode(d).finish();
-			
-		//开始解析
-		let proto = awesomepackage.AwesomeMessage.decode(buf);
-		console.log("!!!!!!!!!!! 解析后数据= ",proto);
-    
-
-
+		// let result:number=decodeRqstInt(bytes).value
+		// console.log(result)
 	}
 }
 //激活启动类

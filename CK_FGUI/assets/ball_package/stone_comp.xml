@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="512,512" mask="n2_yxoi">
+  <displayList>
+    <loader id="n1_yxoi" name="skin_loader" xy="0,0" size="512,512" url="ui://bym47417yxoi1"/>
+    <image id="n6_oktn" name="n6" src="oktn3" fileName="ball_img/阴影（正片叠底_强光）.png" xy="106,106" size="300,300"/>
+    <graph id="n2_yxoi" name="ball_mask" xy="106,106" size="300,300" type="eclipse"/>
+  </displayList>
+  <transition name="t0" autoPlayRepeat="-1">
+    <item time="0" type="XY" target="n2_yxoi" tween="true" startValue="174,174" endValue="348,174" duration="24"/>
+    <item time="25" type="XY" target="n2_yxoi" tween="true" startValue="0,174" endValue="348,174" duration="29"/>
+  </transition>
+</component>
