@@ -23,7 +23,7 @@ export class BitConvert {
         this.byte.clear();
         this.byte.writeInt32(int);
         let array:Uint8Array =this.byte.readUint8Array(0,this.byte.length);
-        let result:number[]=[this.byte.length];
+        let result:number[]=new Array(this.byte.length);
         for (let index = 0; index < array.length; index++) {
             const element = array[index];
             result[index]=element;
@@ -36,9 +36,9 @@ export class BitConvert {
     {
 
         this.byte.clear();
-        this.byte.writeUTFString(str);
+        this.byte.writeUTFBytes(str);
         let array:Uint8Array =this.byte.readUint8Array(0,this.byte.length);
-        let result:number[]=[this.byte.length];
+        let result:number[]=new Array(this.byte.length);
         for (let index = 0; index < array.length; index++) {
             const element = array[index];
             result[index]=element;
@@ -50,7 +50,7 @@ export class BitConvert {
     public ByteArrayToNumberArray(arr:Uint8Array):number[]
     {
 
-        let numberArray:number[]=[arr.length];
+        let numberArray:number[]=new Array(arr.length);
         for (let index = 0; index < arr.length; index++) {
             const element = arr[index];
             numberArray[index]=element;

@@ -75,7 +75,7 @@
             this.byte.clear();
             this.byte.writeInt32(int);
             let array = this.byte.readUint8Array(0, this.byte.length);
-            let result = [this.byte.length];
+            let result = new Array(this.byte.length);
             for (let index = 0; index < array.length; index++) {
                 const element = array[index];
                 result[index] = element;
@@ -84,9 +84,9 @@
         }
         StringToByteArray(str) {
             this.byte.clear();
-            this.byte.writeUTFString(str);
+            this.byte.writeUTFBytes(str);
             let array = this.byte.readUint8Array(0, this.byte.length);
-            let result = [this.byte.length];
+            let result = new Array(this.byte.length);
             for (let index = 0; index < array.length; index++) {
                 const element = array[index];
                 result[index] = element;
@@ -94,7 +94,7 @@
             return result;
         }
         ByteArrayToNumberArray(arr) {
-            let numberArray = [arr.length];
+            let numberArray = new Array(arr.length);
             for (let index = 0; index < arr.length; index++) {
                 const element = arr[index];
                 numberArray[index] = element;
@@ -202,26 +202,31 @@
             return new MiniDataDecryptHead(headByte, tailBytes);
         }
         static GetMiniData(dscrptByte, bytesSupplier) {
+            console.log("dscrptByte", dscrptByte);
             let type = (dscrptByte & MiniDataUtil.TYPE_MASK);
+            console.log("type", type);
             let tailLen = -1;
-            let bytes;
+            let bytes = new Array;
             switch (type) {
                 case MiniDataUtil.DATA_TYPE_STR:
                     tailLen = dscrptByte & MiniDataUtil.STR_LEN_MASK;
                     if (tailLen > 0) {
-                        bytes = [tailLen];
-                        bytesSupplier.apply(bytes);
+                        bytes = new Array(tailLen);
+                        bytes = bytesSupplier(bytes);
                         let uint8 = BitConvert.GetInstance().NumberArrayToByte(bytes);
-                        return uint8.getUTFString();
+                        uint8.pos = 0;
+                        return uint8.getUTFBytes(tailLen);
                     }
                     break;
                 case MiniDataUtil.DATA_TYPE_NUM: {
                     tailLen = (dscrptByte & MiniDataUtil.NUM_TYPE_MASK) >>> 4;
+                    console.log("DATA_TYPE_NUM");
                     if (tailLen == 0)
                         return dscrptByte & MiniDataUtil.HEAD_NUM_MASK;
                     else {
-                        bytes = [tailLen];
-                        bytesSupplier.apply(bytes);
+                        bytes = new Array(tailLen);
+                        bytes = bytesSupplier(bytes);
+                        console.log("bytes", bytes);
                         if (tailLen <= 3) {
                             let data = dscrptByte & MiniDataUtil.HEAD_NUM_MASK;
                             for (let i = 0, shift = 4; i < tailLen; i++, shift += 8) {
@@ -232,6 +237,7 @@
                         else {
                             let lte7Bytes = tailLen <= 6;
                             let data = lte7Bytes ? dscrptByte & MiniDataUtil.HEAD_NUM_MASK : 0;
+                            console.log("data", data);
                             for (let i = 0, shift = lte7Bytes ? 4 : 0; i < tailLen; i++, shift += 8) {
                                 data = data | ((bytes[i] & 0xFF) << shift);
                             }
@@ -282,11 +288,166 @@
         }
     }
 
+    class MessageCenter {
+        constructor() {
+        }
+        static GetInstance() {
+            if (this.Instance == null) {
+                this.Instance = new MessageCenter();
+            }
+            return this.Instance;
+        }
+        HandleReceiveMsg(data) {
+            BaseMsgHeadUtil.GetCompressionType(data.Head);
+            let baseType = BaseMsgHeadUtil.GetMsgType(data.Head);
+            let extType = BaseMsgHeadUtil.GetExtendType(data.Head);
+            extType = baseType * 10 + extType;
+            console.log("BaseType:", baseType, " ,ExtType:", extType);
+            switch (baseType) {
+                case MsgType.BIZ_MSG:
+                    this.HandleBizMsg(extType, data);
+                    break;
+                case MsgType.CTRL_HEART_BEAT:
+                    break;
+                case MsgType.CTRL_CONNC_OPEN:
+                    break;
+                case MsgType.CTRL_CONNC_CLOSE:
+                    this.HandleConnectClose(extType, data);
+                    break;
+                case MsgType.CTRL_CUSTOM:
+                    break;
+                case MsgType.ERR_MSG:
+                    this.HandleErrorMsg(extType, data);
+                    break;
+                default:
+                    break;
+            }
+        }
+        HandleBizMsg(extType, data) {
+            let body = data.Body;
+            if (body != null) {
+                let byte = new Laya.Byte();
+                byte.writeArrayBuffer(body);
+                byte.pos = 0;
+                let bytesSupplier = (bytes) => {
+                    let tempBytes = byte.getUint8Array(byte.pos, bytes.length);
+                    return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes);
+                };
+                let msgLength = MiniDataUtil.GetMiniData(byte.getByte(), bytesSupplier);
+                let cmdId = MiniDataUtil.GetMiniData(byte.getByte(), bytesSupplier);
+                let data = byte.getUint8Array(byte.pos, byte.length);
+                console.log(msgLength, cmdId, data);
+                switch (extType) {
+                    case ExtType.BIZ_MSG_EXT_TYPE_UNICAST:
+                        console.log("BIZ_MSG_EXT_TYPE_UNICAST");
+                        break;
+                    case ExtType.BIZ_MSG_EXT_TYPE_BROADCAST:
+                        console.log("BIZ_MSG_EXT_TYPE_BROADCAST");
+                        break;
+                    case ExtType.BIZ_MSG_EXT_TYPE_MULTICAST:
+                        console.log("BIZ_MSG_EXT_TYPE_MULTICAST");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        HandleErrorMsg(extType, data) {
+            let body = data.Body;
+            let errCode = 0;
+            if (body != null) {
+                let byte = new Laya.Byte();
+                byte.writeArrayBuffer(body);
+                byte.pos = 0;
+                let bytesSupplier = (bytes) => {
+                    let tempBytes = byte.getUint8Array(byte.pos, bytes.length);
+                    return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes);
+                };
+                errCode = MiniDataUtil.GetMiniData(byte.getByte(), bytesSupplier);
+                switch (extType) {
+                    case ExtType.ERR_MSG_EXT_TYPE_CODE:
+                        console.log("ERR_MSG_EXT_TYPE_CODE", errCode);
+                        break;
+                    case ExtType.ERR_MSG_EXT_TYPE_CODE_WITH_CAUSE:
+                        let causeCode = MiniDataUtil.GetMiniData(byte.getByte(), bytesSupplier);
+                        console.log("ERR_MSG_EXT_TYPE_CODE_WITH_CAUSE", errCode, causeCode);
+                        break;
+                    case ExtType.ERR_MSG_EXT_TYPE_CODE_WITH_AGENT_ID:
+                        console.log("ERR_MSG_EXT_TYPE_CODE_WITH_AGENT_ID", errCode);
+                        break;
+                    case ExtType.ERR_MSG_EXT_TYPE_CODE_WITH_AGENT_ID_AND_CAUSE:
+                        console.log("ERR_MSG_EXT_TYPE_CODE_WITH_AGENT_ID_AND_CAUSE", errCode);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        HandleConnectClose(extType, data) {
+            let body = data.Body;
+            if (body != null) {
+                let byte = new Laya.Byte();
+                byte.writeArrayBuffer(body);
+                byte.pos = 0;
+                let bytesSupplier = (bytes) => {
+                    let tempBytes = byte.getUint8Array(byte.pos, bytes.length);
+                    return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes);
+                };
+                switch (extType) {
+                    case ExtType.CTRL_CONNC_CLOSE_EXT_TYPE_NO_PARAM:
+                        console.log("CTRL_CONNC_CLOSE_EXT_TYPE_NO_PARAM");
+                        break;
+                    case ExtType.CTRL_CONNC_CLOSE_EXT_TYPE_WITH_CAUSE_CODE:
+                        let causeCode = MiniDataUtil.GetMiniData(byte.getByte(), bytesSupplier);
+                        console.log("CTRL_CONNC_CLOSE_EXT_TYPE_WITH_CAUSE_CODE", causeCode);
+                        break;
+                    default:
+                        break;
+                }
+                SocketClient.GetInstance().SocketClose();
+            }
+        }
+        HandleConnectOpen() {
+            console.log("CTRL_CONNC_OPEN_EXT_TYPE_BASIC");
+        }
+        HandleCustom(extType, data) {
+            let body = data.Body;
+            if (body != null) {
+                let byte = new Laya.Byte();
+                byte.writeArrayBuffer(body);
+                byte.pos = 0;
+                let bytesSupplier = (bytes) => {
+                    let tempBytes = byte.getUint8Array(byte.pos, bytes.length);
+                    return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes);
+                };
+                switch (extType) {
+                    case ExtType.CTRL_CUSTOM_EXT_TYPE_0:
+                        console.log("CTRL_CUSTOM_EXT_TYPE_0");
+                        break;
+                    case ExtType.CTRL_CUSTOM_EXT_TYPE_1:
+                        console.log("CTRL_CUSTOM_EXT_TYPE_1");
+                        break;
+                    case ExtType.CTRL_CUSTOM_EXT_TYPE_2:
+                        console.log("CTRL_CUSTOM_EXT_TYPE_2");
+                        break;
+                    case ExtType.CTRL_CUSTOM_EXT_TYPE_3:
+                        console.log("CTRL_CUSTOM_EXT_TYPE_3");
+                        break;
+                    default:
+                        break;
+                }
+                SocketClient.GetInstance().SocketClose();
+            }
+        }
+    }
+
     class SocketClient {
         constructor() {
             this.Endian = Laya.Byte.BIG_ENDIAN;
             this.socket = new Laya.Socket();
             this.socket.endian = this.Endian;
+            this.byte = new Laya.Byte();
+            this.byte.endian = this.Endian;
             this.socket.on(Laya.Event.OPEN, this, this.OpenHandler);
             this.socket.on(Laya.Event.MESSAGE, this, this.ReceiveHandler);
             this.socket.on(Laya.Event.CLOSE, this, this.CloseHandler);
@@ -314,38 +475,41 @@
             receiveData.Head = byte.getByte();
             receiveData.Length = byte.getInt32();
             receiveData.Body = byte.getUint8Array(byte.pos, byte.length);
-            console.log(receiveData);
+            MessageCenter.GetInstance().HandleReceiveMsg(receiveData);
         }
         CloseHandler(e = null) {
+            console.log("Socket Close");
         }
         ErrorHandler(e = null) {
-            console.log("发送错误", e);
+            console.log("Socket Error", e);
         }
         ShakeHand() {
-            let byte = new Laya.Byte();
-            byte.endian = this.Endian;
+            this.byte.clear();
             let head = BaseMsgHeadUtil.BuildHeadByte(true, MsgType.CTRL_CONNC_OPEN, 0, ExtType.CTRL_CONNC_OPEN_EXT_TYPE_BASIC);
-            byte.writeByte(head);
+            this.byte.writeByte(head);
             var body = MiniDataUtil.GetStringDataDscrpt(BitConvert.GetInstance().StringToByteArray(this.ServerId));
             var bodyLength = 1 + body.GetTailBytes().length;
-            byte.writeInt32(bodyLength);
-            byte.writeByte(body.GetHeadByte());
+            this.byte.writeInt32(bodyLength);
+            this.byte.writeByte(body.GetHeadByte());
             let tailArray = body.GetTailBytes();
             for (let index = 0; index < tailArray.length; index++) {
                 const element = tailArray[index];
-                byte.writeByte(element);
+                this.byte.writeByte(element);
             }
-            console.log(byte);
-            this.socket.send(byte.buffer);
+            console.log(body, this.byte);
+            this.socket.send(this.byte.buffer);
         }
         SendMsg(haveLenField, msgType, cmpType, extType, msg) {
-            let byte = new Laya.Byte;
-            byte.endian = this.Endian;
+            this.byte.clear();
             let head = BaseMsgHeadUtil.BuildHeadByte(haveLenField, msgType, cmpType, extType);
-            byte.writeByte(head);
-            byte.writeInt32(msg.length);
-            byte.writeArrayBuffer(msg);
-            this.socket.send(byte.buffer);
+            this.byte.writeByte(head);
+            this.byte.writeInt32(msg.length);
+            this.byte.writeArrayBuffer(msg);
+            this.socket.send(this.byte.buffer);
+        }
+        SocketClose() {
+            this.socket.cleanSocket();
+            this.socket.close();
         }
     }
     class ReceiveData {

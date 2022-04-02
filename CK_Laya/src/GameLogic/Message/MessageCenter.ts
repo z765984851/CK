@@ -38,10 +38,11 @@ export class MessageCenter {
             
                 break;
             case MsgType.CTRL_CONNC_OPEN:
-            
+                 
                 break;
             case MsgType.CTRL_CONNC_CLOSE:
             
+                this.HandleConnectClose(extType,data)
                 break;
             case MsgType.CTRL_CUSTOM:
             
@@ -65,16 +66,32 @@ export class MessageCenter {
             let byte = new Laya.Byte();
             byte.writeArrayBuffer(body);
             byte.pos=0;
-            function bytesSupplier(bytes) {
+            let bytesSupplier=(bytes)=>{
                 let tempBytes= byte.getUint8Array(byte.pos,bytes.length)
-                bytes=BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes)
-            }
+                return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes)
+            };
             let msgLength=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier)
             let cmdId=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier)
             let data=byte.getUint8Array(byte.pos,byte.length)
 
             console.log( msgLength,cmdId,data );
-            
+            switch (extType) {
+                case ExtType.BIZ_MSG_EXT_TYPE_UNICAST:
+                    console.log("BIZ_MSG_EXT_TYPE_UNICAST");
+                    
+                    break;
+                case ExtType.BIZ_MSG_EXT_TYPE_BROADCAST:
+                    console.log("BIZ_MSG_EXT_TYPE_BROADCAST");
+                    break;
+
+                case ExtType.BIZ_MSG_EXT_TYPE_MULTICAST:
+                    console.log("BIZ_MSG_EXT_TYPE_MULTICAST");
+                    break;
+
+               
+                default:
+                    break;
+            }
 
         }
 
@@ -83,15 +100,17 @@ export class MessageCenter {
     private HandleErrorMsg(extType:ExtType,data:ReceiveData) {
         let body=data.Body;
         let errCode=0;
+        
        
+        
         if (body!=null) {
             let byte = new Laya.Byte();
             byte.writeArrayBuffer(body);
             byte.pos=0;
-            function bytesSupplier(bytes) {
+            let bytesSupplier=(bytes)=>{
                 let tempBytes= byte.getUint8Array(byte.pos,bytes.length)
-                bytes=BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes)
-            }
+                return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes)
+            };
             errCode=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier)
             switch (extType) {
                 case ExtType.ERR_MSG_EXT_TYPE_CODE:
@@ -99,7 +118,8 @@ export class MessageCenter {
                     
                     break;
                 case ExtType.ERR_MSG_EXT_TYPE_CODE_WITH_CAUSE:
-                    console.log("ERR_MSG_EXT_TYPE_CODE_WITH_CAUSE",errCode);
+                    let causeCode=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier)
+                    console.log("ERR_MSG_EXT_TYPE_CODE_WITH_CAUSE",errCode,causeCode);
                     break;
 
                 case ExtType.ERR_MSG_EXT_TYPE_CODE_WITH_AGENT_ID:
@@ -125,10 +145,10 @@ export class MessageCenter {
             let byte = new Laya.Byte();
             byte.writeArrayBuffer(body);
             byte.pos=0;
-            function bytesSupplier(bytes) {
+            let bytesSupplier=(bytes)=>{
                 let tempBytes= byte.getUint8Array(byte.pos,bytes.length)
-                bytes=BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes)
-            }
+                return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes)
+            };
           
             switch (extType) {
                 case ExtType.CTRL_CONNC_CLOSE_EXT_TYPE_NO_PARAM:
@@ -139,6 +159,58 @@ export class MessageCenter {
                     let causeCode=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier);
                     console.log("CTRL_CONNC_CLOSE_EXT_TYPE_WITH_CAUSE_CODE",causeCode);
                     break;
+             
+                default:
+                    break;
+            }
+            
+            SocketClient.GetInstance().SocketClose();
+
+           
+            
+        }
+
+    }
+
+
+    private HandleConnectOpen() {
+        //trigger -103 event
+
+        console.log("CTRL_CONNC_OPEN_EXT_TYPE_BASIC");
+        
+    }
+
+    private HandleCustom(extType:ExtType,data:ReceiveData) {
+        let body=data.Body;
+      
+        if (body!=null) {
+            let byte = new Laya.Byte();
+            byte.writeArrayBuffer(body);
+            byte.pos=0;
+            let bytesSupplier=(bytes)=>{
+                let tempBytes= byte.getUint8Array(byte.pos,bytes.length)
+                return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes)
+            };
+          
+            switch (extType) {
+                case ExtType.CTRL_CUSTOM_EXT_TYPE_0:
+                    console.log("CTRL_CUSTOM_EXT_TYPE_0");
+                    
+                    break;
+                case ExtType.CTRL_CUSTOM_EXT_TYPE_1:
+                   
+                    console.log("CTRL_CUSTOM_EXT_TYPE_1");
+                    break;
+                case ExtType.CTRL_CUSTOM_EXT_TYPE_2:
+                    
+                    console.log("CTRL_CUSTOM_EXT_TYPE_2");
+                   
+                    break;
+                case ExtType.CTRL_CUSTOM_EXT_TYPE_3:
+                    
+                    console.log("CTRL_CUSTOM_EXT_TYPE_3");
+                    
+                    break;    
              
                 default:
                     break;

@@ -1,4 +1,5 @@
 
+
 import { SocketClient } from "../Message/SocketClient";
 export default class GameManager extends Laya.Script {
 
@@ -13,6 +14,13 @@ export default class GameManager extends Laya.Script {
         SocketClient.GetInstance().Port=8088;
         SocketClient.GetInstance().Connect();
         
-        // SocketClient.GetInstance().ShakeHand()
+        // let bytes=new Laya.Byte()
+        // bytes.writeUTFString("aaaaaaa");
+        // console.log(bytes);
+        // bytes.pos=0;
+        // // let number=bytes.getUint8Array(0,bytes.length);
+        // // console.log(number);
+        // console.log(bytes.getUTFString());
+        
     }
 }

@@ -42,29 +42,7 @@ export class MiniDataUtil {
 		return new MiniDataDecryptHead(ret, strBytes);
 	}
 
-	// public static GetNumDataDscrptHead(uuidNum:number):MiniDataDecryptHead {
-	// 	// if (uuidNum instanceof Number) {
-	// 	// 	return getIntDataDscrptHead(uuidNum.intValue());
-	// 	// } else if (uuidNum instanceof Long) {
-	// 	// 	return getLongDataDscrptHead(uuidNum.longValue());
-	// 	// } else if (uuidNum instanceof Short) {
-	// 	// 	return getShortDataDscrptHead(uuidNum.shortValue());
-	// 	// } else if (uuidNum instanceof Byte) {
-	// 	// 	return getByteDataDscrptHead(uuidNum.byteValue());
-	// 	// } else {
-	// 	// 	throw new RuntimeException("unsupport type " + uuidNum.getClass().getName());
-	// 	// }
-    //     return ;
-	// }
-
-	// public static GetByteDataDscrptHead( num:number):MiniDataDecryptHead {
-	// 	return MiniDataUtil.GetNumDataDscrptHead(0xFF & num);
-	// }
-
-	// public static  GetShortDataDscrptHead(num:number):MiniDataDecryptHead {
-	// 	return MiniDataUtil.GetNumDataDscrptHead(0xFFFF & num);
-	// }
-
+	
 	public static  GetIntDataDscrptHead(num:number):MiniDataDecryptHead {
 		if (num < 0)
 			throw new console.error("only support positive data");
@@ -135,26 +113,36 @@ export class MiniDataUtil {
 
 
 	public static  GetMiniData ( dscrptByte:number, bytesSupplier:Function):any {
+		console.log("dscrptByte",dscrptByte);
+		
 		let type:number = (dscrptByte & MiniDataUtil.TYPE_MASK);
+		console.log("type",type);
 		let tailLen :number = -1;
-		let bytes:number[];
+		
+		let bytes:number[] = new Array;
 		switch (type) {
 		case MiniDataUtil.DATA_TYPE_STR:
 			tailLen = dscrptByte & MiniDataUtil.STR_LEN_MASK;
 			if (tailLen > 0) {
-				bytes = [tailLen];
-				bytesSupplier.apply(bytes);
+				bytes = new Array(tailLen);
+				bytes=bytesSupplier(bytes);		
 				let uint8=BitConvert.GetInstance().NumberArrayToByte(bytes);
-				return uint8.getUTFString();
+				uint8.pos=0;
+				return uint8.getUTFBytes(tailLen);
 			}
 			break;
 		case MiniDataUtil.DATA_TYPE_NUM: {
+			
+			
 			tailLen = (dscrptByte & MiniDataUtil.NUM_TYPE_MASK) >>> 4;
+			console.log("DATA_TYPE_NUM");
 			if (tailLen == 0)
 				return dscrptByte & MiniDataUtil.HEAD_NUM_MASK;
 			else {
-				bytes = [tailLen];
-				bytesSupplier.apply(bytes);
+				bytes = new Array(tailLen);
+
+				bytes= bytesSupplier(bytes);
+				console.log("bytes",bytes);
 				if (tailLen <= 3) {
 					let data : number = dscrptByte & MiniDataUtil.HEAD_NUM_MASK;
 
@@ -165,6 +153,7 @@ export class MiniDataUtil {
 				} else {
 					let lte7Bytes:boolean = tailLen <= 6;
 					let data:number = lte7Bytes ? dscrptByte & MiniDataUtil.HEAD_NUM_MASK : 0;
+					console.log("data",data);
 					for (let i = 0, shift = lte7Bytes ? 4 : 0; i < tailLen; i++, shift += 8) {
 						data = data | ((bytes[i] & 0xFF) << shift);
 					}

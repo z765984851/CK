@@ -13,8 +13,9 @@ export class SocketClient
     private socket:Laya.Socket;
     private static Instance:SocketClient;
     
-    private Endian:string=Laya.Byte.BIG_ENDIAN
-   
+    private Endian:string=Laya.Byte.BIG_ENDIAN;
+    
+    private byte:Laya.Byte;
 
     public static GetInstance():SocketClient
     {
@@ -31,6 +32,10 @@ export class SocketClient
 
         this.socket = new Laya.Socket();
         this.socket.endian = this.Endian;
+
+        this.byte=new Laya.Byte();
+        this.byte.endian=this.Endian;
+
         this.socket.on(Laya.Event.OPEN, this, this.OpenHandler);
         this.socket.on(Laya.Event.MESSAGE, this, this.ReceiveHandler);
         this.socket.on(Laya.Event.CLOSE, this, this.CloseHandler);
@@ -64,8 +69,8 @@ export class SocketClient
         receiveData.Head=byte.getByte();
         receiveData.Length=byte.getInt32();
         receiveData.Body=byte.getUint8Array(byte.pos,byte.length)
-        console.log(receiveData)
-        // MessageCenter.GetInstance().HandleReceiveMsg(receiveData)
+        // console.log(receiveData)
+        MessageCenter.GetInstance().HandleReceiveMsg(receiveData)
         
     }
     private CloseHandler(e: any = null): void {
@@ -78,29 +83,25 @@ export class SocketClient
 
     public ShakeHand():void{
 
-        let byte:Laya.Byte=new Laya.Byte();
-        byte.endian=this.Endian;
+        this.byte.clear();
         // write head
         let head=BaseMsgHeadUtil.BuildHeadByte(true, MsgType.CTRL_CONNC_OPEN, 0, ExtType.CTRL_CONNC_OPEN_EXT_TYPE_BASIC)
-        byte.writeByte(head);
+        this.byte.writeByte(head);
         
 
 		var body = MiniDataUtil.GetStringDataDscrpt(BitConvert.GetInstance().StringToByteArray(this.ServerId));
 		var bodyLength = 1 + body.GetTailBytes().length;
 
-        byte.writeInt32(bodyLength)
+        this.byte.writeInt32(bodyLength)
         
-        byte.writeByte(body.GetHeadByte())
-        
+        this.byte.writeByte(body.GetHeadByte())
         let tailArray=body.GetTailBytes()
         for (let index = 0; index < tailArray.length; index++) {
             const element = tailArray[index];
-            byte.writeByte(element)
-        }
-
-        console.log(byte);
-        
-        this.socket.send(byte.buffer);
+            this.byte.writeByte(element)
+        }  
+        console.log(body,this.byte);
+        this.socket.send(this.byte.buffer);
 
     }
 
@@ -109,19 +110,19 @@ export class SocketClient
     public SendMsg(haveLenField:boolean, msgType:MsgType, cmpType:number, extType:ExtType,  msg:number[])
     {
 
-        let byte:Laya.Byte=new Laya.Byte;
-        byte.endian=this.Endian;
+        
+        this.byte.clear()
         //write head
         let head=BaseMsgHeadUtil.BuildHeadByte(haveLenField, msgType, cmpType, extType)
-        byte.writeByte(head);
+        this.byte.writeByte(head);
         //write msg length
-        byte.writeInt32(msg.length);
+        this.byte.writeInt32(msg.length);
         //?
-        byte.writeArrayBuffer(msg);
+        this.byte.writeArrayBuffer(msg);
        
         // console.log(byte);
         
-        this.socket.send(byte.buffer);
+        this.socket.send(this.byte.buffer);
 
 
     }
