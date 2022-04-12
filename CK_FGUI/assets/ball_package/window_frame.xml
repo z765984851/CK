@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="800,450">
+  <displayList>
+    <graph id="n2_kv2p" name="background" xy="0,0" size="800,450" type="rect" fillColor="#ff999999"/>
+  </displayList>
+</component>

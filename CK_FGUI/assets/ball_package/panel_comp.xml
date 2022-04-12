@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1600,900">
+  <displayList>
+    <graph id="n1_kv2p" name="background" xy="0,0" size="1600,900" type="rect" fillColor="#ff999999"/>
+    <component id="n0_kv2p" name="openwindow_btn" src="kv2p6" fileName="Button1.xml" xy="580,328" size="450,93">
+      <Button title="OpenWindow"/>
+    </component>
+  </displayList>
+</component>

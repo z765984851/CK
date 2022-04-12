@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <packageDescription id="bym47417">
   <resources>
-    <component id="p3wc0" name="stone_comp.xml" path="/" exported="true"/>
-    <image id="yxoi1" name="stone.png" path="/ball_img/"/>
-    <image id="oktn2" name="高光（叠加_滤色减淡）.png" path="/ball_img/"/>
-    <image id="oktn3" name="阴影（正片叠底_强光）.png" path="/ball_img/"/>
+    <component id="kv2p4" name="panel_comp.xml" path="/" exported="true"/>
+    <component id="kv2p5" name="window_comp.xml" path="/" exported="true"/>
+    <component id="kv2p6" name="Button1.xml" path="/"/>
+    <component id="kv2p7" name="window_frame.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

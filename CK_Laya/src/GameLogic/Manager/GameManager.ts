@@ -1,6 +1,9 @@
 
 
 
+
+import { CK_UIType } from "../FGUI/CK_FGUIConfig";
+import { FGUIManager } from "./FGUIManager";
 import { SceneManager, SceneType } from "./SceneManager";
 export default class GameManager extends Laya.Script {
 
@@ -17,15 +20,22 @@ export default class GameManager extends Laya.Script {
         // SocketClient.GetInstance().Connect();
 
 
-        SceneManager.GetInstance().LoadScene3D(SceneType.GameScene,Laya.Handler.create(this,()=>{
-            SceneManager.GetInstance().ChangeScene3D(SceneType.GameScene);
-        }));
-        
-        
+        // SceneManager.GetInstance().LoadScene3D(SceneType.GameScene,Laya.Handler.create(this,()=>{
+        //     SceneManager.GetInstance().ChangeScene3D(SceneType.GameScene);
 
+           
+             
+        // }));
+        
+        
+        FGUIManager.GetInstance().Init();
+
+        FGUIManager.GetInstance().OpenUI(CK_UIType.PanelExample,()=>{},null)
+      
        
     }
 
+   
     
 }
 
