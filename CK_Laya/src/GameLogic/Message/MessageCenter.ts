@@ -27,7 +27,7 @@ export class MessageCenter {
 	   let extType:ExtType = BaseMsgHeadUtil.GetExtendType(data.Head);
 	   extType = baseType * 10 + extType;
 
-       console.log("BaseType:",baseType," ,ExtType:",extType);
+       console.log("ReceiveMsg","BaseType:",baseType," ,ExtType:",extType);
       
     
        switch (baseType) { 
@@ -38,14 +38,14 @@ export class MessageCenter {
             
                 break;
             case MsgType.CTRL_CONNC_OPEN:
-                 
+                SocketClient.GetInstance().Regular();
                 break;
             case MsgType.CTRL_CONNC_CLOSE:
             
                 this.HandleConnectClose(extType,data)
                 break;
             case MsgType.CTRL_CUSTOM:
-            
+                this.HandleCustom(extType,data)
                 break;
             case MsgType.ERR_MSG:
                 this.HandleErrorMsg(extType,data)
@@ -74,11 +74,11 @@ export class MessageCenter {
             let cmdId=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier)
             let data=byte.getUint8Array(byte.pos,byte.length)
 
-            console.log( msgLength,cmdId,data );
+            // console.log( msgLength,cmdId,data );
             switch (extType) {
                 case ExtType.BIZ_MSG_EXT_TYPE_UNICAST:
-                    console.log("BIZ_MSG_EXT_TYPE_UNICAST");
-                    
+
+                    Laya.stage.event(cmdId,data)
                     break;
                 case ExtType.BIZ_MSG_EXT_TYPE_BROADCAST:
                     console.log("BIZ_MSG_EXT_TYPE_BROADCAST");

@@ -1,5 +1,4 @@
 import GameConfig from "./GameConfig";
-import { decodeRqstInt, encodeRqstInt, RqstInt } from "./GameLogic/RqstFully";
 class Main {
 	constructor() {
 		//根据IDE设置初始化引擎		

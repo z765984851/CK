@@ -1,0 +1,10 @@
+syntax="proto3";
+
+package RespXY;
+
+message RespXY {  
+// x坐标
+ sint32 x=1;
+// y坐标
+ sint32 y=2;
+}

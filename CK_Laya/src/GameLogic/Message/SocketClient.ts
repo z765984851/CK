@@ -46,39 +46,65 @@ export class SocketClient
     public Connect()
     {
         this.socket.connect(this.IP,this.Port);
-        // this.socket.connectByUrl("ws://192.168.10.26:8088")
     }
 
     private OpenHandler(event: any = null): void {
         //send shake hand
-        // this.socket.send("hello");
         this.ShakeHand();
     
 
     }
+    
     private ReceiveHandler(msg: any = null): void {
        
         let buffer:ArrayBuffer=msg;
         let byte=new Laya.Byte();
         byte.writeArrayBuffer(buffer);
-        console.log(byte)
 
         let receiveData=new ReceiveData();
         //nessary !!! must to set pos =0 
         byte.pos=0;
+        console.log("ReceiveHandler",byte)
         receiveData.Head=byte.getByte();
-        receiveData.Length=byte.getInt32();
-        receiveData.Body=byte.getUint8Array(byte.pos,byte.length)
-        // console.log(receiveData)
+        if (BaseMsgHeadUtil.HaveLenField(receiveData.Head)) {
+            receiveData.Length=byte.getInt32();
+        }
+        receiveData.Body=byte.getUint8Array(byte.pos,byte.length) 
         MessageCenter.GetInstance().HandleReceiveMsg(receiveData)
         
     }
+
     private CloseHandler(e: any = null): void {
         console.log("Socket Close");
     }
+
     private ErrorHandler(e: any = null): void {
         console.log("Socket Error",e)
         
+    }
+
+
+    public SendMsg(haveLenField:boolean, msgType:MsgType, cmpType:number, extType:ExtType,  msg:number[])
+    {
+
+        
+        this.byte.clear()
+        //write head
+        let head=BaseMsgHeadUtil.BuildHeadByte(haveLenField, msgType, cmpType, extType)
+        this.byte.writeByte(head);
+        //write msg length
+        this.byte.writeInt32(msg.length);
+        //?
+        for (let index = 0; index < msg.length; index++) {
+            const element = msg[index];
+            this.byte.writeByte(element);
+        }
+       
+        console.log("Send Msg",this.byte);
+        
+        this.socket.send(this.byte.buffer);
+
+
     }
 
     public ShakeHand():void{
@@ -100,32 +126,39 @@ export class SocketClient
             const element = tailArray[index];
             this.byte.writeByte(element)
         }  
-        console.log(body,this.byte);
+        console.log("Send ShakeHand",this.byte);
+        
         this.socket.send(this.byte.buffer);
 
     }
 
+    public Regular():void{
 
+        this.byte.clear();
+        this.byte.pos=0;
+        let uid=123;
+        // write head
+        let msg = uid + "#" + this.ServerId + "#" + "accessToken" + "#" + "refreshToken";
 
-    public SendMsg(haveLenField:boolean, msgType:MsgType, cmpType:number, extType:ExtType,  msg:number[])
-    {
+        let msgByteArray=BitConvert.GetInstance().StringToByteArray(msg);
+        let msgHead=MiniDataUtil.GetStringDataDscrpt(msgByteArray);
+    
 
-        
-        this.byte.clear()
-        //write head
-        let head=BaseMsgHeadUtil.BuildHeadByte(haveLenField, msgType, cmpType, extType)
-        this.byte.writeByte(head);
-        //write msg length
-        this.byte.writeInt32(msg.length);
-        //?
-        this.byte.writeArrayBuffer(msg);
+        this.byte.writeByte(msgHead.GetHeadByte());
+        let tailBytes=msgHead.GetTailBytes();
+        for (let index = 0; index < tailBytes.length; index++) {
+            const element = tailBytes[index];
+            this.byte.writeByte(element)
+        }
        
-        // console.log(byte);
+        let msgArray=BitConvert.GetInstance().ByteArrayToNumberArray(this.byte.getUint8Array(0,this.byte.length));
+        console.log("Send Regular",msgArray);
+        this.SendMsg(true,MsgType.CTRL_CUSTOM,0,ExtType.CTRL_CUSTOM_EXT_TYPE_0,msgArray);
         
-        this.socket.send(this.byte.buffer);
-
 
     }
+
+   
 
     public SocketClose(){
         this.socket.cleanSocket();

@@ -113,10 +113,9 @@ export class MiniDataUtil {
 
 
 	public static  GetMiniData ( dscrptByte:number, bytesSupplier:Function):any {
-		console.log("dscrptByte",dscrptByte);
 		
 		let type:number = (dscrptByte & MiniDataUtil.TYPE_MASK);
-		console.log("type",type);
+
 		let tailLen :number = -1;
 		
 		let bytes:number[] = new Array;

@@ -6,33 +6,34 @@ var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.ut
 // Exported root namespace
 var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
-$root.awesomepackage = (function() {
+$root.RespXY = (function() {
 
     /**
-     * Namespace awesomepackage.
-     * @exports awesomepackage
+     * Namespace RespXY.
+     * @exports RespXY
      * @namespace
      */
-    var awesomepackage = {};
+    var RespXY = {};
 
-    awesomepackage.AwesomeMessage = (function() {
+    RespXY.RespXY = (function() {
 
         /**
-         * Properties of an AwesomeMessage.
-         * @memberof awesomepackage
-         * @interface IAwesomeMessage
-         * @property {string|null} [awesome_field] AwesomeMessage awesome_field
+         * Properties of a RespXY.
+         * @memberof RespXY
+         * @interface IRespXY
+         * @property {number|null} [x] RespXY x
+         * @property {number|null} [y] RespXY y
          */
 
         /**
-         * Constructs a new AwesomeMessage.
-         * @memberof awesomepackage
-         * @classdesc Represents an AwesomeMessage.
-         * @implements IAwesomeMessage
+         * Constructs a new RespXY.
+         * @memberof RespXY
+         * @classdesc Represents a RespXY.
+         * @implements IRespXY
          * @constructor
-         * @param {awesomepackage.IAwesomeMessage=} [properties] Properties to set
+         * @param {RespXY.IRespXY=} [properties] Properties to set
          */
-        function AwesomeMessage(properties) {
+        function RespXY(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -40,75 +41,88 @@ $root.awesomepackage = (function() {
         }
 
         /**
-         * AwesomeMessage awesome_field.
-         * @member {string} awesome_field
-         * @memberof awesomepackage.AwesomeMessage
+         * RespXY x.
+         * @member {number} x
+         * @memberof RespXY.RespXY
          * @instance
          */
-        AwesomeMessage.prototype.awesome_field = "";
+        RespXY.prototype.x = 0;
 
         /**
-         * Creates a new AwesomeMessage instance using the specified properties.
-         * @function create
-         * @memberof awesomepackage.AwesomeMessage
-         * @static
-         * @param {awesomepackage.IAwesomeMessage=} [properties] Properties to set
-         * @returns {awesomepackage.AwesomeMessage} AwesomeMessage instance
+         * RespXY y.
+         * @member {number} y
+         * @memberof RespXY.RespXY
+         * @instance
          */
-        AwesomeMessage.create = function create(properties) {
-            return new AwesomeMessage(properties);
+        RespXY.prototype.y = 0;
+
+        /**
+         * Creates a new RespXY instance using the specified properties.
+         * @function create
+         * @memberof RespXY.RespXY
+         * @static
+         * @param {RespXY.IRespXY=} [properties] Properties to set
+         * @returns {RespXY.RespXY} RespXY instance
+         */
+        RespXY.create = function create(properties) {
+            return new RespXY(properties);
         };
 
         /**
-         * Encodes the specified AwesomeMessage message. Does not implicitly {@link awesomepackage.AwesomeMessage.verify|verify} messages.
+         * Encodes the specified RespXY message. Does not implicitly {@link RespXY.RespXY.verify|verify} messages.
          * @function encode
-         * @memberof awesomepackage.AwesomeMessage
+         * @memberof RespXY.RespXY
          * @static
-         * @param {awesomepackage.IAwesomeMessage} message AwesomeMessage message or plain object to encode
+         * @param {RespXY.IRespXY} message RespXY message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        AwesomeMessage.encode = function encode(message, writer) {
+        RespXY.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.awesome_field != null && message.hasOwnProperty("awesome_field"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.awesome_field);
+            if (message.x != null && message.hasOwnProperty("x"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.x);
+            if (message.y != null && message.hasOwnProperty("y"))
+                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.y);
             return writer;
         };
 
         /**
-         * Encodes the specified AwesomeMessage message, length delimited. Does not implicitly {@link awesomepackage.AwesomeMessage.verify|verify} messages.
+         * Encodes the specified RespXY message, length delimited. Does not implicitly {@link RespXY.RespXY.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof awesomepackage.AwesomeMessage
+         * @memberof RespXY.RespXY
          * @static
-         * @param {awesomepackage.IAwesomeMessage} message AwesomeMessage message or plain object to encode
+         * @param {RespXY.IRespXY} message RespXY message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        AwesomeMessage.encodeDelimited = function encodeDelimited(message, writer) {
+        RespXY.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes an AwesomeMessage message from the specified reader or buffer.
+         * Decodes a RespXY message from the specified reader or buffer.
          * @function decode
-         * @memberof awesomepackage.AwesomeMessage
+         * @memberof RespXY.RespXY
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {awesomepackage.AwesomeMessage} AwesomeMessage
+         * @returns {RespXY.RespXY} RespXY
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        AwesomeMessage.decode = function decode(reader, length) {
+        RespXY.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.awesomepackage.AwesomeMessage();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.RespXY.RespXY();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.awesome_field = reader.string();
+                    message.x = reader.sint32();
+                    break;
+                case 2:
+                    message.y = reader.sint32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -119,40 +133,43 @@ $root.awesomepackage = (function() {
         };
 
         /**
-         * Decodes an AwesomeMessage message from the specified reader or buffer, length delimited.
+         * Decodes a RespXY message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof awesomepackage.AwesomeMessage
+         * @memberof RespXY.RespXY
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {awesomepackage.AwesomeMessage} AwesomeMessage
+         * @returns {RespXY.RespXY} RespXY
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        AwesomeMessage.decodeDelimited = function decodeDelimited(reader) {
+        RespXY.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies an AwesomeMessage message.
+         * Verifies a RespXY message.
          * @function verify
-         * @memberof awesomepackage.AwesomeMessage
+         * @memberof RespXY.RespXY
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        AwesomeMessage.verify = function verify(message) {
+        RespXY.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.awesome_field != null && message.hasOwnProperty("awesome_field"))
-                if (!$util.isString(message.awesome_field))
-                    return "awesome_field: string expected";
+            if (message.x != null && message.hasOwnProperty("x"))
+                if (!$util.isInteger(message.x))
+                    return "x: integer expected";
+            if (message.y != null && message.hasOwnProperty("y"))
+                if (!$util.isInteger(message.y))
+                    return "y: integer expected";
             return null;
         };
 
-        return AwesomeMessage;
+        return RespXY;
     })();
 
-    return awesomepackage;
+    return RespXY;
 })();

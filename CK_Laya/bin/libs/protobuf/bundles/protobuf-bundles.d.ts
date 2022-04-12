@@ -1,71 +1,77 @@
 type Long = protobuf.Long;
 
-/** Namespace awesomepackage. */
-declare namespace awesomepackage {
+/** Namespace RespXY. */
+declare namespace RespXY {
 
-    /** Properties of an AwesomeMessage. */
-    interface IAwesomeMessage {
+    /** Properties of a RespXY. */
+    interface IRespXY {
 
-        /** AwesomeMessage awesome_field */
-        awesome_field?: (string|null);
+        /** RespXY x */
+        x?: (number|null);
+
+        /** RespXY y */
+        y?: (number|null);
     }
 
-    /** Represents an AwesomeMessage. */
-    class AwesomeMessage implements IAwesomeMessage {
+    /** Represents a RespXY. */
+    class RespXY implements IRespXY {
 
         /**
-         * Constructs a new AwesomeMessage.
+         * Constructs a new RespXY.
          * @param [properties] Properties to set
          */
-        constructor(properties?: awesomepackage.IAwesomeMessage);
+        constructor(properties?: RespXY.IRespXY);
 
-        /** AwesomeMessage awesome_field. */
-        public awesome_field: string;
+        /** RespXY x. */
+        public x: number;
+
+        /** RespXY y. */
+        public y: number;
 
         /**
-         * Creates a new AwesomeMessage instance using the specified properties.
+         * Creates a new RespXY instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns AwesomeMessage instance
+         * @returns RespXY instance
          */
-        public static create(properties?: awesomepackage.IAwesomeMessage): awesomepackage.AwesomeMessage;
+        public static create(properties?: RespXY.IRespXY): RespXY.RespXY;
 
         /**
-         * Encodes the specified AwesomeMessage message. Does not implicitly {@link awesomepackage.AwesomeMessage.verify|verify} messages.
-         * @param message AwesomeMessage message or plain object to encode
+         * Encodes the specified RespXY message. Does not implicitly {@link RespXY.RespXY.verify|verify} messages.
+         * @param message RespXY message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: awesomepackage.IAwesomeMessage, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: RespXY.IRespXY, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified AwesomeMessage message, length delimited. Does not implicitly {@link awesomepackage.AwesomeMessage.verify|verify} messages.
-         * @param message AwesomeMessage message or plain object to encode
+         * Encodes the specified RespXY message, length delimited. Does not implicitly {@link RespXY.RespXY.verify|verify} messages.
+         * @param message RespXY message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: awesomepackage.IAwesomeMessage, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: RespXY.IRespXY, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes an AwesomeMessage message from the specified reader or buffer.
+         * Decodes a RespXY message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns AwesomeMessage
+         * @returns RespXY
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): awesomepackage.AwesomeMessage;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): RespXY.RespXY;
 
         /**
-         * Decodes an AwesomeMessage message from the specified reader or buffer, length delimited.
+         * Decodes a RespXY message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns AwesomeMessage
+         * @returns RespXY
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): awesomepackage.AwesomeMessage;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): RespXY.RespXY;
 
         /**
-         * Verifies an AwesomeMessage message.
+         * Verifies a RespXY message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */

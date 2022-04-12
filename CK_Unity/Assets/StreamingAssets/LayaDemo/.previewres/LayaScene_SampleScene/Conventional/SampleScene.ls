@@ -110,7 +110,7 @@
 					"isStatic":false,
 					"layer":0,
 					"position":[
-						0,
+						-2.31,
 						3,
 						0
 					],
