@@ -2,9 +2,6 @@
 <component size="800,450">
   <displayList>
     <component id="n3_kv2p" name="frame" src="kv2p7" fileName="window_frame.xml" xy="0,0"/>
-    <component id="n0_kv2p" name="closeButton" src="kv2p6" fileName="Button1.xml" xy="750,12" size="35,40">
-      <Button title="X"/>
-    </component>
     <component id="n4_kv2p" name="open_btn" src="kv2p6" fileName="Button1.xml" xy="252,198" size="325,89">
       <Button title="open new window"/>
     </component>

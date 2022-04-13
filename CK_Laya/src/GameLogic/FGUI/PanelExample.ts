@@ -1,14 +1,17 @@
+import { CK_EventCode } from "../CK_EventCode";
+import { FGUIManager } from "../Manager/FGUIManager";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "./CK_FGUIConfig";
 
 
 export class PanelExample  implements FGUIBase 
 {
+     
     
      Config:CK_UIConfig;
      IsInitFinish: boolean=false;
      Content: fgui.GComponent;
      ID: number= 0;
-     UIType: any = CK_UIType.PanelExample;
+     UIType: CK_UIType = CK_UIType.PanelExample;
      private packagePath;
 
      private testBtn:fgui.GButton;
@@ -21,16 +24,12 @@ export class PanelExample  implements FGUIBase
             this.Config=CK_FGUIConfig.GetInstance().Config.get(this.UIType);
             this.packagePath=`res/fguipackage/${this.Config.PackageName}/${this.Config.PackageName}`
             fgui.UIPackage.addPackage(this.packagePath);
-            this.Content=fgui.UIPackage.createObject(this.Config.PackageName,this.Config.ComponentName) as fgui.GComponent;
+            this.Content=fgui.UIPackage.createObject(this.Config.PackageName,this.Config.ComponentName).asCom;
             fgui.GRoot.inst.addChild(this.Content);
             this.Content.makeFullScreen();
             this.InitComp();
             this.BindEvent();
             this.Close();
-
-            console.log(this.Config.PackageName,"Init finish");
-            
-
             this.IsInitFinish=true;               
             
 
@@ -40,25 +39,29 @@ export class PanelExample  implements FGUIBase
 
 
      Show(args? : any) {
-        if (this.Content!=null) {
-            this.Content.visible=true;
+        this.SetVisible(true);
 
-        }
      }
 
-     Hide() {
-       
-        if (this.Content!=null) {
-            this.Content.visible=false;
-        }
-        
-     }
+     Close() 
+     {
 
-     Close() {
-
-        this.Content?.dispose()
+        this.SetVisible(false);
         this.ID=0;
+        Laya.stage.event(CK_EventCode.PanelDestroy,this.ID);
      }
+
+
+     SetVisible(visible: boolean)
+     {
+
+         if (this.Content!=null) {
+            this.Content.visible=visible;
+
+         }   
+     }
+     
+    
 
      Destroy() {
 
@@ -66,19 +69,19 @@ export class PanelExample  implements FGUIBase
          fgui.UIPackage.removePackage(this.Config.PackageName)
          this.IsInitFinish=false;
          this.ID=0;
+         Laya.stage.event(CK_EventCode.PanelDestroy,this.UIType);
      }
 
     
      private InitComp(){
 
-        this.testBtn=this.Content.getChild("openwindow_btn") as fgui.GButton;
+        this.testBtn=this.Content.getChild("openwindow_btn").asButton;
      }
      
      private BindEvent()
      {
         this.testBtn.onClick(this,()=>{
-            console.log("aaa");
-            
+            FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample,()=>{});  
         })
 
      }

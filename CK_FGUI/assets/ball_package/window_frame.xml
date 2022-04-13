@@ -2,5 +2,8 @@
 <component size="800,450">
   <displayList>
     <graph id="n2_kv2p" name="background" xy="0,0" size="800,450" type="rect" fillColor="#ff999999"/>
+    <component id="n3_k6yg" name="closeButton" src="kv2p6" fileName="Button1.xml" xy="765,0" size="35,40">
+      <Button title="X"/>
+    </component>
   </displayList>
 </component>

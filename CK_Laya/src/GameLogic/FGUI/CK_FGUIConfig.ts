@@ -20,7 +20,7 @@ export class CK_FGUIConfig {
 
         [
             [CK_UIType.PanelExample , new CK_UIConfig("ball_package","panel_comp",false,false)],
-
+            [CK_UIType.WindowExample , new CK_UIConfig("ball_package","window_comp",true,false)],
         ]
 
     );

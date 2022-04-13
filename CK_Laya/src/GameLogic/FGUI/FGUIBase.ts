@@ -7,7 +7,7 @@ interface FGUIBase
     ID:number;
     Init(),
     Show(args? : any),
-    Hide(),
     Close(),
     Destroy(),
+    SetVisible(visible:boolean),
 }

@@ -27,14 +27,22 @@ export default class GameManager extends Laya.Script {
              
         // }));
         
-        
+        Laya.stage.on(Laya.Event.KEY_DOWN,this,(e:Laya.Event)=>{
+            let keyCode=e.keyCode;
+            console.log(keyCode);
+            if (keyCode==65) {
+                FGUIManager.GetInstance().CloseAllWindow();
+            }
+            
+        });
         FGUIManager.GetInstance().Init();
 
-        FGUIManager.GetInstance().OpenUI(CK_UIType.PanelExample,()=>{},null)
+        FGUIManager.GetInstance().OpenPanel(CK_UIType.PanelExample,()=>{},null)
       
        
     }
 
+    
    
     
 }
