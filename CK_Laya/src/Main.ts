@@ -31,14 +31,7 @@ class Main {
 	onConfigLoaded(): void {
 		//加载IDE指定的场景
 		GameConfig.startScene && Laya.Scene.open(GameConfig.startScene);
-		// let data:RqstInt ={
-		// 	value:5
-		// }
-		// let bytes=encodeRqstInt(data)
-		// console.log(bytes)
-
-		// let result:number=decodeRqstInt(bytes).value
-		// console.log(result)
+	
 	}
 }
 //激活启动类

@@ -2,9 +2,10 @@
 <component size="800,450">
   <displayList>
     <component id="n3_kv2p" name="frame" src="kv2p7" fileName="window_frame.xml" xy="0,0"/>
-    <component id="n4_kv2p" name="open_btn" src="kv2p6" fileName="Button1.xml" xy="252,198" size="325,89">
+    <component id="n4_kv2p" name="open_btn" src="kv2p6" fileName="Button1.xml" xy="228,338" size="325,89">
       <Button title="open new window"/>
     </component>
     <text id="n5_kv2p" name="title" xy="252,42" size="311,44" fontSize="32" align="center" vAlign="middle" autoSize="none" text="Window 1"/>
+    <loader3D id="n6_vbql" name="ball_loader" xy="297,122" size="212,191" animation="" skin="" loop="true"/>
   </displayList>
 </component>

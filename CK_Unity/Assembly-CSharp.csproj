@@ -64,8 +64,7 @@
     <Compile Include="Assets\LayaAir3D\LayaShader\ShaderGUI\LayaUnlitGUI.cs" />
     <Compile Include="Assets\LayaAir3D\LayaShader\ShaderGUI\PBRStandardShaderGUI.cs" />
     <Compile Include="Assets\LayaAir3D\LayaShader\ShaderGUI\StandardSpecularShaderGUI.cs" />
-    <Compile Include="Assets\Scripts\DrawOctahedronSphere.cs" />
-    <Compile Include="Assets\Scripts\TestMove.cs" />
+    <Compile Include="Assets\Scripts\RotateTest.cs" />
     <None Include="Assets\LayaAir3D\LayaShader\CGIncludes\libs\LayaPBRStruct.cginc" />
     <None Include="Assets\LayaAir3D\LayaShader\LayaShader\water\Water (Primary).shader" />
     <None Include="Assets\LayaAir3D\LayaShader\LayaShader\LayaShuriKenParticle.shader" />

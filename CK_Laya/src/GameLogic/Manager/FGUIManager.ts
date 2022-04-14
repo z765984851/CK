@@ -1,5 +1,5 @@
 
-import { CK_EventCode } from "../CK_EventCode";
+import { CK_EventCode } from "../Common/CK_EventCode";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "../FGUI/CK_FGUIConfig";
 import { PanelExample } from "../FGUI/PanelExample";
 import { WindowExample } from "../FGUI/WindowExample";

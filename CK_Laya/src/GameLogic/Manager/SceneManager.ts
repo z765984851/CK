@@ -1,3 +1,5 @@
+import { BattleScene } from "../Scene/BattleScene";
+import { SceneBase } from "../Scene/SceneBase";
 import { ResMananger } from "./ResMananger";
 
 export class SceneManager {
@@ -14,11 +16,11 @@ export class SceneManager {
         return this.Instance
     }
 
-    public CurrentActiveScene;
+    public CurrentActiveScene:SceneBase;
 
     private ScenePathMap=new Map(
         [
-            [SceneType.GameScene,"res/unityscenes/LayaScene_LightTest/Conventional/LightTest.ls"]
+            [SceneType.BattleScene,"res/unityscenes/LayaScene_BattleScene/Conventional/BattleScene.ls"]
         ]
     );
 
@@ -32,11 +34,27 @@ export class SceneManager {
 
     public ChangeScene3D(sceneType)
     {
+        if (sceneType==SceneType.None) {
+            if (this.CurrentActiveScene!=null) {
+                Laya.stage.removeChild(this.CurrentActiveScene.Scene)
+                this.CurrentActiveScene=null;
+            }
+        }
+        else{
+            let url=this.ScenePathMap.get(sceneType);
+            let scene=ResMananger.GetInstance().GetRes(url);
+            Laya.stage.addChild(scene) ;
+            switch (sceneType) {
+                case SceneType.BattleScene:
+                    this.CurrentActiveScene=new BattleScene(scene);
+                    break;
+            
+                default:
+                    break;
+            }
+            
+        }
         
-        let url=this.ScenePathMap.get(sceneType);
-        let scene=ResMananger.GetInstance().GetRes(url);
-        Laya.stage.addChild(scene) ;
-        this.CurrentActiveScene=scene;
     }
 
 
@@ -44,6 +62,7 @@ export class SceneManager {
 
 export enum SceneType
 {
-    GameScene=1,
+    None="None",
+    BattleScene="BattleScene",
 
 }

@@ -1,4 +1,4 @@
-import { CK_EventCode } from "../CK_EventCode";
+import { CK_EventCode } from "../Common/CK_EventCode";
 import { FGUIManager } from "../Manager/FGUIManager";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "./CK_FGUIConfig";
 
