@@ -6,6 +6,7 @@
       <Button title="open new window"/>
     </component>
     <text id="n5_kv2p" name="title" xy="252,42" size="311,44" fontSize="32" align="center" vAlign="middle" autoSize="none" text="Window 1"/>
-    <loader3D id="n6_vbql" name="ball_loader" xy="297,122" size="212,191" animation="" skin="" loop="true"/>
+    <loader3D id="n6_vbql" name="ball_loader" xy="134,127" pivot="0.5,0.5" size="212,191" animation="" skin="" loop="true"/>
+    <graph id="n8_tq9o" name="ball_holder" xy="452,135" size="179,177" type="rect"/>
   </displayList>
 </component>

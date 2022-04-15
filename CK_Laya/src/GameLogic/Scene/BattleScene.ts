@@ -29,7 +29,7 @@ export class BattleScene implements SceneBase {
         this.Light=this.Scene.getChildByName("Directional Light") as Laya.DirectionLight;
         this.ball=this.Scene.getChildByName("DragonBall") as Laya.Sprite3D;
         this.OpenShadow();
-        this.BindEvent();
+        // this.BindEvent();
     }
 
     private OpenShadow()
@@ -102,6 +102,10 @@ export class BattleScene implements SceneBase {
         
     }
 
+
+    public GetBall():Laya.Sprite3D{
+        return this.ball
+    }
    
 
 }

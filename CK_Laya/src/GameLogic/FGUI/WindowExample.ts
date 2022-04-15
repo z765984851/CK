@@ -1,6 +1,8 @@
 
 import { CK_EventCode } from "../Common/CK_EventCode";
 import { FGUIManager } from "../Manager/FGUIManager";
+import { SceneManager } from "../Manager/SceneManager";
+import { BattleScene } from "../Scene/BattleScene";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "./CK_FGUIConfig";
 
 export class WindowExample extends fgui.Window implements FGUIBase {
@@ -14,6 +16,10 @@ export class WindowExample extends fgui.Window implements FGUIBase {
     private title:fgui.GTextField;
     private openBtn;
 
+    private ball_loader:fgui.GLoader3D;
+    private ball_holder:fgui.GGraph;
+
+
     Init() {
         if (this.IsInitFinish==false) {
 
@@ -25,7 +31,7 @@ export class WindowExample extends fgui.Window implements FGUIBase {
             this.center();
             this.setPivot(0.5, 0.5);
             this.InitComp();
-            this.BindEvent();
+            // this.BindEvent();
            
             // console.log(this.Config.PackageName,"Init finish");
             this.IsInitFinish=true;               
@@ -51,7 +57,37 @@ export class WindowExample extends fgui.Window implements FGUIBase {
 
     protected onShown(): void {
         
+
+        let battleScene=SceneManager.GetInstance().CurrentActiveScene as BattleScene;
+        let ball=battleScene.GetBall();
+
+        let sceneRoot= this.ball_holder.displayObject; 
+
+        let ballScene=new Laya.Scene3D();
+        sceneRoot.addChild(ballScene)
+
+        let uiCamera=new Laya.Camera();
+        ballScene.addChild(uiCamera);
+        let globalPoint= sceneRoot.localToGlobal(new Laya.Point(0,0));
+        // uiCamera.viewport=new Laya.Viewport(globalPoint.x,globalPoint.y,ballScene.width,ballScene.height);
+        // uiCamera.viewport=new Laya.Viewport(0,0,Laya.stage.width,Laya.stage.height);
+       
+        let ballUI= Laya.Sprite3D.instantiate(ball,ballScene,false);
+        // ballUI.transform.position=new Laya.Vector3(0,0,0);
+        // uiCamera.transform.lookAt(ballUI.transform.position,new Laya.Vector3(0,1,0));
+        // uiCamera.transform.position=new Laya.Vector3(0,4,0);
+        uiCamera.transform.translate(new Laya.Vector3(0, 0, 1.5));
+        uiCamera.transform.rotate(new Laya.Vector3(0,90,0));
+        
+        
+        
+
     }
+
+    
+
+
+
     protected onHide(): void {
         this.ID=0;
         Laya.stage.event(CK_EventCode.WindowClose);
@@ -97,6 +133,10 @@ export class WindowExample extends fgui.Window implements FGUIBase {
 
         this.openBtn=this.Content.getChild("open_btn").asButton;
         this.title=this.Content.getChild("title").asTextField;
+        this.ball_loader=this.Content.getChild("ball_loader") as fgui.GLoader3D;
+        this.ball_holder=this.Content.getChild("ball_holder") as fgui.GGraph;
+        console.log("ball loader",this.ball_loader,this.ball_holder);
+        
      }
      
      private BindEvent()

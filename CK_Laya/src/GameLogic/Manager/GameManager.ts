@@ -13,7 +13,12 @@ export default class GameManager extends Laya.Script {
 
     public onAwake():void {
 
-        this.Init();
+        SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene,Laya.Handler.create(this,()=>{
+            SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
+            this.Init();
+            FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample,()=>{},null)
+        }));
+        
 
         // SocketClient.GetInstance().ServerId="7001";
         // SocketClient.GetInstance().IP="192.168.10.26";
@@ -21,10 +26,7 @@ export default class GameManager extends Laya.Script {
         // SocketClient.GetInstance().Connect();
 
 
-        SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene,Laya.Handler.create(this,()=>{
-            SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
-
-        }));
+      
         
         // Laya.stage.on(Laya.Event.KEY_DOWN,this,(e:Laya.Event)=>{
         //     let keyCode=e.keyCode;
@@ -35,7 +37,7 @@ export default class GameManager extends Laya.Script {
             
         // });
         
-        // FGUIManager.GetInstance().OpenPanel(CK_UIType.PanelExample,()=>{},null)
+        
       
        
     }
