@@ -1,24 +1,14 @@
 fileFormatVersion: 2
-guid: 79838a11a7eac3c44bcb2b1ef7e55cce
+guid: dedc3f1da6417f84bb3fb1fb8758e112
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: "\u3000\uE811\uE810"
-    100004: "\u5BF9\u8C61001"
-    100006: "\uE810\uE810"
-    100008: "\uE811\uE810\uE811"
-    100010: "\uE814\uE810"
     400000: //RootNode
-    400002: "\u3000\uE811\uE810"
-    400004: "\u5BF9\u8C61001"
-    400006: "\uE810\uE810"
-    400008: "\uE811\uE810\uE811"
-    400010: "\uE814\uE810"
-    2100000: No Name
-    2300000: "\u5BF9\u8C61001"
-    3300000: "\u5BF9\u8C61001"
-    4300000: "\u5BF9\u8C61001"
+    2100000: 02 - Default
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: ball
   externalObjects: {}
   materials:
     importMaterials: 1

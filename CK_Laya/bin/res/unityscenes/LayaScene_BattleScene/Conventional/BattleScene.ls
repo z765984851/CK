@@ -14,33 +14,33 @@
 			"reflectionIntensity":1,
 			"ambientMode":1,
 			"ambientSphericalHarmonics":[
-				0.1678838,
-				-0.01659165,
-				-0.01137983,
-				0.00656961,
-				0.004985159,
-				-0.008635049,
-				0.009734819,
-				-0.01030053,
-				0.02333619,
-				0.2107363,
-				0.02701665,
-				-0.0188861,
-				0.01090373,
-				0.008416965,
-				-0.01457904,
-				0.01416337,
-				-0.01572322,
-				0.03351215,
-				0.2899413,
-				0.1099665,
-				-0.0348094,
-				0.02009422,
-				0.01630473,
-				-0.02824404,
-				0.01814265,
-				-0.02374644,
-				0.04080036
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0,
+				0
 			],
 			"ambientSphericalHarmonicsIntensity":1,
 			"lightmaps":[],
@@ -137,100 +137,12 @@
 				"child":[]
 			},
 			{
-				"type":"MeshSprite3D",
+				"type":"Sprite3D",
 				"instanceID":2,
 				"props":{
-					"name":"Plane",
+					"name":"Scene",
 					"active":true,
 					"isStatic":false,
-					"layer":0,
-					"position":[
-						0,
-						-0.199,
-						0
-					],
-					"rotation":[
-						0,
-						0,
-						0,
-						-1
-					],
-					"scale":[
-						1.6,
-						1,
-						0.9
-					],
-					"meshPath":"Library/unity default resources-Plane.lm",
-					"enableRender":true,
-					"receiveShadows":true,
-					"castShadow":true,
-					"materials":[
-						{
-							"path":"Assets/Res/Mat/SceneGrassMat.lmat"
-						}
-					]
-				},
-				"components":[
-					{
-						"type":"PhysicsCollider",
-						"restitution":0,
-						"friction":0.5,
-						"rollingFriction":0,
-						"shapes":[
-							{
-								"type":"MeshColliderShape",
-								"mesh":"Library/unity default resources-Plane.lm"
-							}
-						],
-						"isTrigger":false
-					}
-				],
-				"child":[]
-			},
-			{
-				"type":"MeshSprite3D",
-				"instanceID":3,
-				"props":{
-					"name":"DragonBall",
-					"active":true,
-					"isStatic":false,
-					"layer":0,
-					"position":[
-						0.72,
-						0,
-						-0.37
-					],
-					"rotation":[
-						0.4253241,
-						0,
-						0,
-						-0.9050412
-					],
-					"scale":[
-						1,
-						1,
-						1
-					],
-					"meshPath":"Assets/Res/juzipiqiu-对象001.lm",
-					"enableRender":true,
-					"receiveShadows":true,
-					"castShadow":true,
-					"materials":[
-						{
-							"path":"Assets/Res/Mat/DragonMat.lmat"
-						}
-					]
-				},
-				"components":[],
-				"child":[]
-			},
-			{
-				"type":"Sprite3D",
-				"instanceID":4,
-				"props":{
-					"name":"Wall",
-					"active":true,
-					"isStatic":true,
 					"layer":0,
 					"position":[
 						0,
@@ -253,151 +165,231 @@
 				"child":[
 					{
 						"type":"MeshSprite3D",
-						"instanceID":5,
+						"instanceID":3,
 						"props":{
-							"name":"Wall_h1",
+							"name":"Plane",
 							"active":true,
-							"isStatic":true,
+							"isStatic":false,
 							"layer":0,
 							"position":[
 								0,
-								0,
-								4.96
+								-0.2,
+								0
 							],
 							"rotation":[
-								7.165881E-08,
-								0.9238796,
-								-0.3826834,
-								1.729997E-07
+								0,
+								0,
+								0,
+								-1
 							],
 							"scale":[
-								19.59005,
+								1.6,
 								1,
-								2
+								0.9
 							],
-							"meshPath":"Library/unity default resources-Cube.lm",
+							"meshPath":"Library/unity default resources-Plane.lm",
 							"enableRender":true,
 							"receiveShadows":true,
 							"castShadow":true,
 							"materials":[
 								{
-									"path":"Assets/Res/Mat/WallMat1.lmat"
+									"path":"Assets/Res/Mat/SceneGrassMat.lmat"
 								}
 							]
 						},
-						"components":[],
+						"components":[
+							{
+								"type":"PhysicsCollider",
+								"restitution":0,
+								"friction":0.5,
+								"rollingFriction":0,
+								"shapes":[
+									{
+										"type":"MeshColliderShape",
+										"mesh":"Library/unity default resources-Plane.lm"
+									}
+								],
+								"isTrigger":false
+							}
+						],
 						"child":[]
 					},
 					{
-						"type":"MeshSprite3D",
-						"instanceID":6,
+						"type":"Sprite3D",
+						"instanceID":4,
 						"props":{
-							"name":"Wall_v1",
-							"active":true,
-							"isStatic":true,
-							"layer":0,
-							"position":[
-								9.44,
-								-0.25,
-								0.05
-							],
-							"rotation":[
-								-0.2705981,
-								0.6532815,
-								-0.2705981,
-								-0.6532815
-							],
-							"scale":[
-								13,
-								2.740001,
-								3
-							],
-							"meshPath":"Library/unity default resources-Cube.lm",
-							"enableRender":true,
-							"receiveShadows":true,
-							"castShadow":true,
-							"materials":[
-								{
-									"path":"Assets/Res/Mat/WallMat2.lmat"
-								}
-							]
-						},
-						"components":[],
-						"child":[]
-					},
-					{
-						"type":"MeshSprite3D",
-						"instanceID":7,
-						"props":{
-							"name":"Wall_h2",
+							"name":"Wall",
 							"active":true,
 							"isStatic":true,
 							"layer":0,
 							"position":[
 								0,
 								0,
-								-4.958
+								0
 							],
 							"rotation":[
-								-0.3826834,
 								0,
 								0,
-								-0.9238796
+								0,
+								-1
 							],
 							"scale":[
-								19.59,
 								1,
-								2
-							],
-							"meshPath":"Library/unity default resources-Cube.lm",
-							"enableRender":true,
-							"receiveShadows":true,
-							"castShadow":true,
-							"materials":[
-								{
-									"path":"Assets/Res/Mat/WallMat1.lmat"
-								}
+								1,
+								1
 							]
 						},
 						"components":[],
-						"child":[]
-					},
-					{
-						"type":"MeshSprite3D",
-						"instanceID":8,
-						"props":{
-							"name":"Wall_v2",
-							"active":true,
-							"isStatic":true,
-							"layer":0,
-							"position":[
-								-9.43,
-								-0.25,
-								0.05
-							],
-							"rotation":[
-								-0.2705981,
-								-0.6532815,
-								0.2705981,
-								-0.6532815
-							],
-							"scale":[
-								13,
-								2.740001,
-								3
-							],
-							"meshPath":"Library/unity default resources-Cube.lm",
-							"enableRender":true,
-							"receiveShadows":true,
-							"castShadow":true,
-							"materials":[
-								{
-									"path":"Assets/Res/Mat/WallMat2.lmat"
-								}
-							]
-						},
-						"components":[],
-						"child":[]
+						"child":[
+							{
+								"type":"MeshSprite3D",
+								"instanceID":5,
+								"props":{
+									"name":"Wall_h1",
+									"active":true,
+									"isStatic":true,
+									"layer":0,
+									"position":[
+										0,
+										0,
+										4.96
+									],
+									"rotation":[
+										7.165881E-08,
+										0.9238796,
+										-0.3826834,
+										1.729997E-07
+									],
+									"scale":[
+										19.59005,
+										1,
+										2
+									],
+									"meshPath":"Library/unity default resources-Cube.lm",
+									"enableRender":true,
+									"receiveShadows":true,
+									"castShadow":true,
+									"materials":[
+										{
+											"path":"Assets/Res/Mat/WallMat1.lmat"
+										}
+									]
+								},
+								"components":[],
+								"child":[]
+							},
+							{
+								"type":"MeshSprite3D",
+								"instanceID":6,
+								"props":{
+									"name":"Wall_v1",
+									"active":true,
+									"isStatic":true,
+									"layer":0,
+									"position":[
+										9.44,
+										-0.25,
+										0.05
+									],
+									"rotation":[
+										-0.2705981,
+										0.6532815,
+										-0.2705981,
+										-0.6532815
+									],
+									"scale":[
+										13,
+										2.740001,
+										3
+									],
+									"meshPath":"Library/unity default resources-Cube.lm",
+									"enableRender":true,
+									"receiveShadows":true,
+									"castShadow":true,
+									"materials":[
+										{
+											"path":"Assets/Res/Mat/WallMat2.lmat"
+										}
+									]
+								},
+								"components":[],
+								"child":[]
+							},
+							{
+								"type":"MeshSprite3D",
+								"instanceID":7,
+								"props":{
+									"name":"Wall_h2",
+									"active":true,
+									"isStatic":true,
+									"layer":0,
+									"position":[
+										0,
+										0,
+										-4.958
+									],
+									"rotation":[
+										-0.3826834,
+										0,
+										0,
+										-0.9238796
+									],
+									"scale":[
+										19.59,
+										1,
+										2
+									],
+									"meshPath":"Library/unity default resources-Cube.lm",
+									"enableRender":true,
+									"receiveShadows":true,
+									"castShadow":true,
+									"materials":[
+										{
+											"path":"Assets/Res/Mat/WallMat1.lmat"
+										}
+									]
+								},
+								"components":[],
+								"child":[]
+							},
+							{
+								"type":"MeshSprite3D",
+								"instanceID":8,
+								"props":{
+									"name":"Wall_v2",
+									"active":true,
+									"isStatic":true,
+									"layer":0,
+									"position":[
+										-9.43,
+										-0.25,
+										0.05
+									],
+									"rotation":[
+										-0.2705981,
+										-0.6532815,
+										0.2705981,
+										-0.6532815
+									],
+									"scale":[
+										13,
+										2.740001,
+										3
+									],
+									"meshPath":"Library/unity default resources-Cube.lm",
+									"enableRender":true,
+									"receiveShadows":true,
+									"castShadow":true,
+									"materials":[
+										{
+											"path":"Assets/Res/Mat/WallMat2.lmat"
+										}
+									]
+								},
+								"components":[],
+								"child":[]
+							}
+						]
 					}
 				]
 			}

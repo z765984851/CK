@@ -18,17 +18,24 @@ export class SceneManager {
 
     public CurrentActiveScene:SceneBase;
 
-    private ScenePathMap=new Map(
-        [
-            [SceneType.BattleScene,"res/unityscenes/LayaScene_BattleScene/Conventional/BattleScene.ls"]
-        ]
-    );
 
+
+    public UIScene;
+    public GameScene;
+
+    public Init(){
+
+        this.GameScene=new Laya.Scene();
+        Laya.stage.addChild(this.GameScene);
+        this.UIScene=new Laya.Scene();
+        Laya.stage.addChild(this.UIScene);
+       
+    }
     
     public LoadScene3D(sceneType,complete?,progress?)
     {
        
-        let url=this.ScenePathMap.get(sceneType);
+        let url=ResMananger.GetInstance().BaseScenePath+sceneType;
         ResMananger.GetInstance().Load3DRes(url,complete,progress)
     }
 
@@ -41,9 +48,9 @@ export class SceneManager {
             }
         }
         else{
-            let url=this.ScenePathMap.get(sceneType);
+            let url=ResMananger.GetInstance().BaseScenePath+sceneType;
             let scene=ResMananger.GetInstance().GetRes(url);
-            Laya.stage.addChild(scene) ;
+            this.GameScene.addChild(scene);
             switch (sceneType) {
                 case SceneType.BattleScene:
                     this.CurrentActiveScene=new BattleScene(scene);
@@ -63,6 +70,6 @@ export class SceneManager {
 export enum SceneType
 {
     None="None",
-    BattleScene="BattleScene",
+    BattleScene="BattleScene.ls",
 
 }

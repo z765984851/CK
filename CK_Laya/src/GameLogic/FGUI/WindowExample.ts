@@ -1,5 +1,7 @@
 
+import { BallType } from "../Common/BallType";
 import { CK_EventCode } from "../Common/CK_EventCode";
+import { BallFactory } from "../Manager/BallFactory";
 import { FGUIManager } from "../Manager/FGUIManager";
 import { SceneManager } from "../Manager/SceneManager";
 import { BattleScene } from "../Scene/BattleScene";
@@ -58,29 +60,25 @@ export class WindowExample extends fgui.Window implements FGUIBase {
     protected onShown(): void {
         
 
-        let battleScene=SceneManager.GetInstance().CurrentActiveScene as BattleScene;
-        let ball=battleScene.GetBall();
+        
 
         let sceneRoot= this.ball_holder.displayObject; 
-
         let ballScene=new Laya.Scene3D();
         sceneRoot.addChild(ballScene)
 
         let uiCamera=new Laya.Camera();
         ballScene.addChild(uiCamera);
         let globalPoint= sceneRoot.localToGlobal(new Laya.Point(0,0));
-        // uiCamera.viewport=new Laya.Viewport(globalPoint.x,globalPoint.y,ballScene.width,ballScene.height);
-        // uiCamera.viewport=new Laya.Viewport(0,0,Laya.stage.width,Laya.stage.height);
-       
-        let ballUI= Laya.Sprite3D.instantiate(ball,ballScene,false);
-        // ballUI.transform.position=new Laya.Vector3(0,0,0);
-        // uiCamera.transform.lookAt(ballUI.transform.position,new Laya.Vector3(0,1,0));
-        // uiCamera.transform.position=new Laya.Vector3(0,4,0);
-        uiCamera.transform.translate(new Laya.Vector3(0, 0, 1.5));
-        uiCamera.transform.rotate(new Laya.Vector3(0,90,0));
+        uiCamera.viewport=new Laya.Viewport(globalPoint.x,globalPoint.y,sceneRoot.width,sceneRoot.height);
+        uiCamera.transform.position=new Laya.Vector3(0,4,0);
+        uiCamera.transform.rotationEuler=new Laya.Vector3(90,0,180);
+        let ball= BallFactory.GetInstance().GetBall(BallType.Fe);
+        console.log(ball,uiCamera);
         
-        
-        
+        ballScene.addChild(ball);
+        ball.transform.localPosition=new Laya.Vector3(0,0,0);
+        ball.transform.localScale=new Laya.Vector3(1,1,1);
+        ball.active=true;
 
     }
 
@@ -135,7 +133,7 @@ export class WindowExample extends fgui.Window implements FGUIBase {
         this.title=this.Content.getChild("title").asTextField;
         this.ball_loader=this.Content.getChild("ball_loader") as fgui.GLoader3D;
         this.ball_holder=this.Content.getChild("ball_holder") as fgui.GGraph;
-        console.log("ball loader",this.ball_loader,this.ball_holder);
+        // console.log("ball loader",this.ball_loader,this.ball_holder);
         
      }
      

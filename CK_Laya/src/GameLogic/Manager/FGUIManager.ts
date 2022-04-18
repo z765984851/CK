@@ -3,6 +3,7 @@ import { CK_EventCode } from "../Common/CK_EventCode";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "../FGUI/CK_FGUIConfig";
 import { PanelExample } from "../FGUI/PanelExample";
 import { WindowExample } from "../FGUI/WindowExample";
+import { SceneManager } from "./SceneManager";
 
 export class FGUIManager {
 
@@ -32,7 +33,7 @@ export class FGUIManager {
 
 
     public Init(){
-        Laya.stage.addChild(fgui.GRoot.inst.displayObject);
+        SceneManager.GetInstance().UIScene.addChild(fgui.GRoot.inst.displayObject);
     
         Laya.stage.on(CK_EventCode.WindowClose,this,()=>{
               this.OnCloseWindow();

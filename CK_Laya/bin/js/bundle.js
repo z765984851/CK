@@ -29,6 +29,194 @@
        }
    }
 
+   class ArrayHelper {
+       constructor() {
+       }
+       static GetInstance() {
+           if (this.Instance == null) {
+               this.Instance = new ArrayHelper();
+           }
+           return this.Instance;
+       }
+       HasElement(array, suit) {
+           for (let index = 0; index < array.length; index++) {
+               const element = array[index];
+               if (element == suit) {
+                   return true;
+               }
+           }
+           return false;
+       }
+       GetElementIndex(array, suit) {
+           for (let index = 0; index < array.length; index++) {
+               const element = array[index];
+               if (element == suit) {
+                   return index;
+               }
+           }
+           return null;
+       }
+       RemoveElementFromArray(array, suit) {
+           let index = this.GetElementIndex(array, suit);
+           if (index != null) {
+               array.splice(index, 1);
+           }
+       }
+   }
+
+   var BallType;
+   (function (BallType) {
+       BallType["Dragon"] = "DragonBall.lh";
+       BallType["Fe"] = "FeBall.lh";
+       BallType["Wood"] = "WoodBall.lh";
+       BallType["Stone"] = "StoneBall.lh";
+   })(BallType || (BallType = {}));
+
+   class ResMananger {
+       constructor() {
+           this.BaseScenePath = "res/unityscenes/LayaScene_BattleScene/Conventional/";
+           this.BasePrefabPath = "res/unityscenes/LayaScene_PrefabScene/Conventional/";
+           this.loadedPath = new Array();
+       }
+       static GetInstance() {
+           if (this.Instance == null) {
+               this.Instance = new ResMananger();
+           }
+           return this.Instance;
+       }
+       Init() {
+       }
+       Preload2DRes(complete, progress) {
+           let preload2DPath = new Array();
+           let needLoadLength = preload2DPath.length;
+           let preloadFunc = () => {
+               if (preload2DPath.length != 0) {
+                   let path = preload2DPath.pop();
+                   this.Load2DRes(path, Laya.Handler.create(this, (result) => {
+                       if (result != null) {
+                           let currentProgress = (needLoadLength - preload2DPath.length) / needLoadLength;
+                           progress === null || progress === void 0 ? void 0 : progress.runWith(currentProgress);
+                           preloadFunc();
+                       }
+                       else {
+                           complete === null || complete === void 0 ? void 0 : complete.runWith(false);
+                       }
+                   }));
+               }
+               else {
+                   complete === null || complete === void 0 ? void 0 : complete.runWith(true);
+               }
+           };
+           preloadFunc();
+       }
+       Preload3DRes(complete, progress) {
+           let preload3DPath = new Array();
+           for (const key in BallType) {
+               preload3DPath.push(this.BasePrefabPath + BallType[key]);
+           }
+           let needLoadLength = preload3DPath.length;
+           let preloadFunc = () => {
+               if (preload3DPath.length != 0) {
+                   let path = preload3DPath.pop();
+                   this.Load3DRes(path, Laya.Handler.create(this, (result) => {
+                       if (result != null) {
+                           let currentProgress = (needLoadLength - preload3DPath.length) / needLoadLength;
+                           progress === null || progress === void 0 ? void 0 : progress.runWith(currentProgress);
+                           preloadFunc();
+                       }
+                       else {
+                           complete === null || complete === void 0 ? void 0 : complete.runWith(false);
+                       }
+                   }));
+               }
+               else {
+                   complete === null || complete === void 0 ? void 0 : complete.runWith(true);
+               }
+           };
+           preloadFunc();
+       }
+       Load2DRes(path, complete, progress) {
+           if (this.IsLoaded(path)) {
+               return;
+           }
+           Laya.loader.load(path, Laya.Handler.create(this, (result) => {
+               this.loadedPath.push(path);
+               complete === null || complete === void 0 ? void 0 : complete.runWith(result);
+           }), progress);
+       }
+       Load3DRes(path, complete, progress) {
+           if (this.IsLoaded(path)) {
+               return;
+           }
+           Laya.loader.create(path, Laya.Handler.create(this, (result) => {
+               this.loadedPath.push(path);
+               complete === null || complete === void 0 ? void 0 : complete.runWith(result);
+           }), progress);
+       }
+       GetRes(url) {
+           let result = Laya.loader.getRes(url);
+           if (result == null) {
+               console.log(url, "Get Failed");
+           }
+           return result;
+       }
+       IsLoaded(path) {
+           let result = ArrayHelper.GetInstance().HasElement(this.loadedPath, path);
+           return result;
+       }
+       ReleaseRes(path) {
+           if (this.IsLoaded(path)) {
+               Laya.loader.clearRes(path);
+               ArrayHelper.GetInstance().RemoveElementFromArray(this.loadedPath, path);
+           }
+       }
+   }
+
+   class BallFactory {
+       constructor() {
+           this.pool = new Map();
+       }
+       static GetInstance() {
+           if (this.Instance == null) {
+               this.Instance = new BallFactory();
+           }
+           return this.Instance;
+       }
+       Init() {
+           this.poolParent = new Laya.Scene();
+           Laya.stage.addChild(this.poolParent);
+       }
+       GetBall(ballType) {
+           let ball = null;
+           if (this.pool.has(ballType)) {
+               if (this.pool.get(ballType).length == 0) {
+                   this.CreateBall(ballType);
+               }
+           }
+           else {
+               this.CreateBall(ballType);
+           }
+           let array = this.pool.get(ballType);
+           ball = array.pop();
+           return ball;
+       }
+       ResycleBall(ballType, ball) {
+           ball.active = false;
+           this.pool[ballType].push(ball);
+       }
+       CreateBall(ballType) {
+           console.log("CreateBall", ballType);
+           if (!this.pool.has(ballType)) {
+               this.pool.set(ballType, new Array);
+           }
+           let array = this.pool.get(ballType);
+           let path = ResMananger.GetInstance().BasePrefabPath + ballType;
+           let ball = ResMananger.GetInstance().GetRes(path);
+           this.poolParent.addChild(ball);
+           array.push(ball);
+       }
+   }
+
    var CK_EventCode;
    (function (CK_EventCode) {
        CK_EventCode["WindowClose"] = "WindowClose";
@@ -88,132 +276,6 @@
        }
    }
 
-   class BattleScene {
-       constructor(scene) {
-           this.SceneType = SceneType.BattleScene;
-           this.r_ball = 0.5;
-           this.PI = 3.14;
-           this.Scene = scene;
-           this.Init();
-       }
-       Init() {
-           this.Camera = this.Scene.getChildByName("Main Camera");
-           this.Light = this.Scene.getChildByName("Directional Light");
-           this.ball = this.Scene.getChildByName("DragonBall");
-           this.OpenShadow();
-       }
-       OpenShadow() {
-           this.Light.shadowMode = 1;
-       }
-       BindEvent() {
-           Laya.stage.on(Laya.Event.KEY_PRESS, this, (e) => {
-               let keyCode = e.keyCode;
-               console.log(keyCode);
-               this.currentPos = this.ball.transform.position;
-               this.tempX = this.currentPos.x;
-               this.tempY = this.currentPos.y;
-               this.tempZ = this.currentPos.z;
-               if (keyCode == 115) {
-                   this.tempZ += 0.01;
-               }
-               if (keyCode == 119) {
-                   this.tempZ -= 0.01;
-               }
-               if (keyCode == 100) {
-                   this.tempX += 0.01;
-               }
-               if (keyCode == 97) {
-                   this.tempX -= 0.01;
-               }
-               this.newPos = new Laya.Vector3(this.tempX, this.tempY, this.tempZ);
-               if (this.newPos != this.currentPos) {
-                   let dis = Laya.Vector3.distance(this.newPos, this.currentPos);
-                   let angle = 360 * (dis / (this.r_ball * this.PI));
-                   let forward = new Laya.Vector3(0, 0, 0);
-                   Laya.Vector3.subtract(this.newPos, this.currentPos, forward);
-                   Laya.Vector3.cross(new Laya.Vector3(0, 1, 0), forward, forward);
-                   Laya.Vector3.scale(forward, angle * 100, forward);
-                   console.log(forward);
-                   this.ball.transform.rotate(forward, false, false);
-                   this.ball.transform.position = this.newPos;
-               }
-           });
-           Laya.timer.frameLoop(1, this, () => {
-               this.Camera.transform.position = new Laya.Vector3(this.ball.transform.position.x, 4, this.ball.transform.position.z);
-           });
-       }
-       GetBall() {
-           return this.ball;
-       }
-   }
-
-   class ResMananger {
-       constructor() {
-       }
-       static GetInstance() {
-           if (this.Instance == null) {
-               this.Instance = new ResMananger();
-           }
-           return this.Instance;
-       }
-       Load2DRes(resName, complete, progress) {
-           Laya.loader.load(resName, complete, progress);
-       }
-       Load3DRes(resName, complete, progress) {
-           Laya.loader.create(resName, complete, progress);
-       }
-       GetRes(url) {
-           let result = Laya.loader.getRes(url);
-           if (result == null) {
-               console.log(url, "Get Failed");
-           }
-           return result;
-       }
-   }
-
-   class SceneManager {
-       constructor() {
-           this.ScenePathMap = new Map([
-               [SceneType.BattleScene, "res/unityscenes/LayaScene_BattleScene/Conventional/BattleScene.ls"]
-           ]);
-       }
-       static GetInstance() {
-           if (this.Instance == null) {
-               this.Instance = new SceneManager();
-           }
-           return this.Instance;
-       }
-       LoadScene3D(sceneType, complete, progress) {
-           let url = this.ScenePathMap.get(sceneType);
-           ResMananger.GetInstance().Load3DRes(url, complete, progress);
-       }
-       ChangeScene3D(sceneType) {
-           if (sceneType == SceneType.None) {
-               if (this.CurrentActiveScene != null) {
-                   Laya.stage.removeChild(this.CurrentActiveScene.Scene);
-                   this.CurrentActiveScene = null;
-               }
-           }
-           else {
-               let url = this.ScenePathMap.get(sceneType);
-               let scene = ResMananger.GetInstance().GetRes(url);
-               Laya.stage.addChild(scene);
-               switch (sceneType) {
-                   case SceneType.BattleScene:
-                       this.CurrentActiveScene = new BattleScene(scene);
-                       break;
-                   default:
-                       break;
-               }
-           }
-       }
-   }
-   var SceneType;
-   (function (SceneType) {
-       SceneType["None"] = "None";
-       SceneType["BattleScene"] = "BattleScene";
-   })(SceneType || (SceneType = {}));
-
    class WindowExample extends fgui.Window {
        constructor() {
            super(...arguments);
@@ -248,18 +310,22 @@
                .onComplete(this.hideImmediately, this);
        }
        onShown() {
-           let battleScene = SceneManager.GetInstance().CurrentActiveScene;
-           let ball = battleScene.GetBall();
            let sceneRoot = this.ball_holder.displayObject;
            let ballScene = new Laya.Scene3D();
            sceneRoot.addChild(ballScene);
            let uiCamera = new Laya.Camera();
            ballScene.addChild(uiCamera);
            let globalPoint = sceneRoot.localToGlobal(new Laya.Point(0, 0));
-           let ballUI = Laya.Sprite3D.instantiate(ball, ballScene, false);
-           ballUI.transform.position = new Laya.Vector3(0, 0, 0);
+           uiCamera.viewport = new Laya.Viewport(globalPoint.x, globalPoint.y, sceneRoot.width, sceneRoot.height);
            uiCamera.transform.position = new Laya.Vector3(0, 4, 0);
-           uiCamera.transform.rotate(new Laya.Vector3(0, 90, 0));
+           uiCamera.transform.rotationEuler = new Laya.Vector3(90, 0, 180);
+           uiCamera.clearFlag = Laya.CameraClearFlags.Sky;
+           let ball = BallFactory.GetInstance().GetBall(BallType.Fe);
+           console.log(ball, uiCamera);
+           ballScene.addChild(ball);
+           ball.transform.localPosition = new Laya.Vector3(0, 0, 0);
+           ball.transform.localScale = new Laya.Vector3(1, 1, 1);
+           ball.active = true;
        }
        onHide() {
            this.ID = 0;
@@ -291,7 +357,6 @@
            this.title = this.Content.getChild("title").asTextField;
            this.ball_loader = this.Content.getChild("ball_loader");
            this.ball_holder = this.Content.getChild("ball_holder");
-           console.log("ball loader", this.ball_loader, this.ball_holder);
        }
        BindEvent() {
            this.openBtn.onClick(this, () => {
@@ -299,6 +364,80 @@
            });
        }
    }
+
+   class BattleScene {
+       constructor(scene) {
+           this.SceneType = SceneType.BattleScene;
+           this.r_ball = 0.5;
+           this.PI = 3.14;
+           this.Scene = scene;
+           this.Init();
+       }
+       Init() {
+           this.Camera = this.Scene.getChildByName("Main Camera");
+           this.Light = this.Scene.getChildByName("Directional Light");
+           this.OpenShadow();
+           this.CreateBall();
+       }
+       OpenShadow() {
+           this.Light.shadowMode = 1;
+       }
+       CreateBall() {
+           let ball = BallFactory.GetInstance().GetBall(BallType.Dragon);
+           this.Scene.addChild(ball);
+           ball.transform.localPosition = new Laya.Vector3(0, 0, 0);
+           ball.transform.localScale = new Laya.Vector3(1, 1, 1);
+           ball.active = true;
+       }
+       BindEvent() {
+       }
+   }
+
+   class SceneManager {
+       constructor() {
+       }
+       static GetInstance() {
+           if (this.Instance == null) {
+               this.Instance = new SceneManager();
+           }
+           return this.Instance;
+       }
+       Init() {
+           this.GameScene = new Laya.Scene();
+           Laya.stage.addChild(this.GameScene);
+           this.UIScene = new Laya.Scene();
+           Laya.stage.addChild(this.UIScene);
+       }
+       LoadScene3D(sceneType, complete, progress) {
+           let url = ResMananger.GetInstance().BaseScenePath + sceneType;
+           ResMananger.GetInstance().Load3DRes(url, complete, progress);
+       }
+       ChangeScene3D(sceneType) {
+           if (sceneType == SceneType.None) {
+               if (this.CurrentActiveScene != null) {
+                   Laya.stage.removeChild(this.CurrentActiveScene.Scene);
+                   this.CurrentActiveScene = null;
+               }
+           }
+           else {
+               let url = ResMananger.GetInstance().BaseScenePath + sceneType;
+               let scene = ResMananger.GetInstance().GetRes(url);
+               this.GameScene.addChild(scene);
+               switch (sceneType) {
+                   case SceneType.BattleScene:
+                       this.CurrentActiveScene = new BattleScene(scene);
+                       break;
+                   default:
+                       break;
+               }
+           }
+       }
+   }
+   var SceneType;
+   (function (SceneType) {
+       SceneType["None"] = "None";
+       SceneType["BattleScene"] = "BattleScene.ls";
+   })(SceneType || (SceneType = {}));
 
    class FGUIManager {
        constructor() {
@@ -314,7 +453,7 @@
            return this.Instance;
        }
        Init() {
-           Laya.stage.addChild(fgui.GRoot.inst.displayObject);
+           SceneManager.GetInstance().UIScene.addChild(fgui.GRoot.inst.displayObject);
            Laya.stage.on(CK_EventCode.WindowClose, this, () => {
                this.OnCloseWindow();
            });
@@ -473,14 +612,22 @@
            super();
        }
        onAwake() {
-           SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene, Laya.Handler.create(this, () => {
-               SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
-               this.Init();
-               FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample, () => { }, null);
-           }));
+           this.Init();
        }
        Init() {
+           SceneManager.GetInstance().Init();
            FGUIManager.GetInstance().Init();
+           let onPreloadFinish = Laya.Handler.create(this, () => {
+               BallFactory.GetInstance().Init();
+               SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene, Laya.Handler.create(this, () => {
+                   SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
+                   FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample, () => { }, null);
+               }));
+           });
+           let onPreload2DFinish = Laya.Handler.create(this, () => {
+               ResMananger.GetInstance().Preload3DRes(onPreloadFinish);
+           });
+           ResMananger.GetInstance().Preload2DRes(onPreload2DFinish);
        }
    }
 

@@ -2,8 +2,11 @@
 
 
 
+import { BallType } from "../Common/BallType";
 import { CK_UIType } from "../FGUI/CK_FGUIConfig";
+import { BallFactory } from "./BallFactory";
 import { FGUIManager } from "./FGUIManager";
+import { ResMananger } from "./ResMananger";
 import { SceneManager, SceneType } from "./SceneManager";
 export default class GameManager extends Laya.Script {
 
@@ -13,11 +16,12 @@ export default class GameManager extends Laya.Script {
 
     public onAwake():void {
 
-        SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene,Laya.Handler.create(this,()=>{
-            SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
-            this.Init();
-            FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample,()=>{},null)
-        }));
+        this.Init();
+        // SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene,Laya.Handler.create(this,()=>{
+        //     SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
+           
+        //     FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample,()=>{},null)
+        // }));
         
 
         // SocketClient.GetInstance().ServerId="7001";
@@ -44,10 +48,28 @@ export default class GameManager extends Laya.Script {
 
     private Init()
     {
+        SceneManager.GetInstance().Init();
         FGUIManager.GetInstance().Init();
+       
+
+        let onPreloadFinish=Laya.Handler.create(this,()=>{
+            BallFactory.GetInstance().Init();
+
+            SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene,Laya.Handler.create(this,()=>{
+                SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
+                FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample,()=>{},null)
+            }));
+        });
+        let onPreload2DFinish=Laya.Handler.create(this,()=>{
+            ResMananger.GetInstance().Preload3DRes(onPreloadFinish);
+            
+        })
+        ResMananger.GetInstance().Preload2DRes(onPreload2DFinish);
     }
 
     
+
+
    
     
 }
