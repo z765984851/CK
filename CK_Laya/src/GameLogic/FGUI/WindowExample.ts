@@ -1,11 +1,9 @@
 
 import { BallType } from "../Common/BallType";
 import { CK_EventCode } from "../Common/CK_EventCode";
-import { BallFactory } from "../Manager/BallFactory";
 import { FGUIManager } from "../Manager/FGUIManager";
-import { SceneManager } from "../Manager/SceneManager";
-import { BattleScene } from "../Scene/BattleScene";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "./CK_FGUIConfig";
+import { UIBall } from "./UIBall";
 
 export class WindowExample extends fgui.Window implements FGUIBase {
     Config:CK_UIConfig;
@@ -21,6 +19,7 @@ export class WindowExample extends fgui.Window implements FGUIBase {
     private ball_loader:fgui.GLoader3D;
     private ball_holder:fgui.GGraph;
 
+    private uiCamera:Laya.Camera;
 
     Init() {
         if (this.IsInitFinish==false) {
@@ -60,26 +59,11 @@ export class WindowExample extends fgui.Window implements FGUIBase {
     protected onShown(): void {
         
 
+       let uiBall=new UIBall(this.ball_loader.displayObject,BallType.Dragon,0.7);
+       uiBall.Show();
+
+
         
-
-        let sceneRoot= this.ball_holder.displayObject; 
-        let ballScene=new Laya.Scene3D();
-        sceneRoot.addChild(ballScene)
-
-        let uiCamera=new Laya.Camera();
-        ballScene.addChild(uiCamera);
-        let globalPoint= sceneRoot.localToGlobal(new Laya.Point(0,0));
-        uiCamera.viewport=new Laya.Viewport(globalPoint.x,globalPoint.y,sceneRoot.width,sceneRoot.height);
-        uiCamera.transform.position=new Laya.Vector3(0,4,0);
-        uiCamera.transform.rotationEuler=new Laya.Vector3(90,0,180);
-        let ball= BallFactory.GetInstance().GetBall(BallType.Fe);
-        console.log(ball,uiCamera);
-        
-        ballScene.addChild(ball);
-        ball.transform.localPosition=new Laya.Vector3(0,0,0);
-        ball.transform.localScale=new Laya.Vector3(1,1,1);
-        ball.active=true;
-
     }
 
     
@@ -143,6 +127,6 @@ export class WindowExample extends fgui.Window implements FGUIBase {
           FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample,()=>{});
             
         })
-
+        
      }
 }

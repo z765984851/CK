@@ -1,6 +1,7 @@
 
 import { CK_EventCode } from "../Common/CK_EventCode";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "../FGUI/CK_FGUIConfig";
+import { FGUI_LoadingPanel } from "../FGUI/FGUI_LoadingPanel";
 import { PanelExample } from "../FGUI/PanelExample";
 import { WindowExample } from "../FGUI/WindowExample";
 import { SceneManager } from "./SceneManager";
@@ -27,7 +28,7 @@ export class FGUIManager {
     private CurrentOpenPanel=new Array();
     //uitype,fguibase
     private CurrentCreatedUI=new Map();
-    // uitype,fguibase
+    // packagename,packageName
     private CurrentLoadedPackage=new Map();
 
 
@@ -47,19 +48,48 @@ export class FGUIManager {
         });
     }
 
-    public LoadUIPackage(uiType:CK_UIType,onLoadFinish:Function){
+   
+
+    public LoadUIPackage(packageName:string,onLoadFinish:Function){
     
-        if (this.CurrentLoadedPackage.has(uiType)) {
+        if (this.CurrentLoadedPackage.has(packageName)) {
             onLoadFinish()
         }
-        else{
-           let config=CK_FGUIConfig.GetInstance().Config.get(uiType);
-           let packagePath=`res/fguipackage/${config.PackageName}/${config.PackageName}`
+        else{        
+           let packagePath=`res/fguipackage/${packageName}/${packageName}`
            fgui.UIPackage.loadPackage(packagePath,Laya.Handler.create(this,()=>{
-                this.CurrentLoadedPackage.set(uiType,config)
+                this.CurrentLoadedPackage.set(packageName,packageName)
                 onLoadFinish();
             }));
         }
+
+    }
+
+    public LoadUIPackages(packageNames:string[],onLoadFinish:Function,onLoadProgress:Function)
+    {
+    
+        let progress=0;
+        let wholeValue=packageNames.length;
+        let progressFloat=0;
+        for (let index = 0; index < wholeValue; index++) {
+            const packageName = packageNames[index];
+            this.LoadUIPackage(packageName,()=>{
+                progress++;
+                progressFloat=progress/wholeValue;
+                onLoadProgress(progressFloat);
+                if (progress==wholeValue) {
+                    onLoadFinish();
+                }
+               
+            });
+        }
+
+    }
+
+    public AddPackage(packageName:string)
+    {
+        let packagePath=`res/fguipackage/${packageName}/${packageName}`
+        fgui.UIPackage.addPackage(packagePath);
 
     }
 
@@ -68,9 +98,10 @@ export class FGUIManager {
     // can open mutiple
     public OpenWindow(uiType:CK_UIType,onLoadFinish,args?:any)
     {
+        let config=CK_FGUIConfig.GetInstance().Config.get(uiType);
         let openUI =()=>{
             let ui:FGUIBase=null;
-            let config=CK_FGUIConfig.GetInstance().Config.get(uiType);
+          
             if (config.IsMutiple || this.CurrentCreatedUI.has(uiType)==false) {
                 ui= this.CreateNewUI(uiType);
                 this.CurrentCreatedUI.set(uiType,ui);
@@ -101,7 +132,7 @@ export class FGUIManager {
         } 
         
         
-        this.LoadUIPackage(uiType,()=>{
+        this.LoadUIPackage(config.PackageName,()=>{
             openUI();
             onLoadFinish();
         });
@@ -113,9 +144,10 @@ export class FGUIManager {
     //can not open mutiple and is fullscreen
     public OpenPanel(uiType:CK_UIType,onLoadFinish,ifDestroyLast=true,args?:any)
     {
+        let config=CK_FGUIConfig.GetInstance().Config.get(uiType);
         let openUI =()=>{
             let ui:FGUIBase=null;
-            let config=CK_FGUIConfig.GetInstance().Config.get(uiType);
+            
             if ( this.CurrentCreatedUI.has(uiType)==false) {
                 ui= this.CreateNewUI(uiType);
                 ui.Init();
@@ -146,7 +178,7 @@ export class FGUIManager {
         } 
         
         
-        this.LoadUIPackage(uiType,()=>{
+        this.LoadUIPackage(config.PackageName,()=>{
             openUI();
             onLoadFinish();
         });
@@ -257,8 +289,11 @@ export class FGUIManager {
             case CK_UIType.WindowExample:
                 ui=new WindowExample();
                 break;    
+            case CK_UIType.LoadingPanel:
+                ui=new FGUI_LoadingPanel();
+                break;   
 
-
+                
             default:
                 break;
         }

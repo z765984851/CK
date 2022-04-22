@@ -4,5 +4,6 @@ export enum CK_EventCode
     PanelClose="PanelClose",
     WindowDestroy="WindowDestroy",
     PanelDestroy="PanelDestroy",
-    
+    GetServerResp="GetServerResp",
+    LoadingProgressChange="LoadingProgressChange",
 }

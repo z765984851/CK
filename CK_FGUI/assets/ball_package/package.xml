@@ -5,6 +5,7 @@
     <component id="kv2p5" name="window_comp.xml" path="/" exported="true"/>
     <component id="kv2p6" name="Button1.xml" path="/"/>
     <component id="kv2p7" name="window_frame.xml" path="/"/>
+    <component id="omkua" name="hp_slider.xml" path="/" exported="true"/>
   </resources>
   <publish name=""/>
 </packageDescription>

@@ -6,6 +6,8 @@
            this.Config = new Map([
                [CK_UIType.PanelExample, new CK_UIConfig("ball_package", "panel_comp", false, false)],
                [CK_UIType.WindowExample, new CK_UIConfig("ball_package", "window_comp", true, false)],
+               [CK_UIType.LoadingPanel, new CK_UIConfig("loading_package", "loading_comp", false, false)],
+               [CK_UIType.LobbyPanel, new CK_UIConfig("lobby_package", "lobby_comp", false, false)],
            ]);
        }
        static GetInstance() {
@@ -19,6 +21,8 @@
    (function (CK_UIType) {
        CK_UIType[CK_UIType["PanelExample"] = 0] = "PanelExample";
        CK_UIType[CK_UIType["WindowExample"] = 1] = "WindowExample";
+       CK_UIType[CK_UIType["LoadingPanel"] = 2] = "LoadingPanel";
+       CK_UIType[CK_UIType["LobbyPanel"] = 3] = "LobbyPanel";
    })(CK_UIType || (CK_UIType = {}));
    class CK_UIConfig {
        constructor(packageName, componentName, isMutiple, isWindow) {
@@ -28,6 +32,126 @@
            this.IsWindow = isWindow;
        }
    }
+
+   var CK_EventCode;
+   (function (CK_EventCode) {
+       CK_EventCode["WindowClose"] = "WindowClose";
+       CK_EventCode["PanelClose"] = "PanelClose";
+       CK_EventCode["WindowDestroy"] = "WindowDestroy";
+       CK_EventCode["PanelDestroy"] = "PanelDestroy";
+       CK_EventCode["GetServerResp"] = "GetServerResp";
+       CK_EventCode["LoadingProgressChange"] = "LoadingProgressChange";
+   })(CK_EventCode || (CK_EventCode = {}));
+
+   class FGUI_LoadingPanel {
+       constructor() {
+           this.UIType = CK_UIType.LoadingPanel;
+           this.IsInitFinish = false;
+           this.ID = 0;
+       }
+       Init() {
+           if (this.IsInitFinish == false) {
+               this.Config = CK_FGUIConfig.GetInstance().Config.get(this.UIType);
+               this.Content = fgui.UIPackage.createObject(this.Config.PackageName, this.Config.ComponentName).asCom;
+               fgui.GRoot.inst.addChild(this.Content);
+               this.Content.makeFullScreen();
+               this.InitComp();
+               this.SetVisible(false);
+               this.IsInitFinish = true;
+           }
+       }
+       Show(args) {
+           this.SetVisible(true);
+           this.animRotate.play(null, -1);
+           this.animText.play(null, -1);
+           Laya.stage.on(CK_EventCode.LoadingProgressChange, this, this.ChangeProgress);
+       }
+       Close() {
+           this.SetVisible(false);
+           this.ID = 0;
+           Laya.stage.off(CK_EventCode.LoadingProgressChange, this, this.ChangeProgress);
+           Laya.stage.event(CK_EventCode.PanelDestroy, this.ID);
+       }
+       Destroy() {
+           var _a;
+           (_a = this.Content) === null || _a === void 0 ? void 0 : _a.dispose();
+           fgui.UIPackage.removePackage(this.Config.PackageName);
+           this.IsInitFinish = false;
+           this.ID = 0;
+           Laya.stage.event(CK_EventCode.PanelDestroy, this.UIType);
+       }
+       SetVisible(visible) {
+           if (this.Content != null) {
+               this.Content.visible = visible;
+           }
+       }
+       InitComp() {
+           this.progressText = this.Content.getChild("openwindow_btn");
+           this.animRotate = this.Content.getTransition("loading_logospinning _anim");
+           this.animText = this.Content.getTransition("loading_titlechange_anim");
+       }
+       ChangeProgress(value) {
+           this.progressText.text = value + "%";
+       }
+   }
+
+   class PanelExample {
+       constructor() {
+           this.IsInitFinish = false;
+           this.ID = 0;
+           this.UIType = CK_UIType.PanelExample;
+       }
+       Init() {
+           if (this.IsInitFinish == false) {
+               this.Config = CK_FGUIConfig.GetInstance().Config.get(this.UIType);
+               FGUIManager.GetInstance().AddPackage(this.Config.PackageName);
+               this.Content = fgui.UIPackage.createObject(this.Config.PackageName, this.Config.ComponentName).asCom;
+               fgui.GRoot.inst.addChild(this.Content);
+               this.Content.makeFullScreen();
+               this.InitComp();
+               this.BindEvent();
+               this.SetVisible(false);
+               this.IsInitFinish = true;
+           }
+       }
+       Show(args) {
+           this.SetVisible(true);
+       }
+       Close() {
+           this.SetVisible(false);
+           this.ID = 0;
+           Laya.stage.event(CK_EventCode.PanelDestroy, this.ID);
+       }
+       SetVisible(visible) {
+           if (this.Content != null) {
+               this.Content.visible = visible;
+           }
+       }
+       Destroy() {
+           var _a;
+           (_a = this.Content) === null || _a === void 0 ? void 0 : _a.dispose();
+           fgui.UIPackage.removePackage(this.Config.PackageName);
+           this.IsInitFinish = false;
+           this.ID = 0;
+           Laya.stage.event(CK_EventCode.PanelDestroy, this.UIType);
+       }
+       InitComp() {
+           this.testBtn = this.Content.getChild("openwindow_btn").asButton;
+       }
+       BindEvent() {
+           this.testBtn.onClick(this, () => {
+               FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample, () => { });
+           });
+       }
+   }
+
+   var BallType;
+   (function (BallType) {
+       BallType["Dragon"] = "DragonBall.lh";
+       BallType["Fe"] = "FeBall.lh";
+       BallType["Wood"] = "WoodBall.lh";
+       BallType["Stone"] = "StoneBall.lh";
+   })(BallType || (BallType = {}));
 
    class ArrayHelper {
        constructor() {
@@ -63,14 +187,6 @@
            }
        }
    }
-
-   var BallType;
-   (function (BallType) {
-       BallType["Dragon"] = "DragonBall.lh";
-       BallType["Fe"] = "FeBall.lh";
-       BallType["Wood"] = "WoodBall.lh";
-       BallType["Stone"] = "StoneBall.lh";
-   })(BallType || (BallType = {}));
 
    class ResMananger {
        constructor() {
@@ -175,6 +291,7 @@
    class BallFactory {
        constructor() {
            this.pool = new Map();
+           this.ballMap = new Map();
        }
        static GetInstance() {
            if (this.Instance == null) {
@@ -205,74 +322,72 @@
            this.pool[ballType].push(ball);
        }
        CreateBall(ballType) {
-           console.log("CreateBall", ballType);
            if (!this.pool.has(ballType)) {
                this.pool.set(ballType, new Array);
            }
            let array = this.pool.get(ballType);
-           let path = ResMananger.GetInstance().BasePrefabPath + ballType;
-           let ball = ResMananger.GetInstance().GetRes(path);
+           let ball = null;
+           if (!this.ballMap.has(ballType)) {
+               let path = ResMananger.GetInstance().BasePrefabPath + ballType;
+               ball = ResMananger.GetInstance().GetRes(path);
+               this.ballMap.set(ballType, ball);
+           }
+           let ballPrefab = this.ballMap.get(ballType);
+           ball = Laya.Sprite3D.instantiate(ballPrefab, ball);
            this.poolParent.addChild(ball);
            array.push(ball);
        }
+       TestBall() {
+           this.GetBall(BallType.Dragon);
+       }
    }
 
-   var CK_EventCode;
-   (function (CK_EventCode) {
-       CK_EventCode["WindowClose"] = "WindowClose";
-       CK_EventCode["PanelClose"] = "PanelClose";
-       CK_EventCode["WindowDestroy"] = "WindowDestroy";
-       CK_EventCode["PanelDestroy"] = "PanelDestroy";
-   })(CK_EventCode || (CK_EventCode = {}));
-
-   class PanelExample {
-       constructor() {
-           this.IsInitFinish = false;
-           this.ID = 0;
-           this.UIType = CK_UIType.PanelExample;
+   class UIBall {
+       constructor(root, ballType, scale = 1) {
+           this.root = root;
+           this.BallType = ballType;
+           this.scale = scale;
        }
-       Init() {
-           if (this.IsInitFinish == false) {
-               this.Config = CK_FGUIConfig.GetInstance().Config.get(this.UIType);
-               this.packagePath = `res/fguipackage/${this.Config.PackageName}/${this.Config.PackageName}`;
-               fgui.UIPackage.addPackage(this.packagePath);
-               this.Content = fgui.UIPackage.createObject(this.Config.PackageName, this.Config.ComponentName).asCom;
-               fgui.GRoot.inst.addChild(this.Content);
-               this.Content.makeFullScreen();
-               this.InitComp();
-               this.BindEvent();
-               this.Close();
-               this.IsInitFinish = true;
-           }
+       Show() {
+           this.ballScene = new Laya.Scene3D();
+           this.root.addChild(this.ballScene);
+           this.uiCamera = new Laya.Camera();
+           this.ballScene.addChild(this.uiCamera);
+           let globalPoint = this.root.localToGlobal(new Laya.Point(0, 0));
+           this.uiCamera.viewport = new Laya.Viewport(globalPoint.x, globalPoint.y, this.root.width, this.root.height);
+           this.uiCamera.transform.position = new Laya.Vector3(0, 1 * this.scale, 0);
+           this.uiCamera.transform.rotationEuler = new Laya.Vector3(-90, 0, 180);
+           this.uiCamera.clearFlag = Laya.CameraClearFlags.DepthOnly;
+           this.uiCamera.clearColor = null;
+           this.directionLight = this.ballScene.addChild(new Laya.DirectionLight());
+           var mat = this.directionLight.transform.worldMatrix;
+           mat.setForward(new Laya.Vector3(-1, -1, 0));
+           this.directionLight.transform.worldMatrix = mat;
+           this.ball = BallFactory.GetInstance().GetBall(this.BallType);
+           this.ballScene.addChild(this.ball);
+           this.ball.transform.localPosition = new Laya.Vector3(0, 0, 0);
+           this.ball.transform.localScale = new Laya.Vector3(1, 1, 1);
+           this.ball.active = true;
        }
-       Show(args) {
-           this.SetVisible(true);
-       }
-       Close() {
-           this.SetVisible(false);
-           this.ID = 0;
-           Laya.stage.event(CK_EventCode.PanelDestroy, this.ID);
-       }
-       SetVisible(visible) {
-           if (this.Content != null) {
-               this.Content.visible = visible;
-           }
+       Change(root, ballType, scale = 1) {
+           this.root = root;
+           this.BallType = ballType;
+           this.scale = scale;
+           this.root.addChild(this.ballScene);
+           let globalPoint = this.root.localToGlobal(new Laya.Point(0, 0));
+           this.uiCamera.viewport = new Laya.Viewport(globalPoint.x, globalPoint.y, this.root.width, this.root.height);
+           this.ball = BallFactory.GetInstance().GetBall(this.BallType);
+           this.ballScene.addChild(this.ball);
+           this.ball.transform.localPosition = new Laya.Vector3(0, 0, 0);
+           this.ball.transform.localScale = new Laya.Vector3(1, 1, 1);
+           this.ball.active = true;
        }
        Destroy() {
-           var _a;
-           (_a = this.Content) === null || _a === void 0 ? void 0 : _a.dispose();
-           fgui.UIPackage.removePackage(this.Config.PackageName);
-           this.IsInitFinish = false;
-           this.ID = 0;
-           Laya.stage.event(CK_EventCode.PanelDestroy, this.UIType);
+           this.Resycle();
+           this.ballScene.destroy();
        }
-       InitComp() {
-           this.testBtn = this.Content.getChild("openwindow_btn").asButton;
-       }
-       BindEvent() {
-           this.testBtn.onClick(this, () => {
-               FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample, () => { });
-           });
+       Resycle() {
+           BallFactory.GetInstance().ResycleBall(this.BallType, this.ball);
        }
    }
 
@@ -310,22 +425,8 @@
                .onComplete(this.hideImmediately, this);
        }
        onShown() {
-           let sceneRoot = this.ball_holder.displayObject;
-           let ballScene = new Laya.Scene3D();
-           sceneRoot.addChild(ballScene);
-           let uiCamera = new Laya.Camera();
-           ballScene.addChild(uiCamera);
-           let globalPoint = sceneRoot.localToGlobal(new Laya.Point(0, 0));
-           uiCamera.viewport = new Laya.Viewport(globalPoint.x, globalPoint.y, sceneRoot.width, sceneRoot.height);
-           uiCamera.transform.position = new Laya.Vector3(0, 4, 0);
-           uiCamera.transform.rotationEuler = new Laya.Vector3(90, 0, 180);
-           uiCamera.clearFlag = Laya.CameraClearFlags.Sky;
-           let ball = BallFactory.GetInstance().GetBall(BallType.Fe);
-           console.log(ball, uiCamera);
-           ballScene.addChild(ball);
-           ball.transform.localPosition = new Laya.Vector3(0, 0, 0);
-           ball.transform.localScale = new Laya.Vector3(1, 1, 1);
-           ball.active = true;
+           let uiBall = new UIBall(this.ball_loader.displayObject, BallType.Dragon, 0.7);
+           uiBall.Show();
        }
        onHide() {
            this.ID = 0;
@@ -365,6 +466,22 @@
        }
    }
 
+   class UIHpSlider {
+       constructor(root, camera) {
+           this.currentPos = new Laya.Vector4(0, 0, 0, 0);
+           this.root = root;
+           this.camera = camera;
+       }
+       Show() {
+           this.component = fgui.UIPackage.createObject("ball_package", "hp_slider");
+           fgui.GRoot.inst.addChild(this.component);
+       }
+       Follow() {
+           this.camera.viewport.project(this.root.transform.position, this.camera.projectionViewMatrix, this.currentPos);
+           this.component.displayObject.pos(this.currentPos.x, this.currentPos.y);
+       }
+   }
+
    class BattleScene {
        constructor(scene) {
            this.SceneType = SceneType.BattleScene;
@@ -377,19 +494,58 @@
            this.Camera = this.Scene.getChildByName("Main Camera");
            this.Light = this.Scene.getChildByName("Directional Light");
            this.OpenShadow();
+           this.BindEvent();
            this.CreateBall();
        }
        OpenShadow() {
            this.Light.shadowMode = 1;
        }
        CreateBall() {
-           let ball = BallFactory.GetInstance().GetBall(BallType.Dragon);
-           this.Scene.addChild(ball);
-           ball.transform.localPosition = new Laya.Vector3(0, 0, 0);
-           ball.transform.localScale = new Laya.Vector3(1, 1, 1);
-           ball.active = true;
+           this.ball = BallFactory.GetInstance().GetBall(BallType.Dragon);
+           this.Scene.addChild(this.ball);
+           this.ball.transform.localPosition = new Laya.Vector3(0, 0, 0);
+           this.ball.transform.localScale = new Laya.Vector3(1, 1, 1);
+           this.ball.active = true;
+           this.slider = new UIHpSlider(this.ball, this.Camera);
+           this.slider.Show();
+           this.slider.Follow();
        }
        BindEvent() {
+           Laya.stage.on(Laya.Event.KEY_PRESS, this, (e) => {
+               let keyCode = e.keyCode;
+               console.log(keyCode);
+               this.currentPos = this.ball.transform.position;
+               this.tempX = this.currentPos.x;
+               this.tempY = this.currentPos.y;
+               this.tempZ = this.currentPos.z;
+               if (keyCode == 115) {
+                   this.tempZ += 0.01;
+               }
+               if (keyCode == 119) {
+                   this.tempZ -= 0.01;
+               }
+               if (keyCode == 100) {
+                   this.tempX += 0.01;
+               }
+               if (keyCode == 97) {
+                   this.tempX -= 0.01;
+               }
+               this.newPos = new Laya.Vector3(this.tempX, this.tempY, this.tempZ);
+               if (this.newPos != this.currentPos) {
+                   let dis = Laya.Vector3.distance(this.newPos, this.currentPos);
+                   let angle = 360 * (dis / (this.r_ball * this.PI));
+                   let forward = new Laya.Vector3(0, 0, 0);
+                   Laya.Vector3.subtract(this.newPos, this.currentPos, forward);
+                   Laya.Vector3.cross(new Laya.Vector3(0, 1, 0), forward, forward);
+                   Laya.Vector3.scale(forward, angle * 100, forward);
+                   console.log(forward);
+                   this.ball.transform.rotate(forward, false, false);
+                   this.ball.transform.position = this.newPos;
+               }
+           });
+           Laya.timer.frameLoop(1, this, () => {
+               this.Camera.transform.position = new Laya.Vector3(this.ball.transform.position.x, 4, this.ball.transform.position.z);
+           });
        }
    }
 
@@ -464,23 +620,42 @@
                this.OnDestroyPanel(arg);
            });
        }
-       LoadUIPackage(uiType, onLoadFinish) {
-           if (this.CurrentLoadedPackage.has(uiType)) {
+       LoadUIPackage(packageName, onLoadFinish) {
+           if (this.CurrentLoadedPackage.has(packageName)) {
                onLoadFinish();
            }
            else {
-               let config = CK_FGUIConfig.GetInstance().Config.get(uiType);
-               let packagePath = `res/fguipackage/${config.PackageName}/${config.PackageName}`;
+               let packagePath = `res/fguipackage/${packageName}/${packageName}`;
                fgui.UIPackage.loadPackage(packagePath, Laya.Handler.create(this, () => {
-                   this.CurrentLoadedPackage.set(uiType, config);
+                   this.CurrentLoadedPackage.set(packageName, packageName);
                    onLoadFinish();
                }));
            }
        }
+       LoadUIPackages(packageNames, onLoadFinish, onLoadProgress) {
+           let progress = 0;
+           let wholeValue = packageNames.length;
+           let progressFloat = 0;
+           for (let index = 0; index < wholeValue; index++) {
+               const packageName = packageNames[index];
+               this.LoadUIPackage(packageName, () => {
+                   progress++;
+                   progressFloat = progress / wholeValue;
+                   onLoadProgress(progressFloat);
+                   if (progress == wholeValue) {
+                       onLoadFinish();
+                   }
+               });
+           }
+       }
+       AddPackage(packageName) {
+           let packagePath = `res/fguipackage/${packageName}/${packageName}`;
+           fgui.UIPackage.addPackage(packagePath);
+       }
        OpenWindow(uiType, onLoadFinish, args) {
+           let config = CK_FGUIConfig.GetInstance().Config.get(uiType);
            let openUI = () => {
                let ui = null;
-               let config = CK_FGUIConfig.GetInstance().Config.get(uiType);
                if (config.IsMutiple || this.CurrentCreatedUI.has(uiType) == false) {
                    ui = this.CreateNewUI(uiType);
                    this.CurrentCreatedUI.set(uiType, ui);
@@ -498,15 +673,15 @@
                ui.Show(args);
                this.CurrentOpenWindow.set(id, ui);
            };
-           this.LoadUIPackage(uiType, () => {
+           this.LoadUIPackage(config.PackageName, () => {
                openUI();
                onLoadFinish();
            });
        }
        OpenPanel(uiType, onLoadFinish, ifDestroyLast = true, args) {
+           let config = CK_FGUIConfig.GetInstance().Config.get(uiType);
            let openUI = () => {
                let ui = null;
-               let config = CK_FGUIConfig.GetInstance().Config.get(uiType);
                if (this.CurrentCreatedUI.has(uiType) == false) {
                    ui = this.CreateNewUI(uiType);
                    ui.Init();
@@ -529,7 +704,7 @@
                ui.Show(args);
                this.CurrentOpenPanel.push(ui);
            };
-           this.LoadUIPackage(uiType, () => {
+           this.LoadUIPackage(config.PackageName, () => {
                openUI();
                onLoadFinish();
            });
@@ -600,6 +775,9 @@
                case CK_UIType.WindowExample:
                    ui = new WindowExample();
                    break;
+               case CK_UIType.LoadingPanel:
+                   ui = new FGUI_LoadingPanel();
+                   break;
                default:
                    break;
            }
@@ -615,19 +793,29 @@
            this.Init();
        }
        Init() {
+           this.InitManager();
+           this.InitFGUI();
+       }
+       InitManager() {
            SceneManager.GetInstance().Init();
            FGUIManager.GetInstance().Init();
-           let onPreloadFinish = Laya.Handler.create(this, () => {
-               BallFactory.GetInstance().Init();
-               SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene, Laya.Handler.create(this, () => {
-                   SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
-                   FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample, () => { }, null);
-               }));
-           });
-           let onPreload2DFinish = Laya.Handler.create(this, () => {
-               ResMananger.GetInstance().Preload3DRes(onPreloadFinish);
-           });
-           ResMananger.GetInstance().Preload2DRes(onPreload2DFinish);
+       }
+       InitFGUI() {
+           let preloadPackage = ["common_font_package", "loading_package"];
+           let onLoadFinish = () => {
+               for (let index = 0; index < preloadPackage.length; index++) {
+                   const element = preloadPackage[index];
+                   FGUIManager.GetInstance().AddPackage(element);
+               }
+               this.ShowLoadingPanel();
+           };
+           let onProgress = (progress) => {
+               console.log("InitFGUI", progress);
+           };
+           FGUIManager.Instance.LoadUIPackages(preloadPackage, onLoadFinish, onProgress);
+       }
+       ShowLoadingPanel() {
+           FGUIManager.GetInstance().OpenPanel(CK_UIType.LoadingPanel, () => { }, null);
        }
    }
 

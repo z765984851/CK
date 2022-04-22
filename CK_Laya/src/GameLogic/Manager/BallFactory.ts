@@ -20,6 +20,7 @@ export class BallFactory {
     private pool : Map<BallType,Array<Laya.Sprite3D>>=new Map();
     private poolParent:Laya.Scene;
    
+    private ballMap : Map<BallType,Laya.Sprite3D>=new Map();
 
     public Init()
     {
@@ -57,20 +58,29 @@ export class BallFactory {
 
     private CreateBall(ballType:BallType)
     {
-        console.log("CreateBall",ballType);
-        
+
         if (!this.pool.has(ballType))
         {
             this.pool.set(ballType,new Array)
         }
+        
         let array=this.pool.get(ballType);
-        
-        let path=ResMananger.GetInstance().BasePrefabPath+ballType;
-        
-        let ball=ResMananger.GetInstance().GetRes(path);
-      
+        let ball:Laya.Sprite3D=null;
+        if (!this.ballMap.has(ballType)) {
+            let path=ResMananger.GetInstance().BasePrefabPath+ballType;
+            ball=ResMananger.GetInstance().GetRes(path);
+            this.ballMap.set(ballType,ball);
+           
+        }
+        let ballPrefab=this.ballMap.get(ballType);
+        ball=Laya.Sprite3D.instantiate(ballPrefab,ball);
         this.poolParent.addChild(ball);
         array.push(ball)
 
+    }
+
+    public TestBall(){
+        this.GetBall(BallType.Dragon);
+        // this.GetBall(BallType.Dragon);
     }
 }

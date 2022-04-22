@@ -12,7 +12,6 @@ export class PanelExample  implements FGUIBase
      Content: fgui.GComponent;
      ID: number= 0;
      UIType: CK_UIType = CK_UIType.PanelExample;
-     private packagePath;
 
      private testBtn:fgui.GButton;
 
@@ -22,14 +21,13 @@ export class PanelExample  implements FGUIBase
          if (this.IsInitFinish==false) {
 
             this.Config=CK_FGUIConfig.GetInstance().Config.get(this.UIType);
-            this.packagePath=`res/fguipackage/${this.Config.PackageName}/${this.Config.PackageName}`
-            fgui.UIPackage.addPackage(this.packagePath);
+            FGUIManager.GetInstance().AddPackage(this.Config.PackageName);
             this.Content=fgui.UIPackage.createObject(this.Config.PackageName,this.Config.ComponentName).asCom;
             fgui.GRoot.inst.addChild(this.Content);
             this.Content.makeFullScreen();
             this.InitComp();
             this.BindEvent();
-            this.Close();
+            this.SetVisible(false);
             this.IsInitFinish=true;               
             
 
