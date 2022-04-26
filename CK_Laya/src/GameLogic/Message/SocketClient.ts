@@ -2,13 +2,14 @@ import BaseMsgHeadUtil from "./BaseMsgHeadUtil";
 import { ExtType, MsgType } from "./BaseMsgType";
 import { BitConvert } from "./BitConvert";
 import { MessageCenter } from "./MessageCenter";
-import { MiniDataUtil } from "./MiniDataUtil";
+import { MiniDataDecryptHead, MiniDataUtil } from "./MiniDataUtil";
 
 export class SocketClient
 {
     public IP:string;
     public Port:number;
     public ServerId:string;
+    public UID:number=111111111;
 
     private socket:Laya.Socket;
     private static Instance:SocketClient;
@@ -45,6 +46,8 @@ export class SocketClient
 
     public Connect()
     {
+        console.log("Socket Connet",this.IP,this.Port);
+        
         this.socket.connect(this.IP,this.Port);
     }
 
@@ -64,7 +67,7 @@ export class SocketClient
         let receiveData=new ReceiveData();
         //nessary !!! must to set pos =0 
         byte.pos=0;
-        console.log("ReceiveHandler",byte)
+        // console.log("ReceiveHandler",byte)
         receiveData.Head=byte.getByte();
         if (BaseMsgHeadUtil.HaveLenField(receiveData.Head)) {
             receiveData.Length=byte.getInt32();
@@ -100,7 +103,7 @@ export class SocketClient
             this.byte.writeByte(element);
         }
        
-        console.log("Send Msg",this.byte);
+        // console.log("Send Msg",this.byte);
         
         this.socket.send(this.byte.buffer);
 
@@ -126,7 +129,7 @@ export class SocketClient
             const element = tailArray[index];
             this.byte.writeByte(element)
         }  
-        console.log("Send ShakeHand",this.byte);
+        // console.log("Send ShakeHand",this.byte);
         
         this.socket.send(this.byte.buffer);
 
@@ -136,9 +139,8 @@ export class SocketClient
 
         this.byte.clear();
         this.byte.pos=0;
-        let uid=123;
         // write head
-        let msg = uid + "#" + this.ServerId + "#" + "accessToken" + "#" + "refreshToken";
+        let msg = this.UID + "#" + this.ServerId + "#" + "accessToken" + "#" + "refreshToken";
 
         let msgByteArray=BitConvert.GetInstance().StringToByteArray(msg);
         let msgHead=MiniDataUtil.GetStringDataDscrpt(msgByteArray);
@@ -152,11 +154,59 @@ export class SocketClient
         }
        
         let msgArray=BitConvert.GetInstance().ByteArrayToNumberArray(this.byte.getUint8Array(0,this.byte.length));
-        console.log("Send Regular",msgArray);
+        // console.log("Send Regular",msgArray);
         this.SendMsg(true,MsgType.CTRL_CUSTOM,0,ExtType.CTRL_CUSTOM_EXT_TYPE_0,msgArray);
         
 
     }
+
+    public SendBizMsg(cmd:number,msg:Uint8Array)
+    {
+        let proxtoHead:MiniDataDecryptHead  = MiniDataUtil.GetIntDataDscrptHead(3);
+        let cmdHead:MiniDataDecryptHead  = MiniDataUtil.GetIntDataDscrptHead(cmd);
+        this.byte.clear();
+        this.byte.pos=0;
+        //write head
+        this.byte.writeByte(proxtoHead.GetHeadByte());
+        let tailArray=proxtoHead.GetTailBytes()
+        for (let index = 0; index < tailArray.length; index++) {
+            const element = tailArray[index];
+            this.byte.writeByte(element)
+        }  
+
+        //write cmd
+        this.byte.writeByte(cmdHead.GetHeadByte());
+        tailArray=cmdHead.GetTailBytes()
+        for (let index = 0; index < tailArray.length; index++) {
+            const element = tailArray[index];
+            this.byte.writeByte(element)
+        }
+
+
+        
+        //write msg
+        for (let index = 0; index < msg.length; index++) {
+            const element = msg[index];
+            this.byte.writeUint8(element)
+        }
+
+        let msgArray=BitConvert.GetInstance().ByteArrayToNumberArray(this.byte.getUint8Array(0,this.byte.length));
+        // console.log("Send Biz",cmd);
+        this.SendMsg(true,MsgType.BIZ_MSG,0,ExtType.BIZ_MSG_EXT_TYPE_UNICAST,msgArray);
+
+
+    }
+
+    public SendBizMsg_Empty(cmd:number)
+    {
+        let rqst=RequestPackage.RqstInt.create();
+        rqst.value=0;
+        let buf:Uint8Array=RequestPackage.RqstInt.encode(rqst).finish();
+
+        SocketClient.GetInstance().SendBizMsg(cmd,buf);
+
+    }
+
 
    
 

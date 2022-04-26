@@ -2,11 +2,15 @@
 
 
 
-import { BallType } from "../Common/BallType";
+import { CK_EventCode } from "../Common/CK_EventCode";
+import { CK_MsgCMD } from "../Common/CK_MsgCMD";
 import { CK_UIType } from "../FGUI/CK_FGUIConfig";
+import { MainPanelType } from "../FGUI/Panel/FGUI_MainPanel";
+import { EventProperty } from "../Model/LoadProgressProperty";
 import { BallFactory } from "./BallFactory";
+import { DataManager } from "./DataManager";
 import { FGUIManager } from "./FGUIManager";
-import { HttpManager } from "./HttpManager";
+import { LoginManager } from "./LoginManager";
 import { ResMananger } from "./ResMananger";
 import { SceneManager, SceneType } from "./SceneManager";
 export default class GameManager extends Laya.Script {
@@ -44,31 +48,15 @@ export default class GameManager extends Laya.Script {
         //5. socket connect
         //   5.1 shank hand
         //   5.2 send regular
-        //   5.3 get userdata
+        //   5.3 send check msg 201 to get if has character 
+        //      *5.3.1 if not has character send 202 
+        //   5.4 send enter game 203
         //6. preload some res
 
         this.InitManager();
         this.InitFGUI();
        
 
-        // let onPreloadFinish=Laya.Handler.create(this,()=>{
-        //     BallFactory.GetInstance().Init();
-
-        //     // FGUIManager.GetInstance().LoadUIPackage("ball_package",()=>{
-        //     //     // SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
-        //     //     FGUIManager.GetInstance().OpenWindow(CK_UIType.WindowExample,()=>{},null);
-
-        //     // });
-        //     // // SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene,Laya.Handler.create(this,()=>{
-
-               
-        //     // }));
-        // });
-        // let onPreload2DFinish=Laya.Handler.create(this,()=>{
-        //     ResMananger.GetInstance().Preload3DRes(onPreloadFinish);
-            
-        // })
-        // ResMananger.GetInstance().Preload2DRes(onPreload2DFinish);
     }
 
     private InitManager(){
@@ -103,10 +91,139 @@ export default class GameManager extends Laya.Script {
     private ShowLoadingPanel()
     {
         FGUIManager.GetInstance().OpenPanel(CK_UIType.LoadingPanel,()=>{},null);
+        this.ChangeLoadingProgress(0);
+        this.GetServerResp();
+
+    }
+
+    private GetServerResp(){
+        Laya.stage.once(CK_EventCode.GetServerResp,this,this.OnGetSuccess);
+        LoginManager.GetInstance().GetServer();
+
+    }
+
+    private OnGetSuccess()
+    {
+       
+        this.ChangeLoadingProgress(10);
+        Laya.stage.once(CK_EventCode.RegularSuccess,this,this.OnRegularSuccess)
+        LoginManager.GetInstance().SocketConnet();
+       
+    }
+
+    private OnRegularSuccess()
+    {
+        this.ChangeLoadingProgress(20);
+
+        Laya.stage.once(CK_MsgCMD.Verify.toString(),this,this.OnVerifySuccess)
+        LoginManager.GetInstance().SendVerify();
+
+
+    }
+
+    private OnVerifySuccess(data)
+    {
+
+        this.ChangeLoadingProgress(30);
+        let respfully=ResponsePackage.RespFully.decode(data);
+        let ifCreateRole=respfully.respRole.createRole.value;
+        //need to create role 
+        if (ifCreateRole) 
+        {
+            Laya.stage.once(CK_MsgCMD.CreateRole.toString(),this,this.OnCreateRoleSuccess)
+            LoginManager.GetInstance().SendCreateRole();
+            
+        }
+        //request user info
+        else{
+            this.OnCreateRoleSuccess();
+        }
+
+    }
+
+    private OnCreateRoleSuccess()
+    {
+        
+
+        this.ChangeLoadingProgress(35);
+        Laya.stage.once(CK_MsgCMD.EnterGame.toString(),this,this.OnRqstRoleInfoSuccess)
+        LoginManager.GetInstance().SendRqstRoleInfo();
+    }
+
+    private OnRqstRoleInfoSuccess(data)
+    {
+        this.ChangeLoadingProgress(40);
+        let respfully=ResponsePackage.RespFully.decode(data);
+        DataManager.GetInstance().SetPlayerData(respfully);
+        this.Preload2DRes();
     }
 
 
+    private Preload2DRes()
+    {
+        ResMananger.GetInstance().Preload2DRes(Laya.Handler.create(this,this.Preload3DRes))
+    }
+
+    private Preload3DRes()
+    {
+        this.ChangeLoadingProgress(50);
+        ResMananger.GetInstance().Preload3DRes(Laya.Handler.create(this,this.PreloadLobbyScene));
+       
+    }
+
+    private PreloadLobbyScene()
+    {
+       SceneManager.GetInstance().LoadScene3D(SceneType.LobbyScene,Laya.Handler.create(this,this.PreloadFGUIPackage));
+    }
+
+    private PreloadFGUIPackage()
+    {
+        this.ChangeLoadingProgress(60);
+        let preloadPackage=[
+            "main_package",
+            "common_icon_package",
+            "common_component_package",
+            "common_battle_package",
+            "common_button_package",
+            "common_bar_package",
+        ];
+        let onLoadFinish=()=>
+        {
+            for (let index = 0; index < preloadPackage.length; index++) {
+                const element = preloadPackage[index];
+                FGUIManager.GetInstance().AddPackage(element);
+            }
+            this.ChangeLoadingProgress(90);
+
+            this.InitFactory();
+        }
+        
+        FGUIManager.Instance.LoadUIPackages(preloadPackage,onLoadFinish,()=>{});
+    }
+
+    private InitFactory()
+    {
+       
+        BallFactory.GetInstance().Init();
+        this.ChangeLoadingProgress(100);
+        SceneManager.GetInstance().ChangeScene3D(SceneType.LobbyScene);
+        FGUIManager.GetInstance().OpenPanel(CK_UIType.MainPanel,()=>{},true,MainPanelType.Lobby);
+        FGUIManager.GetInstance().OpenPanel(CK_UIType.TopBarPanel,()=>{},false);
+        
+    }
     
+
+
+
+
+    private ChangeLoadingProgress(value,isTween=false)
+    {
+        let data:EventProperty.LoadProgressProperty=new EventProperty.LoadProgressProperty(value,isTween);
+        Laya.stage.event(CK_EventCode.LoadingProgressChange,data);
+        
+    }
+
+
 
 
    

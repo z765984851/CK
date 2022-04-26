@@ -1,4 +1,5 @@
 import { BattleScene } from "../Scene/BattleScene";
+import { LobbyScene } from "../Scene/LobbyScene";
 import { SceneBase } from "../Scene/SceneBase";
 import { ResMananger } from "./ResMananger";
 
@@ -32,10 +33,22 @@ export class SceneManager {
        
     }
     
-    public LoadScene3D(sceneType,complete?,progress?)
+    public LoadScene3D(sceneType,complete?:Handler|null,progress?:Handler|null)
     {
        
-        let url=ResMananger.GetInstance().BaseScenePath+sceneType;
+        // let url=ResMananger.GetInstance().BattleScenePath+sceneType;
+        let url="";
+        switch (sceneType) {
+            case SceneType.BattleScene:
+                url=ResMananger.GetInstance().BattleScenePath+sceneType;
+                break;
+            case SceneType.LobbyScene:
+                url=ResMananger.GetInstance().LobbyScenePath+sceneType;
+                break;
+        
+            default:
+                break;
+        }
         ResMananger.GetInstance().Load3DRes(url,complete,progress)
     }
 
@@ -48,12 +61,20 @@ export class SceneManager {
             }
         }
         else{
-            let url=ResMananger.GetInstance().BaseScenePath+sceneType;
-            let scene=ResMananger.GetInstance().GetRes(url);
-            this.GameScene.addChild(scene);
+            let url;
+            let scene;
             switch (sceneType) {
                 case SceneType.BattleScene:
+                    url=ResMananger.GetInstance().BattleScenePath+sceneType;
+                    scene=ResMananger.GetInstance().GetRes(url);
+                    this.GameScene.addChild(scene);
                     this.CurrentActiveScene=new BattleScene(scene);
+                    break;
+                case SceneType.LobbyScene:
+                    url=ResMananger.GetInstance().LobbyScenePath+sceneType;
+                    scene=ResMananger.GetInstance().GetRes(url);
+                    this.GameScene.addChild(scene);
+                    this.CurrentActiveScene=new LobbyScene(scene);
                     break;
             
                 default:
@@ -71,5 +92,6 @@ export enum SceneType
 {
     None="None",
     BattleScene="BattleScene.ls",
+    LobbyScene="LobbyScene.ls"
 
 }

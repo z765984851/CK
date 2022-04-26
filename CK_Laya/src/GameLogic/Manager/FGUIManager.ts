@@ -1,10 +1,12 @@
 
 import { CK_EventCode } from "../Common/CK_EventCode";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "../FGUI/CK_FGUIConfig";
-import { FGUI_LoadingPanel } from "../FGUI/FGUI_LoadingPanel";
+import { FGUI_LoadingPanel } from "../FGUI/Panel/FGUI_LoadingPanel";
+import { FGUI_MainPanel } from "../FGUI/Panel/FGUI_MainPanel";
 import { PanelExample } from "../FGUI/PanelExample";
 import { WindowExample } from "../FGUI/WindowExample";
 import { SceneManager } from "./SceneManager";
+import { FGUI_TopBarPanel } from "../FGUI/Panel/FGUI_TopBarPanel";
 
 export class FGUIManager {
 
@@ -159,15 +161,12 @@ export class FGUIManager {
             }
            
             if (this.CurrentOpenPanel.length!=0) {
-                let lastPanel:FGUIBase=this.CurrentOpenPanel.pop();
+                
                 if (ifDestroyLast) {
-                    
+                    let lastPanel:FGUIBase=this.CurrentOpenPanel.pop();
                     lastPanel.Destroy();
                 }
-                else{
-
-                    lastPanel.SetVisible(false)
-                }
+                
             }
            
           
@@ -203,9 +202,10 @@ export class FGUIManager {
 
     public GetPanel(uiType)
     {
+         console.log("[FGUIManager]",this.CurrentOpenPanel);
        
         for (let index = 0; index < this.CurrentOpenPanel.length; index++) {
-            let  element:FGUIBase = this.CurrentOpenPanel[index];
+            let element:FGUIBase = this.CurrentOpenPanel[index];
             if (element.UIType==uiType) {
                 return element;
             }
@@ -293,7 +293,13 @@ export class FGUIManager {
                 ui=new FGUI_LoadingPanel();
                 break;   
 
-                
+            case CK_UIType.MainPanel:
+                ui=new FGUI_MainPanel();
+                break;  
+            
+            case CK_UIType.TopBarPanel:
+                ui=new FGUI_TopBarPanel();
+                break;  
             default:
                 break;
         }

@@ -134,14 +134,14 @@ export class MiniDataUtil {
 			
 			
 			tailLen = (dscrptByte & MiniDataUtil.NUM_TYPE_MASK) >>> 4;
-			console.log("DATA_TYPE_NUM");
+			// console.log("DATA_TYPE_NUM");
 			if (tailLen == 0)
 				return dscrptByte & MiniDataUtil.HEAD_NUM_MASK;
 			else {
 				bytes = new Array(tailLen);
 
 				bytes= bytesSupplier(bytes);
-				console.log("bytes",bytes);
+				// console.log("bytes",bytes);
 				if (tailLen <= 3) {
 					let data : number = dscrptByte & MiniDataUtil.HEAD_NUM_MASK;
 
@@ -152,7 +152,7 @@ export class MiniDataUtil {
 				} else {
 					let lte7Bytes:boolean = tailLen <= 6;
 					let data:number = lte7Bytes ? dscrptByte & MiniDataUtil.HEAD_NUM_MASK : 0;
-					console.log("data",data);
+					// console.log("data",data);
 					for (let i = 0, shift = lte7Bytes ? 4 : 0; i < tailLen; i++, shift += 8) {
 						data = data | ((bytes[i] & 0xFF) << shift);
 					}

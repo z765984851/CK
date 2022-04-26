@@ -1,8 +1,11 @@
 export enum BallType
 {
-    Dragon="DragonBall.lh",
-    Fe="FeBall.lh",
-    Wood="WoodBall.lh",
-    Stone="StoneBall.lh",
+    Fe=1,
+    Stone=2,
+    Wood=3,
+    Dragon=4,
+    
+   
+    
     
 }

@@ -1,3 +1,4 @@
+import { ExtType, MsgType } from "./BaseMsgType";
 
 export default class BaseMsgHeadUtil {
     public static  HEAD_MASK_LENGTH_FIELD:number = 0b1 << 7;
@@ -26,7 +27,7 @@ export default class BaseMsgHeadUtil {
         return headByte & BaseMsgHeadUtil.HEAD_MASK_EXTEND;
     }
 
-    public static BuildHeadByte( haveLenField:boolean,  msgType:CK.MsgType, cmpType:number, extType:CK.ExtType):number {
+    public static BuildHeadByte( haveLenField:boolean,  msgType:MsgType, cmpType:number, extType:ExtType):number {
         let ret = haveLenField ? 1 : 0;
         ret = ret << 2 | cmpType & 0b11;
         ret = ret << 3 | msgType & 0b111;

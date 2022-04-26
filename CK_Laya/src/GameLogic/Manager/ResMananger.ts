@@ -1,5 +1,6 @@
 import { ArrayHelper } from "../Common/ArrayHelper";
 import { BallType } from "../Common/BallType";
+import { CkLineage, CkLineageConfig } from "../Generate/Config/CkLineage";
 
 export class ResMananger {
 
@@ -18,7 +19,9 @@ export class ResMananger {
 
   
     //scene local path
-    public BaseScenePath="res/unityscenes/LayaScene_BattleScene/Conventional/";
+    public BattleScenePath="res/unityscenes/LayaScene_BattleScene/Conventional/";
+    //scene local path
+    public LobbyScenePath="res/unityscenes/LayaScene_LobbyScene/Conventional/";
     //mat local path
     public BasePrefabPath="res/unityscenes/LayaScene_PrefabScene/Conventional/";
 
@@ -68,7 +71,12 @@ export class ResMananger {
         let preload3DPath:Array<string>=new Array();
         //add preload mat path
         for (const key in BallType) {
-            preload3DPath.push(this.BasePrefabPath+BallType[key])
+            let lnName:CkLineage=CkLineageConfig.GetInstance().GetData("1020000"+BallType[key])
+             
+            if (lnName!=null) {
+                preload3DPath.push(this.BasePrefabPath+lnName.ballType)
+            }
+           
         }
         let needLoadLength=preload3DPath.length;
         //preload 2dRes

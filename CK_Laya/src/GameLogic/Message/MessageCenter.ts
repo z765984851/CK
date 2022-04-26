@@ -1,3 +1,4 @@
+import { CK_EventCode } from "../Common/CK_EventCode";
 import BaseMsgHeadUtil from "./BaseMsgHeadUtil";
 import { MsgType,ExtType } from "./BaseMsgType";
 import { BitConvert } from "./BitConvert";
@@ -35,10 +36,11 @@ export class MessageCenter {
                 this.HandleBizMsg(extType,data)
                 break;
             case MsgType.CTRL_HEART_BEAT:
-            
+                this.HandleHeartbeat();
                 break;
             case MsgType.CTRL_CONNC_OPEN:
-                SocketClient.GetInstance().Regular();
+                this.HandleConnectOpen()
+               
                 break;
             case MsgType.CTRL_CONNC_CLOSE:
             
@@ -71,14 +73,15 @@ export class MessageCenter {
                 return BitConvert.GetInstance().ByteArrayToNumberArray(tempBytes)
             };
             let msgLength=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier)
-            let cmdId=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier)
+            let cmdId:number=MiniDataUtil.GetMiniData(byte.getByte(),bytesSupplier)
             let data=byte.getUint8Array(byte.pos,byte.length)
 
-            // console.log( msgLength,cmdId,data );
+            
             switch (extType) {
                 case ExtType.BIZ_MSG_EXT_TYPE_UNICAST:
 
-                    Laya.stage.event(cmdId,data)
+                    console.log( "HandleBizMsg",cmdId);
+                    Laya.stage.event(cmdId.toString(),data)
                     break;
                 case ExtType.BIZ_MSG_EXT_TYPE_BROADCAST:
                     console.log("BIZ_MSG_EXT_TYPE_BROADCAST");
@@ -173,9 +176,15 @@ export class MessageCenter {
     }
 
 
+    private HandleHeartbeat(){
+
+        console.log("CTRL_HEART_BEAT");
+        
+    }
+
     private HandleConnectOpen() {
         //trigger -103 event
-
+        SocketClient.GetInstance().Regular();
         console.log("CTRL_CONNC_OPEN_EXT_TYPE_BASIC");
         
     }
@@ -195,6 +204,7 @@ export class MessageCenter {
             switch (extType) {
                 case ExtType.CTRL_CUSTOM_EXT_TYPE_0:
                     console.log("CTRL_CUSTOM_EXT_TYPE_0");
+                    Laya.stage.event(CK_EventCode.RegularSuccess);
                     
                     break;
                 case ExtType.CTRL_CUSTOM_EXT_TYPE_1:
@@ -216,7 +226,7 @@ export class MessageCenter {
                     break;
             }
             
-            SocketClient.GetInstance().SocketClose();
+
 
            
             

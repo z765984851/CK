@@ -6,4 +6,5 @@ export enum CK_EventCode
     PanelDestroy="PanelDestroy",
     GetServerResp="GetServerResp",
     LoadingProgressChange="LoadingProgressChange",
+    RegularSuccess="RegularSuccess",
 }

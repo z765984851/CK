@@ -1,4 +1,5 @@
 import { BallType } from "../Common/BallType";
+import { CkLineage, CkLineageConfig } from "../Generate/Config/CkLineage";
 import { ResMananger } from "./ResMananger";
 
 
@@ -67,7 +68,8 @@ export class BallFactory {
         let array=this.pool.get(ballType);
         let ball:Laya.Sprite3D=null;
         if (!this.ballMap.has(ballType)) {
-            let path=ResMananger.GetInstance().BasePrefabPath+ballType;
+            let lnName:CkLineage=CkLineageConfig.GetInstance().GetData("1020000"+ballType)
+            let path=ResMananger.GetInstance().BasePrefabPath+lnName.ballType;
             ball=ResMananger.GetInstance().GetRes(path);
             this.ballMap.set(ballType,ball);
            

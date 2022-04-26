@@ -6,7 +6,7 @@ import GameManager from "./GameLogic/Manager/GameManager"
 export default class GameConfig{
     static width:number=1600;
     static height:number=900;
-    static scaleMode:string="fixedwidth";
+    static scaleMode:string="noscale";
     static screenMode:string="horizontal";
     static alignV:string="top";
     static alignH:string="left";

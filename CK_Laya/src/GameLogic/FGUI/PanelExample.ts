@@ -64,7 +64,7 @@ export class PanelExample  implements FGUIBase
      Destroy() {
 
          this.Content?.dispose()
-         fgui.UIPackage.removePackage(this.Config.PackageName)
+         // fgui.UIPackage.removePackage(this.Config.PackageName)
          this.IsInitFinish=false;
          this.ID=0;
          Laya.stage.event(CK_EventCode.PanelDestroy,this.UIType);

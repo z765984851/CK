@@ -1,3 +1,6 @@
+
+import { CK_MsgCMD } from "../Common/CK_MsgCMD";
+import { SocketClient } from "../Message/SocketClient";
 import { DataManager } from "./DataManager";
 import { HttpManager } from "./HttpManager";
 
@@ -36,11 +39,12 @@ export class LoginManager {
         if (data.code==0) {
             let body=data.body;
             DataManager.GetInstance().SetHttpServerResp(body);
+            
         }
         //get error , code=10
         else
         {
-            console.log("get error");
+            console.log("[LoginManager]","onGetServerSuccess","Get Error");
             
         }
     }
@@ -49,6 +53,53 @@ export class LoginManager {
     {
         console.log(error);
     }
+
+    public SocketConnet()
+    {
+        SocketClient.GetInstance().IP=DataManager.GetInstance().HttpServerResp.GatewayIp;
+        SocketClient.GetInstance().Port=DataManager.GetInstance().HttpServerResp.Port;
+        SocketClient.GetInstance().ServerId=DataManager.GetInstance().HttpServerResp.Sid;
+        SocketClient.GetInstance().Connect();
+
+    }
+
+    public SendVerify()
+    {
+        let rqstVerify=RequestPackage.RqstVerify.create();
+        rqstVerify.ip=DataManager.GetInstance().HttpServerResp.ClientIP;
+        rqstVerify.access="111123132";
+        rqstVerify.sid=DataManager.GetInstance().HttpServerResp.Sid;
+        rqstVerify.uid=SocketClient.GetInstance().UID.toString();
+        let buf:Uint8Array=RequestPackage.RqstVerify.encode(rqstVerify).finish();
+        
+        SocketClient.GetInstance().SendBizMsg(CK_MsgCMD.Verify,buf);
+
+    }
+
+    public SendCreateRole()
+    {
+        SocketClient.GetInstance().SendBizMsg_Empty(CK_MsgCMD.CreateRole);
+    }
+
+    public SendRqstRoleInfo()
+    {
+        let rqst=RequestPackage.RqstLoadRole.create();
+        rqst.ip = DataManager.GetInstance().HttpServerResp.ClientIP;
+        rqst.sid = DataManager.GetInstance().HttpServerResp.Sid;
+        let buf:Uint8Array=RequestPackage.RqstLoadRole.encode(rqst).finish();
+        SocketClient.GetInstance().SendBizMsg(CK_MsgCMD.EnterGame,buf);
+
+    }
+
+
+    public StartHeartBeat()
+    {
+
+        
+
+    }
+
+
 
 
 

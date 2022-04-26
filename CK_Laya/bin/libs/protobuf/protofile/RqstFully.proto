@@ -1,15 +1,5 @@
-package clientRequestPackage;
+package RequestPackage;
 syntax="proto3";
-message RqstCreRole {  
-// 服务器id
- string sid=1;
-// 名字
- string name=2;
-// 所在国家
- sint32 country=3;
-// 游戏阵营
- sint32 camp=4;
-}
 message RqstInt {  
  sint32 value=1;
 }
@@ -45,6 +35,5 @@ message RqstVerify {
  string uid=1;
  string sid=2;
  string access=3;
- string refresh=4;
- string ip=5;
+ string ip=4;
 }

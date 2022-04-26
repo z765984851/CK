@@ -3,7 +3,7 @@ import { BallType } from "../Common/BallType";
 import { CK_EventCode } from "../Common/CK_EventCode";
 import { FGUIManager } from "../Manager/FGUIManager";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "./CK_FGUIConfig";
-import { UIBall } from "./UIBall";
+import { UIBall } from "./Component/UIBall";
 
 export class WindowExample extends fgui.Window implements FGUIBase {
     Config:CK_UIConfig;

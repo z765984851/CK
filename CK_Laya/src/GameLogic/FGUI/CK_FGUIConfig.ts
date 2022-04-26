@@ -22,7 +22,8 @@ export class CK_FGUIConfig {
             [CK_UIType.PanelExample , new CK_UIConfig("ball_package","panel_comp",false,false)],
             [CK_UIType.WindowExample , new CK_UIConfig("ball_package","window_comp",true,false)],
             [CK_UIType.LoadingPanel , new CK_UIConfig("loading_package","loading_comp",false,false)],
-            [CK_UIType.LobbyPanel , new CK_UIConfig("lobby_package","lobby_comp",false,false)],
+            [CK_UIType.MainPanel , new CK_UIConfig("main_package","main_comp",false,false)],
+            [CK_UIType.TopBarPanel, new CK_UIConfig("common_component_package","common_playerinfo_comp",false,false)],
         ]
 
     );
@@ -33,9 +34,9 @@ export  enum CK_UIType
 {
     PanelExample=0,
     WindowExample=1,
-    LoadingPanel,
-    LobbyPanel,
-
+    LoadingPanel=2,
+    MainPanel=3,
+    TopBarPanel=4,
 }
 
 export class CK_UIConfig{

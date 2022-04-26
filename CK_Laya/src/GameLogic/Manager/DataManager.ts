@@ -16,8 +16,9 @@ export class DataManager {
         return this.Instance
     }
 
-    public HttpServerResp;
-    public PlayerData;
+    public HttpServerResp:HttpServerResp;
+    public PlayerData:PlayerData;
+    public ServerTime;
 
     public SetHttpServerResp(data)
     {
@@ -26,9 +27,24 @@ export class DataManager {
     }
 
 
-    public SetPlayerData()
+    public SetPlayerData(respfully:ResponsePackage.RespFully)
     {
-        this.PlayerData=new PlayerData();
+        this.PlayerData=new PlayerData(respfully);
+        this.ServerTime=respfully.respRole.roleInfo.serverTime;
+        Laya.timer.loop(1000,this,this.ServerTimeUpdate)
+        console.log("SetPlayerData",this.PlayerData);
+        
     }
+
+    
+
+    private ServerTimeUpdate()
+    {
+        this.ServerTime+=1000;
+
+    }
+    
+
+
 
 }
