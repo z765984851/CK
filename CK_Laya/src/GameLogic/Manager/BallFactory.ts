@@ -53,7 +53,10 @@ export class BallFactory {
     public ResycleBall(ballType:BallType,ball:Laya.Sprite3D)
     {
         ball.active=false;
-        this.pool[ballType].push(ball);
+       
+        let pool=this.pool.get(ballType);
+        // console.log("[BallFactory]",pool,ballType);
+        pool.push(ball);
 
     }
 
@@ -81,8 +84,5 @@ export class BallFactory {
 
     }
 
-    public TestBall(){
-        this.GetBall(BallType.Dragon);
-        // this.GetBall(BallType.Dragon);
-    }
+    
 }

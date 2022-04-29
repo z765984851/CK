@@ -1,5 +1,5 @@
 
-import { CK_MsgCMD } from "../Common/CK_MsgCMD";
+import { RequestCMD } from "../Common/RequestCMD";
 import { SocketClient } from "../Message/SocketClient";
 import { DataManager } from "./DataManager";
 import { HttpManager } from "./HttpManager";
@@ -72,13 +72,13 @@ export class LoginManager {
         rqstVerify.uid=SocketClient.GetInstance().UID.toString();
         let buf:Uint8Array=RequestPackage.RqstVerify.encode(rqstVerify).finish();
         
-        SocketClient.GetInstance().SendBizMsg(CK_MsgCMD.Verify,buf);
+        SocketClient.GetInstance().SendBizMsg(RequestCMD.Verify,buf);
 
     }
 
     public SendCreateRole()
     {
-        SocketClient.GetInstance().SendBizMsg_Empty(CK_MsgCMD.CreateRole);
+        SocketClient.GetInstance().SendBizMsg_Empty(RequestCMD.CreateRole);
     }
 
     public SendRqstRoleInfo()
@@ -87,7 +87,7 @@ export class LoginManager {
         rqst.ip = DataManager.GetInstance().HttpServerResp.ClientIP;
         rqst.sid = DataManager.GetInstance().HttpServerResp.Sid;
         let buf:Uint8Array=RequestPackage.RqstLoadRole.encode(rqst).finish();
-        SocketClient.GetInstance().SendBizMsg(CK_MsgCMD.EnterGame,buf);
+        SocketClient.GetInstance().SendBizMsg(RequestCMD.EnterGame,buf);
 
     }
 

@@ -12,23 +12,24 @@
         CK_EventCode["RegularSuccess"] = "RegularSuccess";
     })(CK_EventCode || (CK_EventCode = {}));
 
-    var CK_MsgCMD;
-    (function (CK_MsgCMD) {
-        CK_MsgCMD[CK_MsgCMD["Verify"] = 201] = "Verify";
-        CK_MsgCMD[CK_MsgCMD["CreateRole"] = 202] = "CreateRole";
-        CK_MsgCMD[CK_MsgCMD["EnterGame"] = 203] = "EnterGame";
-        CK_MsgCMD[CK_MsgCMD["PI"] = 205] = "PI";
-        CK_MsgCMD[CK_MsgCMD["CheckIn"] = 206] = "CheckIn";
-        CK_MsgCMD[CK_MsgCMD["ChangeImg"] = 211] = "ChangeImg";
-        CK_MsgCMD[CK_MsgCMD["UpdateTeam"] = 801] = "UpdateTeam";
-        CK_MsgCMD[CK_MsgCMD["Read"] = 1002] = "Read";
-        CK_MsgCMD[CK_MsgCMD["Delete"] = 1003] = "Delete";
-        CK_MsgCMD[CK_MsgCMD["Pick"] = 1004] = "Pick";
-        CK_MsgCMD[CK_MsgCMD["Chat"] = 1101] = "Chat";
-        CK_MsgCMD[CK_MsgCMD["GetCacheChat"] = 1103] = "GetCacheChat";
-        CK_MsgCMD[CK_MsgCMD["FreeMatch"] = 1401] = "FreeMatch";
-        CK_MsgCMD[CK_MsgCMD["ChampionshipMatch"] = 1402] = "ChampionshipMatch";
-    })(CK_MsgCMD || (CK_MsgCMD = {}));
+    var RequestCMD;
+    (function (RequestCMD) {
+        RequestCMD[RequestCMD["Verify"] = 201] = "Verify";
+        RequestCMD[RequestCMD["CreateRole"] = 202] = "CreateRole";
+        RequestCMD[RequestCMD["EnterGame"] = 203] = "EnterGame";
+        RequestCMD[RequestCMD["PI"] = 205] = "PI";
+        RequestCMD[RequestCMD["CheckIn"] = 206] = "CheckIn";
+        RequestCMD[RequestCMD["ChangeImg"] = 211] = "ChangeImg";
+        RequestCMD[RequestCMD["UpdateTeam"] = 801] = "UpdateTeam";
+        RequestCMD[RequestCMD["Read"] = 1002] = "Read";
+        RequestCMD[RequestCMD["Delete"] = 1003] = "Delete";
+        RequestCMD[RequestCMD["Pick"] = 1004] = "Pick";
+        RequestCMD[RequestCMD["Chat"] = 1101] = "Chat";
+        RequestCMD[RequestCMD["GetCacheChat"] = 1103] = "GetCacheChat";
+        RequestCMD[RequestCMD["FreeMatch"] = 1401] = "FreeMatch";
+        RequestCMD[RequestCMD["ChampionshipMatch"] = 1402] = "ChampionshipMatch";
+        RequestCMD[RequestCMD["ChampionshipInfo"] = 1407] = "ChampionshipInfo";
+    })(RequestCMD || (RequestCMD = {}));
 
     class CK_FGUIConfig {
         constructor() {
@@ -37,6 +38,7 @@
                 [CK_UIType.WindowExample, new CK_UIConfig("ball_package", "window_comp", true, false)],
                 [CK_UIType.LoadingPanel, new CK_UIConfig("loading_package", "loading_comp", false, false)],
                 [CK_UIType.MainPanel, new CK_UIConfig("main_package", "main_comp", false, false)],
+                [CK_UIType.BattlePanel, new CK_UIConfig("battle_package", "battle_comp", false, false)],
                 [CK_UIType.TopBarPanel, new CK_UIConfig("common_component_package", "common_playerinfo_comp", false, false)],
             ]);
         }
@@ -54,6 +56,7 @@
         CK_UIType[CK_UIType["LoadingPanel"] = 2] = "LoadingPanel";
         CK_UIType[CK_UIType["MainPanel"] = 3] = "MainPanel";
         CK_UIType[CK_UIType["TopBarPanel"] = 4] = "TopBarPanel";
+        CK_UIType[CK_UIType["BattlePanel"] = 5] = "BattlePanel";
     })(CK_UIType || (CK_UIType = {}));
     class CK_UIConfig {
         constructor(packageName, componentName, isMutiple, isWindow) {
@@ -169,6 +172,7 @@
             this.SetVisible(true);
             this.animRotate.play(null, -1);
             this.animText.play(null, -1);
+            this.progressText.text = "0%";
             Laya.stage.on(CK_EventCode.LoadingProgressChange, this, this.ChangeProgress);
         }
         Close() {
@@ -182,6 +186,7 @@
             (_a = this.Content) === null || _a === void 0 ? void 0 : _a.dispose();
             this.IsInitFinish = false;
             this.ID = 0;
+            Laya.stage.off(CK_EventCode.LoadingProgressChange, this, this.ChangeProgress);
             Laya.stage.event(CK_EventCode.PanelDestroy, this.UIType);
         }
         SetVisible(visible) {
@@ -332,8 +337,6 @@
 
     class ResMananger {
         constructor() {
-            this.BattleScenePath = "res/unityscenes/LayaScene_BattleScene/Conventional/";
-            this.LobbyScenePath = "res/unityscenes/LayaScene_LobbyScene/Conventional/";
             this.BasePrefabPath = "res/unityscenes/LayaScene_PrefabScene/Conventional/";
             this.loadedPath = new Array();
         }
@@ -428,6 +431,7 @@
         }
         ReleaseRes(path) {
             if (this.IsLoaded(path)) {
+                console.log("[ResMananger] ReleaseRes", path);
                 Laya.loader.clearRes(path);
                 ArrayHelper.GetInstance().RemoveElementFromArray(this.loadedPath, path);
             }
@@ -465,7 +469,8 @@
         }
         ResycleBall(ballType, ball) {
             ball.active = false;
-            this.pool[ballType].push(ball);
+            let pool = this.pool.get(ballType);
+            pool.push(ball);
         }
         CreateBall(ballType) {
             if (!this.pool.has(ballType)) {
@@ -483,9 +488,6 @@
             ball = Laya.Sprite3D.instantiate(ballPrefab, ball);
             this.poolParent.addChild(ball);
             array.push(ball);
-        }
-        TestBall() {
-            this.GetBall(BallType.Dragon);
         }
     }
 
@@ -625,27 +627,222 @@
         }
     }
 
-    class UIHpSlider {
+    class CkQualityConfig {
+        constructor() {
+            this.Data = new Map([
+                ["id_10300001", new CkQuality(10300001, 1, "ui://hhm821bghasgb")],
+                ["id_10300002", new CkQuality(10300002, 2, "ui://hhm821bghasgc")],
+                ["id_10300003", new CkQuality(10300003, 3, "ui://hhm821bghasgd")],
+                ["id_10300004", new CkQuality(10300004, 4, "ui://hhm821bghasge")],
+            ]);
+        }
+        static GetInstance() {
+            if (this.Instance == null) {
+                this.Instance = new CkQualityConfig();
+            }
+            return this.Instance;
+        }
+        GetData(Id) {
+            let data = this.Data.get("id_" + Id);
+            if (data != null) {
+                return data;
+            }
+            return null;
+        }
+    }
+    class CkQuality {
+        constructor(id, qualityType, qualityIcon) {
+            this.id = id;
+            this.qualityType = qualityType;
+            this.qualityIcon = qualityIcon;
+        }
+    }
+
+    class CkWeaponConfig {
+        constructor() {
+            this.Data = new Map([
+                ["id_10100001", new CkWeapon(10100001, 1, 1, "ui://hhm821bghasg9", "ui://hhm821bghasg4", 20, 60, 100, 0)],
+                ["id_10100002", new CkWeapon(10100002, 2, 2, "ui://hhm821bghasga", "ui://hhm821bghasg6", 30, 80, 130, 0)],
+                ["id_10100003", new CkWeapon(10100003, 3, 3, "ui://hhm821bghasga", "ui://hhm821bghasg5", 200, 40, 120, 0)],
+                ["id_10100004", new CkWeapon(10100004, 4, 4, "ui://hhm821bghasg8", "ui://hhm821bghasg7", 150, 60, 100, 130)],
+            ]);
+        }
+        static GetInstance() {
+            if (this.Instance == null) {
+                this.Instance = new CkWeaponConfig();
+            }
+            return this.Instance;
+        }
+        GetData(Id) {
+            let data = this.Data.get("id_" + Id);
+            if (data != null) {
+                return data;
+            }
+            return null;
+        }
+    }
+    class CkWeapon {
+        constructor(id, weaponId, weapontype, weaponIcon, cap, atkDistance, atk, atkSpeed, singSpeed) {
+            this.id = id;
+            this.weaponId = weaponId;
+            this.weapontype = weapontype;
+            this.weaponIcon = weaponIcon;
+            this.cap = cap;
+            this.atkDistance = atkDistance;
+            this.atk = atk;
+            this.atkSpeed = atkSpeed;
+            this.singSpeed = singSpeed;
+        }
+    }
+
+    class UIBallBattleMsg {
         constructor(root, camera) {
             this.currentPos = new Laya.Vector4(0, 0, 0, 0);
             this.root = root;
             this.camera = camera;
         }
-        Show() {
-            this.component = fgui.UIPackage.createObject("ball_package", "hp_slider");
+        Show(data) {
+            this.battlerData = data;
+            this.component = fgui.UIPackage.createObject("battle_package", "battle_ck3d_comp").asCom;
             fgui.GRoot.inst.addChild(this.component);
+            this.InitComp();
+            this.InitData();
+        }
+        InitComp() {
+            this.idText = this.component.getChild("battle_playerid_txt").asTextField;
+            this.hpSlider = this.component.getChild("battle_ckhp_bar").asSlider;
+            this.hatLoader = this.component.getChild("battle_class_comp").asCom.getChild("lobby_function_icon");
+            this.weaponLoader = this.component.getChild("battle_ckweapon_comp").asCom.getChild("lobby_ckweapon_icon");
+            this.beltLoader = this.component.getChild("battle_ckquality_comp").asCom.getChild("lobby_ckquality_icon");
+        }
+        InitData() {
+            this.idText.text = this.battlerData.roleInfo.id;
+            this.hpSlider.max = this.battlerData.battleCk.maxHp;
+            this.ChangeHp(this.battlerData.battleCk.maxHp);
+            this.ChangeCareer(this.battlerData.battleCk.professionList[0]);
+            this.ChangeBelt(this.battlerData.battleCk.quality);
+        }
+        StartFollow() {
+            Laya.timer.loop(20, this, this.Follow);
+        }
+        StopFollow() {
+            Laya.timer.clear(this, this.Follow);
         }
         Follow() {
             this.camera.viewport.project(this.root.transform.position, this.camera.projectionViewMatrix, this.currentPos);
             this.component.displayObject.pos(this.currentPos.x, this.currentPos.y);
+        }
+        ChangeCareer(career) {
+            let careerConfig = CkWeaponConfig.GetInstance().GetData("1010000" + career);
+            this.weaponLoader.url = careerConfig.weaponIcon;
+            this.hatLoader.url = careerConfig.cap;
+        }
+        ChangeBelt(quality) {
+            let beltConfig = CkQualityConfig.GetInstance().GetData("1030000" + quality);
+            this.beltLoader.url = beltConfig.qualityIcon;
+        }
+        ChangeHp(value) {
+            this.hpSlider.value = value;
+        }
+        Destroy() {
+            this.StopFollow();
+            this.component.dispose();
+        }
+    }
+
+    class BattleBall {
+        constructor(userdata, scene) {
+            this.IsDied = false;
+            this.IsDestroy = false;
+            this.r_ball = 0.5;
+            this.PI = 3.14;
+            this.userData = userdata;
+            this.scene = scene;
+            this.RoleId = this.userData.roleInfo.id;
+            this.CkId = this.userData.battleCk.id;
+            this.CreateBall();
+            this.CreateUI();
+        }
+        CreateBall() {
+            let ckInfo = this.userData.battleCk;
+            this.ball = BallFactory.GetInstance().GetBall(ckInfo.lineage);
+            this.scene.Scene.addChild(this.ball);
+            this.ball.active = true;
+            this.ball.transform.localScale = new Laya.Vector3(1, 1, 1);
+        }
+        CreateUI() {
+            this.ui = new UIBallBattleMsg(this.ball, this.scene.Camera);
+            this.ui.Show(this.userData);
+            this.ui.StartFollow();
+        }
+        GetBallGameObject() {
+            return this.ball;
+        }
+        Transport(x, y) {
+            let newPos = new Laya.Vector3(x, 0, y);
+            this.ball.transform.position = newPos;
+        }
+        Move(x, y) {
+            if (this.IsDied) {
+                return;
+            }
+            this.lastPos = this.ball.transform.position;
+            let newPos = new Laya.Vector3(x, 0, y);
+            this.Rotate(newPos);
+            this.ball.transform.position = newPos;
+        }
+        Rotate(newPos) {
+            let dis = Laya.Vector3.distance(newPos, this.lastPos);
+            let angle = 360 * (dis / (this.r_ball * this.PI));
+            let forward = new Laya.Vector3(0, 0, 0);
+            Laya.Vector3.subtract(newPos, this.lastPos, forward);
+            Laya.Vector3.cross(new Laya.Vector3(0, 1, 0), forward, forward);
+            Laya.Vector3.scale(forward, angle * 10, forward);
+            this.ball.transform.rotate(forward, false, false);
+        }
+        ChangeHp(v) {
+            this.ui.ChangeHp(v);
+        }
+        Died() {
+            console.log("[BattleBall] Died", this.CkId);
+            this.IsDied = true;
+            this.Destroy();
+        }
+        Destroy() {
+            if (!this.IsDestroy) {
+                this.IsDestroy = true;
+                let ckInfo = this.userData.battleCk;
+                this.ui.Destroy();
+                BallFactory.GetInstance().ResycleBall(ckInfo.lineage, this.ball);
+            }
+        }
+    }
+
+    class CameraComponent {
+        constructor(camera) {
+            this.camera = camera;
+        }
+        StartFollow(followTarget) {
+            this.followTarget = followTarget;
+            Laya.timer.frameLoop(1, this, this.Follow);
+        }
+        StopFollow() {
+            Laya.timer.clear(this, this.Follow);
+        }
+        Follow() {
+            this.camera.transform.position = new Laya.Vector3(this.followTarget.transform.position.x, 4, this.followTarget.transform.position.z);
         }
     }
 
     class BattleScene {
         constructor(scene) {
             this.SceneType = SceneType.BattleScene;
-            this.r_ball = 0.5;
-            this.PI = 3.14;
+            this.balls = new Array();
+            this.currentFrameId = 0;
+            this.roleMap = new Map();
+            this.ckMap = new Map();
+            this.frameTime = 10;
+            this.endFrameId = 0;
             this.Scene = scene;
             this.Init();
         }
@@ -654,56 +851,100 @@
             this.Light = this.Scene.getChildByName("Directional Light");
             this.OpenShadow();
             this.BindEvent();
-            this.CreateBall();
+            this.CameraInit();
         }
         OpenShadow() {
             this.Light.shadowMode = 1;
         }
-        CreateBall() {
-            this.ball = BallFactory.GetInstance().GetBall(BallType.Dragon);
-            this.Scene.addChild(this.ball);
-            this.ball.transform.localPosition = new Laya.Vector3(0, 0, 0);
-            this.ball.transform.localScale = new Laya.Vector3(1, 1, 1);
-            this.ball.active = true;
-            this.slider = new UIHpSlider(this.ball, this.Camera);
-            this.slider.Show();
-            this.slider.Follow();
+        CameraInit() {
+            this.cameraComp = new CameraComponent(this.Camera);
+        }
+        GameInit(battleData) {
+            this.currentBattleData = battleData;
+            this.DataHandle();
+        }
+        DataHandle() {
+            this.battleFrames = this.currentBattleData.frameList;
+            let battlerList = this.currentBattleData.battlerList;
+            for (let index = 0; index < battlerList.length; index++) {
+                const battler = battlerList[index];
+                let roleInfo = battler.roleInfo;
+                let ckInfo = battler.battleCk;
+                let battleBall = new BattleBall(battler, this);
+                battleBall.Transport(ckInfo.posX / 1000, ckInfo.posY / 1000);
+                this.balls.push(battleBall);
+                this.roleMap.set(roleInfo.id, battleBall);
+                this.ckMap.set(ckInfo.id, battleBall);
+                if (roleInfo.id == DataManager.GetInstance().PlayerData.ID) {
+                    this.mainUser = battleBall;
+                    this.cameraComp.StartFollow(battleBall.GetBallGameObject());
+                }
+            }
+        }
+        GameStart() {
+            FGUIManager.GetInstance().OpenPanel(CK_UIType.BattlePanel, () => { }, true, this.currentBattleData);
+            this.battlePanel = FGUIManager.GetInstance().GetPanel(CK_UIType.BattlePanel);
+            this.endFrameId = this.battleFrames.length;
+            console.log("[BattleScene]FrameLogic", this.balls.length);
+            this.FrameLogic();
+        }
+        FrameLogic() {
+            let frameData = this.battleFrames[this.currentFrameId];
+            let ckframeInfos = frameData.ckFrameInfoList;
+            for (let index = 0; index < ckframeInfos.length; index++) {
+                const ckInfo = ckframeInfos[index];
+                let battleBall = this.ckMap.get(ckInfo.id);
+                battleBall.ChangeHp(ckInfo.hp);
+                if (ckInfo.isDead == true) {
+                    battleBall.Died();
+                    if (ckInfo.id == this.mainUser.CkId) {
+                        this.GameOver();
+                        return;
+                    }
+                }
+                battleBall.Move(ckInfo.posXY.x / 1000, ckInfo.posXY.y / 1000);
+                console.log("[BattleScene]", battleBall.CkId, ckInfo);
+            }
+            this.currentFrameId++;
+            this.battlePanel.ChangeTime(this.currentFrameId * this.frameTime);
+            if (this.currentFrameId != this.endFrameId) {
+                Laya.timer.once(this.frameTime, this, this.FrameLogic);
+            }
+            else {
+                this.GameOver();
+            }
+        }
+        GameOver() {
+            console.log("[BattleScene] Game Over");
+        }
+        EnterLobby() {
+            this.cameraComp.StopFollow();
+            for (let index = 0; index < this.balls.length; index++) {
+                const ball = this.balls[index];
+                ball.Destroy();
+            }
+            FGUIManager.GetInstance().CloseAllPanel();
+            FGUIManager.GetInstance().CloseAllWindow();
+            SceneManager.GetInstance().DestroyCurrentScene();
+            SceneManager.GetInstance().LoadScene3D(SceneType.LobbyScene, Laya.Handler.create(this, () => {
+                SceneManager.GetInstance().ChangeScene3D(SceneType.LobbyScene);
+                FGUIManager.GetInstance().OpenPanel(CK_UIType.MainPanel, () => { }, true, MainPanelType.Lobby);
+                FGUIManager.GetInstance().OpenPanel(CK_UIType.TopBarPanel, () => { }, false);
+            }));
         }
         BindEvent() {
-            Laya.stage.on(Laya.Event.KEY_PRESS, this, (e) => {
+            let focusBall = 0;
+            Laya.stage.on(Laya.Event.KEY_DOWN, this, (e) => {
                 let keyCode = e.keyCode;
                 console.log(keyCode);
-                this.currentPos = this.ball.transform.position;
-                this.tempX = this.currentPos.x;
-                this.tempY = this.currentPos.y;
-                this.tempZ = this.currentPos.z;
-                if (keyCode == 115) {
-                    this.tempZ += 0.01;
+                if (keyCode = 65) {
+                    let ball = this.balls[focusBall];
+                    this.cameraComp.StartFollow(ball.GetBallGameObject());
+                    focusBall++;
+                    if (focusBall == this.balls.length) {
+                        focusBall = 0;
+                    }
                 }
-                if (keyCode == 119) {
-                    this.tempZ -= 0.01;
-                }
-                if (keyCode == 100) {
-                    this.tempX += 0.01;
-                }
-                if (keyCode == 97) {
-                    this.tempX -= 0.01;
-                }
-                this.newPos = new Laya.Vector3(this.tempX, this.tempY, this.tempZ);
-                if (this.newPos != this.currentPos) {
-                    let dis = Laya.Vector3.distance(this.newPos, this.currentPos);
-                    let angle = 360 * (dis / (this.r_ball * this.PI));
-                    let forward = new Laya.Vector3(0, 0, 0);
-                    Laya.Vector3.subtract(this.newPos, this.currentPos, forward);
-                    Laya.Vector3.cross(new Laya.Vector3(0, 1, 0), forward, forward);
-                    Laya.Vector3.scale(forward, angle * 100, forward);
-                    console.log(forward);
-                    this.ball.transform.rotate(forward, false, false);
-                    this.ball.transform.position = this.newPos;
-                }
-            });
-            Laya.timer.frameLoop(1, this, () => {
-                this.Camera.transform.position = new Laya.Vector3(this.ball.transform.position.x, 4, this.ball.transform.position.z);
             });
         }
     }
@@ -750,6 +991,10 @@
 
     class SceneManager {
         constructor() {
+            this.ScenePathMap = new Map([
+                [SceneType.BattleScene, "res/unityscenes/LayaScene_BattleScene/Conventional/BattleScene.ls"],
+                [SceneType.LobbyScene, "res/unityscenes/LayaScene_LobbyScene/Conventional/LobbyScene.ls"],
+            ]);
         }
         static GetInstance() {
             if (this.Instance == null) {
@@ -764,17 +1009,7 @@
             Laya.stage.addChild(this.UIScene);
         }
         LoadScene3D(sceneType, complete, progress) {
-            let url = "";
-            switch (sceneType) {
-                case SceneType.BattleScene:
-                    url = ResMananger.GetInstance().BattleScenePath + sceneType;
-                    break;
-                case SceneType.LobbyScene:
-                    url = ResMananger.GetInstance().LobbyScenePath + sceneType;
-                    break;
-                default:
-                    break;
-            }
+            let url = this.ScenePathMap.get(sceneType);
             ResMananger.GetInstance().Load3DRes(url, complete, progress);
         }
         ChangeScene3D(sceneType) {
@@ -785,25 +1020,26 @@
                 }
             }
             else {
-                let url;
-                let scene;
+                let url = this.ScenePathMap.get(sceneType);
+                let scene = ResMananger.GetInstance().GetRes(url);
+                this.GameScene.addChild(scene);
                 switch (sceneType) {
                     case SceneType.BattleScene:
-                        url = ResMananger.GetInstance().BattleScenePath + sceneType;
-                        scene = ResMananger.GetInstance().GetRes(url);
-                        this.GameScene.addChild(scene);
                         this.CurrentActiveScene = new BattleScene(scene);
                         break;
                     case SceneType.LobbyScene:
-                        url = ResMananger.GetInstance().LobbyScenePath + sceneType;
-                        scene = ResMananger.GetInstance().GetRes(url);
-                        this.GameScene.addChild(scene);
                         this.CurrentActiveScene = new LobbyScene(scene);
                         break;
                     default:
                         break;
                 }
             }
+        }
+        DestroyCurrentScene() {
+            this.CurrentActiveScene.Scene.destroy();
+            let url = this.ScenePathMap.get(this.CurrentActiveScene.SceneType);
+            ResMananger.GetInstance().ReleaseRes(url);
+            this.CurrentActiveScene = null;
         }
     }
     var SceneType;
@@ -955,6 +1191,64 @@
         }
     }
 
+    class FGUI_BattlePanel {
+        constructor() {
+            this.UIType = CK_UIType.BattlePanel;
+            this.IsInitFinish = false;
+            this.ID = 0;
+        }
+        Init() {
+            if (this.IsInitFinish == false) {
+                this.Config = CK_FGUIConfig.GetInstance().Config.get(this.UIType);
+                this.Content = fgui.UIPackage.createObject(this.Config.PackageName, this.Config.ComponentName).asCom;
+                fgui.GRoot.inst.addChild(this.Content);
+                this.Content.makeFullScreen();
+                this.InitComp();
+                this.SetVisible(false);
+                this.IsInitFinish = true;
+            }
+        }
+        Show(args) {
+            this.SetVisible(true);
+            this.battleData = args;
+            this.ChangeTime(0);
+        }
+        Close() {
+            this.SetVisible(false);
+            this.ID = 0;
+            Laya.stage.event(CK_EventCode.PanelDestroy, this.ID);
+        }
+        Destroy() {
+            var _a;
+            (_a = this.Content) === null || _a === void 0 ? void 0 : _a.dispose();
+            this.IsInitFinish = false;
+            this.ID = 0;
+            Laya.stage.event(CK_EventCode.PanelDestroy, this.UIType);
+        }
+        SetVisible(visible) {
+            if (this.Content != null) {
+                this.Content.visible = visible;
+            }
+        }
+        InitComp() {
+            this.timeText = this.Content.getChild("battle_time_comp").asCom.getChild("battle_timenumber_txt").asTextField;
+        }
+        ChangeTime(milSecond) {
+            let s = milSecond / 1000;
+            let sec = Math.floor(s % 60);
+            let min = Math.floor(s / 60);
+            let secStr = sec.toString();
+            let minStr = min.toString();
+            if (sec < 10) {
+                secStr = "0" + sec;
+            }
+            if (min < 10) {
+                minStr = "0" + min;
+            }
+            this.timeText.text = minStr + ":" + secStr;
+        }
+    }
+
     class FGUIManager {
         constructor() {
             this.CurrentOpenWindow = new Map();
@@ -1038,7 +1332,7 @@
                 onLoadFinish();
             });
         }
-        OpenPanel(uiType, onLoadFinish, ifDestroyLast = true, args) {
+        OpenPanel(uiType, onOpenFinish, ifDestroyLast = true, args) {
             let config = CK_FGUIConfig.GetInstance().Config.get(uiType);
             let openUI = () => {
                 let ui = null;
@@ -1063,7 +1357,7 @@
             };
             this.LoadUIPackage(config.PackageName, () => {
                 openUI();
-                onLoadFinish();
+                onOpenFinish();
             });
         }
         GetWindow(id) {
@@ -1077,7 +1371,6 @@
             return ui;
         }
         GetPanel(uiType) {
-            console.log("[FGUIManager]", this.CurrentOpenPanel);
             for (let index = 0; index < this.CurrentOpenPanel.length; index++) {
                 let element = this.CurrentOpenPanel[index];
                 if (element.UIType == uiType) {
@@ -1115,6 +1408,12 @@
             }
             this.CurrentOpenWindow.clear();
         }
+        CloseAllPanel() {
+            while (this.CurrentOpenPanel.length != 0) {
+                let panel = this.CurrentOpenPanel.pop();
+                panel.Destroy();
+            }
+        }
         IfOpenThisWindow(uiType) {
             for (let index = 0; index < this.CurrentOpenWindow.size; index++) {
                 let element = this.CurrentOpenWindow.get(index + 1);
@@ -1142,6 +1441,9 @@
                 case CK_UIType.TopBarPanel:
                     ui = new FGUI_TopBarPanel();
                     break;
+                case CK_UIType.BattlePanel:
+                    ui = new FGUI_BattlePanel();
+                    break;
                 default:
                     break;
             }
@@ -1162,6 +1464,7 @@
             this.healthText = this.content.getChild("common_con_txt").asTextField;
             this.spiritText = this.content.getChild("common_spi_txt").asTextField;
             this.luckText = this.content.getChild("common_luk_txt").asTextField;
+            this.hpText = this.content.getChild("common_hpnumber_txt").asTextField;
         }
         SetData(ckInfo) {
             this.levelText.text = ckInfo.level.toString();
@@ -1171,74 +1474,6 @@
             this.healthText.text = ckInfo.health.toString();
             this.spiritText.text = ckInfo.spirit.toString();
             this.luckText.text = ckInfo.luck.toString();
-        }
-    }
-
-    class CkQualityConfig {
-        constructor() {
-            this.Data = new Map([
-                ["id_10300001", new CkQuality(10300001, 1, "ui://hhm821bghasgb")],
-                ["id_10300002", new CkQuality(10300002, 2, "ui://hhm821bghasgc")],
-                ["id_10300003", new CkQuality(10300003, 3, "ui://hhm821bghasgd")],
-                ["id_10300004", new CkQuality(10300004, 4, "ui://hhm821bghasge")],
-            ]);
-        }
-        static GetInstance() {
-            if (this.Instance == null) {
-                this.Instance = new CkQualityConfig();
-            }
-            return this.Instance;
-        }
-        GetData(Id) {
-            let data = this.Data.get("id_" + Id);
-            if (data != null) {
-                return data;
-            }
-            return null;
-        }
-    }
-    class CkQuality {
-        constructor(id, qualityType, qualityIcon) {
-            this.id = id;
-            this.qualityType = qualityType;
-            this.qualityIcon = qualityIcon;
-        }
-    }
-
-    class CkWeaponConfig {
-        constructor() {
-            this.Data = new Map([
-                ["id_10100001", new CkWeapon(10100001, 1, 1, "ui://hhm821bghasg9", "ui://hhm821bghasg4", 20, 60, 100, 0)],
-                ["id_10100002", new CkWeapon(10100002, 2, 2, "ui://hhm821bghasga", "ui://hhm821bghasg6", 30, 80, 130, 0)],
-                ["id_10100003", new CkWeapon(10100003, 3, 3, "ui://hhm821bghasga", "ui://hhm821bghasg5", 200, 40, 120, 0)],
-                ["id_10100004", new CkWeapon(10100004, 4, 4, "ui://hhm821bghasg8", "ui://hhm821bghasg7", 150, 60, 100, 130)],
-            ]);
-        }
-        static GetInstance() {
-            if (this.Instance == null) {
-                this.Instance = new CkWeaponConfig();
-            }
-            return this.Instance;
-        }
-        GetData(Id) {
-            let data = this.Data.get("id_" + Id);
-            if (data != null) {
-                return data;
-            }
-            return null;
-        }
-    }
-    class CkWeapon {
-        constructor(id, weaponId, weapontype, weaponIcon, cap, atkDistance, atk, atkSpeed, singSpeed) {
-            this.id = id;
-            this.weaponId = weaponId;
-            this.weapontype = weapontype;
-            this.weaponIcon = weaponIcon;
-            this.cap = cap;
-            this.atkDistance = atkDistance;
-            this.atk = atk;
-            this.atkSpeed = atkSpeed;
-            this.singSpeed = singSpeed;
         }
     }
 
@@ -1334,108 +1569,61 @@
         }
     }
 
-    class UIMatch {
-        constructor(content) {
-            this.Content = content;
-            this.Init();
-            this.BindEvent();
-        }
-        Init() {
-            this.returnBtn = this.Content.getChild("match_back_btn").asButton;
-        }
-        Show(args) {
-        }
-        Hide() {
-        }
-        BindEvent() {
-            this.returnBtn.onClick(this, this.ToLobbyPanel);
-        }
-        ToLobbyPanel() {
-            let mainPanel = FGUIManager.GetInstance().GetPanel(CK_UIType.MainPanel);
-            if (mainPanel != null || mainPanel != undefined) {
-                mainPanel.ChangePanel(MainPanelType.Lobby);
-            }
-        }
-    }
+    var BattleType;
+    (function (BattleType) {
+        BattleType[BattleType["SingleBattle_6"] = 1] = "SingleBattle_6";
+        BattleType[BattleType["TeamBattle_3"] = 2] = "TeamBattle_3";
+    })(BattleType || (BattleType = {}));
+    var MatchType;
+    (function (MatchType) {
+        MatchType[MatchType["Free"] = 1401] = "Free";
+        MatchType[MatchType["Championship"] = 1402] = "Championship";
+    })(MatchType || (MatchType = {}));
 
-    class FGUI_MainPanel {
+    var CK_RespCMD;
+    (function (CK_RespCMD) {
+        CK_RespCMD[CK_RespCMD["UserJoin"] = 1403] = "UserJoin";
+        CK_RespCMD[CK_RespCMD["MatchFailed"] = 1404] = "MatchFailed";
+        CK_RespCMD[CK_RespCMD["BattleStart"] = 1406] = "BattleStart";
+    })(CK_RespCMD || (CK_RespCMD = {}));
+
+    class ChampionshipConfig {
         constructor() {
-            this.UIType = CK_UIType.MainPanel;
-            this.IsInitFinish = false;
-            this.ID = 0;
-            this.lobbyPanel = null;
-            this.matchPanel = null;
-            this.panelMap = new Map();
+            this.Data = new Map([
+                ["id_30401001", new Championship(30401001, 1, 12, [0, 0, 0, 0], [0, 120, 60, 30], 30401002)],
+                ["id_30401002", new Championship(30401002, 1, 18, [0, 180, 90, 45], [0, 180, 90, 45], 30402001)],
+                ["id_30402001", new Championship(30402001, 2, 12, [0, 0, 0, 0], [0, 120, 60, 30], 30403001)],
+                ["id_30403001", new Championship(30403001, 3, 13, [0, 120, 60, 30], [0, 0, 0, 0], 30404001)],
+                ["id_30404001", new Championship(30404001, 4, 14, [0, 0, 0, 0], [0, 120, 60, 30], 30405001)],
+                ["id_30405001", new Championship(30405001, 5, 15, [0, 120, 60, 30], [0, 0, 0, 0], 30406001)],
+                ["id_30406001", new Championship(30406001, 6, 16, [0, 0, 0, 0], [0, 120, 60, 30], 30407001)],
+                ["id_30407001", new Championship(30407001, 7, 17, [0, 120, 60, 30], [0, 0, 0, 0], 30401001)],
+            ]);
         }
-        Init() {
-            if (this.IsInitFinish == false) {
-                this.Config = CK_FGUIConfig.GetInstance().Config.get(this.UIType);
-                this.Content = fgui.UIPackage.createObject(this.Config.PackageName, this.Config.ComponentName).asCom;
-                fgui.GRoot.inst.addChild(this.Content);
-                this.Content.makeFullScreen();
-                this.InitComp();
-                this.InitMap();
-                this.SetVisible(false);
-                this.IsInitFinish = true;
+        static GetInstance() {
+            if (this.Instance == null) {
+                this.Instance = new ChampionshipConfig();
             }
+            return this.Instance;
         }
-        Show(panelType) {
-            this.SetVisible(true);
-            this.ChangePanel(panelType);
-        }
-        Close() {
-            this.SetVisible(false);
-            this.ID = 0;
-            Laya.stage.event(CK_EventCode.PanelDestroy, this.ID);
-        }
-        Destroy() {
-            var _a;
-            (_a = this.Content) === null || _a === void 0 ? void 0 : _a.dispose();
-            this.IsInitFinish = false;
-            this.ID = 0;
-            Laya.stage.event(CK_EventCode.PanelDestroy, this.UIType);
-        }
-        SetVisible(visible) {
-            if (this.Content != null) {
-                this.Content.visible = visible;
+        GetData(Id) {
+            let data = this.Data.get("id_" + Id);
+            if (data != null) {
+                return data;
             }
-        }
-        InitComp() {
-            this.matchComp = this.Content.getChild("match_comp").asCom;
-            this.lobbyComp = this.Content.getChild("lobby_comp").asCom;
-            this.panelController = this.Content.getController("main_ctrl");
-        }
-        InitMap() {
-            this.lobbyPanel = new UILobby(this.lobbyComp);
-            this.matchPanel = new UIMatch(this.matchComp);
-            this.panelMap.set(MainPanelType.Lobby, this.lobbyPanel);
-            this.panelMap.set(MainPanelType.Match, this.matchPanel);
-        }
-        ChangePanel(panelType, args) {
-            this.panelController.selectedIndex = panelType;
-            if (this.currentUI != undefined) {
-                this.currentUI.Hide();
-            }
-            this.currentUI = this.panelMap.get(panelType);
-            this.currentUI.Show(args);
+            return null;
         }
     }
-    var MainPanelType;
-    (function (MainPanelType) {
-        MainPanelType[MainPanelType["Lobby"] = 0] = "Lobby";
-        MainPanelType[MainPanelType["Match"] = 1] = "Match";
-    })(MainPanelType || (MainPanelType = {}));
-
-    var EventProperty;
-    (function (EventProperty) {
-        class LoadProgressProperty {
-            constructor(value, ifTween = false) {
-                this.Value = value;
-                this.IfTween = ifTween;
-            }
+    class Championship {
+        constructor(id, dayOfWeek, startHour, survivalPeoples, teamPeoples, nextId) {
+            this.id = id;
+            this.dayOfWeek = dayOfWeek;
+            this.startHour = startHour;
+            this.survivalPeoples = survivalPeoples;
+            this.teamPeoples = teamPeoples;
+            this.nextId = nextId;
         }
-        EventProperty.LoadProgressProperty = LoadProgressProperty;
-    })(EventProperty || (EventProperty = {}));
+    }
 
     class BaseMsgHeadUtil {
         static HaveLenField(headByte) {
@@ -1966,6 +2154,7 @@
             this.SendMsg(true, MsgType.CTRL_CUSTOM, 0, ExtType.CTRL_CUSTOM_EXT_TYPE_0, msgArray);
         }
         SendBizMsg(cmd, msg) {
+            console.log("[SocketClient]Send Biz Msg ", cmd);
             let proxtoHead = MiniDataUtil.GetIntDataDscrptHead(3);
             let cmdHead = MiniDataUtil.GetIntDataDscrptHead(cmd);
             this.byte.clear();
@@ -2002,6 +2191,231 @@
     }
     class ReceiveData {
     }
+
+    var EventProperty;
+    (function (EventProperty) {
+        class LoadProgressProperty {
+            constructor(value, ifTween = false) {
+                this.Value = value;
+                this.IfTween = ifTween;
+            }
+        }
+        EventProperty.LoadProgressProperty = LoadProgressProperty;
+    })(EventProperty || (EventProperty = {}));
+
+    class UIMatch {
+        constructor(content) {
+            this.currentMatchMode = MatchType.Free;
+            this.isRequestMsg = false;
+            this.Content = content;
+            this.Init();
+        }
+        Init() {
+            this.InitComp();
+            this.BindEvent();
+        }
+        Show(args) {
+        }
+        Hide() {
+        }
+        InitComp() {
+            this.returnBtn = this.Content.getChild("match_back_btn").asButton;
+            this.freeModeBtn = this.Content.getChild("match_matchmode1_btn").asButton;
+            this.championModeBtn = this.Content.getChild("match_matchmode2_btn").asButton;
+            this.free_singleBattleBtn = this.Content.getChild("match_mode1_free_btn").asButton;
+            this.free_teamBattleBtn = this.Content.getChild("match_mode2_free_btn").asButton;
+            this.champ_singleBattleBtn = this.Content.getChild("match_mode1_championship_btn").asButton;
+            this.champ_teamBattleBtn = this.Content.getChild("match_mode2_championship_btn").asButton;
+            this.nextChampionText = this.Content.getChild("match_time_txt").asTextField;
+        }
+        BindEvent() {
+            this.returnBtn.onClick(this, this.ToLobbyPanel);
+            this.freeModeBtn.onClick(this, this.ChangeMode_Free);
+            this.championModeBtn.onClick(this, this.ChangeMode_Champion);
+            this.free_singleBattleBtn.onClick(this, this.StartMatch, [BattleType.SingleBattle_6]);
+            this.free_teamBattleBtn.onClick(this, this.ChangeMode_Champion, [BattleType.TeamBattle_3]);
+            this.champ_singleBattleBtn.onClick(this, this.ChangeMode_Free, [BattleType.SingleBattle_6]);
+            this.champ_teamBattleBtn.onClick(this, this.ChangeMode_Champion, [BattleType.TeamBattle_3]);
+        }
+        ToLobbyPanel() {
+            let mainPanel = FGUIManager.GetInstance().GetPanel(CK_UIType.MainPanel);
+            if (mainPanel != null || mainPanel != undefined) {
+                mainPanel.ChangePanel(MainPanelType.Lobby);
+            }
+        }
+        ChangeMode_Free() {
+            this.currentMatchMode = MatchType.Free;
+        }
+        ChangeMode_Champion() {
+            this.currentMatchMode = MatchType.Championship;
+            this.RqstChampionMsg();
+        }
+        RqstChampionMsg() {
+            if (this.isRequestMsg == false) {
+                Laya.stage.once(RequestCMD.ChampionshipInfo.toString(), this, this.freshChampionshipInfo);
+                SocketClient.GetInstance().SendBizMsg_Empty(RequestCMD.ChampionshipInfo);
+                this.isRequestMsg = true;
+            }
+        }
+        freshChampionshipInfo(data) {
+            let respfully = ResponsePackage.RespFully.decode(data);
+            let championInfo = respfully.respMatch.respChampionship;
+            this.currentChampionMsg = championInfo;
+            this.champ_singleBattleBtn.grayed = !championInfo.survivalEnd;
+            this.champ_teamBattleBtn.grayed = !championInfo.teamEnd;
+            let champConfig = ChampionshipConfig.GetInstance().GetData(championInfo.cid);
+            let nextChampConfig = ChampionshipConfig.GetInstance().GetData(champConfig.nextId);
+            this.nextChampionText.text = `${nextChampConfig.startHour}:00:00`;
+            this.isRequestMsg = false;
+        }
+        StartMatch(battleMode) {
+            Laya.stage.once(CK_RespCMD.BattleStart.toString(), this, this.MatchSuccess);
+            Laya.stage.once(CK_RespCMD.MatchFailed.toString(), this, this.MatchFailed);
+            this.currentBattleMode = battleMode;
+            switch (this.currentMatchMode) {
+                case MatchType.Free:
+                    this.EnterFree();
+                    break;
+                case MatchType.Championship:
+                    this.EnterChampion();
+                    break;
+                default:
+                    break;
+            }
+        }
+        EnterFree() {
+            console.log("[UIMatch]EnterFree ", this.currentBattleMode);
+            let msg = RequestPackage.RqstInt.create();
+            msg.value = this.currentBattleMode;
+            let buf = RequestPackage.RqstInt.encode(msg).finish();
+            SocketClient.GetInstance().SendBizMsg(RequestCMD.FreeMatch, buf);
+        }
+        EnterChampion() {
+            console.log("[UIMatch]EnterChampion ", this.currentBattleMode);
+            if (this.currentChampionMsg == undefined) {
+                console.log("[UIMatch] Is wait champion msg");
+                return;
+            }
+            switch (this.currentBattleMode) {
+                case BattleType.SingleBattle_6:
+                    if (!this.currentChampionMsg.survivalEnd) {
+                        return;
+                    }
+                    break;
+                case BattleType.TeamBattle_3:
+                    if (!this.currentChampionMsg.teamEnd) {
+                        return;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            let msg = RequestPackage.RqstInt.create();
+            msg.value = this.currentBattleMode;
+            let buf = RequestPackage.RqstInt.encode(msg).finish();
+            SocketClient.GetInstance().SendBizMsg(RequestCMD.ChampionshipMatch, buf);
+        }
+        MatchSuccess(data) {
+            let respfully = ResponsePackage.RespFully.decode(data);
+            FGUIManager.GetInstance().OpenPanel(CK_UIType.LoadingPanel, () => { });
+            this.ChangeLoadingProgress(10);
+            SceneManager.GetInstance().LoadScene3D(SceneType.BattleScene, Laya.Handler.create(this, this.LoadFGUIPackage, [respfully.respFight.fightResult]));
+        }
+        LoadFGUIPackage(fightResult) {
+            FGUIManager.GetInstance().LoadUIPackage("battle_package", () => {
+                this.ChangeLoadingProgress(50);
+                FGUIManager.GetInstance().AddPackage("battle_package");
+                this.EnterScene(fightResult);
+            });
+        }
+        MatchFailed() {
+            console.log("[UIMatch] match failed");
+        }
+        EnterScene(battleData) {
+            this.ChangeLoadingProgress(100);
+            Laya.timer.once(500, this, () => {
+                SceneManager.GetInstance().DestroyCurrentScene();
+                SceneManager.GetInstance().ChangeScene3D(SceneType.BattleScene);
+                let battleScene = SceneManager.GetInstance().CurrentActiveScene;
+                battleScene.GameInit(battleData);
+                FGUIManager.GetInstance().CloseAllPanel();
+                FGUIManager.GetInstance().CloseAllWindow();
+                battleScene.GameStart();
+            });
+        }
+        ChangeLoadingProgress(value, isTween = false) {
+            let data = new EventProperty.LoadProgressProperty(value, isTween);
+            Laya.stage.event(CK_EventCode.LoadingProgressChange, data);
+        }
+    }
+
+    class FGUI_MainPanel {
+        constructor() {
+            this.UIType = CK_UIType.MainPanel;
+            this.IsInitFinish = false;
+            this.ID = 0;
+            this.lobbyPanel = null;
+            this.matchPanel = null;
+            this.panelMap = new Map();
+        }
+        Init() {
+            if (this.IsInitFinish == false) {
+                this.Config = CK_FGUIConfig.GetInstance().Config.get(this.UIType);
+                this.Content = fgui.UIPackage.createObject(this.Config.PackageName, this.Config.ComponentName).asCom;
+                fgui.GRoot.inst.addChild(this.Content);
+                this.Content.makeFullScreen();
+                this.InitComp();
+                this.InitMap();
+                this.SetVisible(false);
+                this.IsInitFinish = true;
+            }
+        }
+        Show(panelType) {
+            this.SetVisible(true);
+            this.ChangePanel(panelType);
+        }
+        Close() {
+            this.SetVisible(false);
+            this.ID = 0;
+            Laya.stage.event(CK_EventCode.PanelDestroy, this.ID);
+        }
+        Destroy() {
+            var _a;
+            (_a = this.Content) === null || _a === void 0 ? void 0 : _a.dispose();
+            this.IsInitFinish = false;
+            this.ID = 0;
+            Laya.stage.event(CK_EventCode.PanelDestroy, this.UIType);
+        }
+        SetVisible(visible) {
+            if (this.Content != null) {
+                this.Content.visible = visible;
+            }
+        }
+        InitComp() {
+            this.matchComp = this.Content.getChild("match_comp").asCom;
+            this.lobbyComp = this.Content.getChild("lobby_comp").asCom;
+            this.panelController = this.Content.getController("main_ctrl");
+        }
+        InitMap() {
+            this.lobbyPanel = new UILobby(this.lobbyComp);
+            this.matchPanel = new UIMatch(this.matchComp);
+            this.panelMap.set(MainPanelType.Lobby, this.lobbyPanel);
+            this.panelMap.set(MainPanelType.Match, this.matchPanel);
+        }
+        ChangePanel(panelType, args) {
+            this.panelController.selectedIndex = panelType;
+            if (this.currentUI != undefined) {
+                this.currentUI.Hide();
+            }
+            this.currentUI = this.panelMap.get(panelType);
+            this.currentUI.Show(args);
+        }
+    }
+    var MainPanelType;
+    (function (MainPanelType) {
+        MainPanelType[MainPanelType["Lobby"] = 0] = "Lobby";
+        MainPanelType[MainPanelType["Match"] = 1] = "Match";
+    })(MainPanelType || (MainPanelType = {}));
 
     class HttpManager {
         constructor() {
@@ -2070,17 +2484,17 @@
             rqstVerify.sid = DataManager.GetInstance().HttpServerResp.Sid;
             rqstVerify.uid = SocketClient.GetInstance().UID.toString();
             let buf = RequestPackage.RqstVerify.encode(rqstVerify).finish();
-            SocketClient.GetInstance().SendBizMsg(CK_MsgCMD.Verify, buf);
+            SocketClient.GetInstance().SendBizMsg(RequestCMD.Verify, buf);
         }
         SendCreateRole() {
-            SocketClient.GetInstance().SendBizMsg_Empty(CK_MsgCMD.CreateRole);
+            SocketClient.GetInstance().SendBizMsg_Empty(RequestCMD.CreateRole);
         }
         SendRqstRoleInfo() {
             let rqst = RequestPackage.RqstLoadRole.create();
             rqst.ip = DataManager.GetInstance().HttpServerResp.ClientIP;
             rqst.sid = DataManager.GetInstance().HttpServerResp.Sid;
             let buf = RequestPackage.RqstLoadRole.encode(rqst).finish();
-            SocketClient.GetInstance().SendBizMsg(CK_MsgCMD.EnterGame, buf);
+            SocketClient.GetInstance().SendBizMsg(RequestCMD.EnterGame, buf);
         }
         StartHeartBeat() {
         }
@@ -2131,7 +2545,7 @@
         }
         OnRegularSuccess() {
             this.ChangeLoadingProgress(20);
-            Laya.stage.once(CK_MsgCMD.Verify.toString(), this, this.OnVerifySuccess);
+            Laya.stage.once(RequestCMD.Verify.toString(), this, this.OnVerifySuccess);
             LoginManager.GetInstance().SendVerify();
         }
         OnVerifySuccess(data) {
@@ -2139,7 +2553,7 @@
             let respfully = ResponsePackage.RespFully.decode(data);
             let ifCreateRole = respfully.respRole.createRole.value;
             if (ifCreateRole) {
-                Laya.stage.once(CK_MsgCMD.CreateRole.toString(), this, this.OnCreateRoleSuccess);
+                Laya.stage.once(RequestCMD.CreateRole.toString(), this, this.OnCreateRoleSuccess);
                 LoginManager.GetInstance().SendCreateRole();
             }
             else {
@@ -2148,7 +2562,7 @@
         }
         OnCreateRoleSuccess() {
             this.ChangeLoadingProgress(35);
-            Laya.stage.once(CK_MsgCMD.EnterGame.toString(), this, this.OnRqstRoleInfoSuccess);
+            Laya.stage.once(RequestCMD.EnterGame.toString(), this, this.OnRqstRoleInfoSuccess);
             LoginManager.GetInstance().SendRqstRoleInfo();
         }
         OnRqstRoleInfoSuccess(data) {
@@ -2215,7 +2629,7 @@
     GameConfig.alignH = "left";
     GameConfig.startScene = "StartScene.scene";
     GameConfig.sceneRoot = "";
-    GameConfig.debug = true;
+    GameConfig.debug = false;
     GameConfig.stat = true;
     GameConfig.physicsDebug = false;
     GameConfig.exportSceneToJson = true;

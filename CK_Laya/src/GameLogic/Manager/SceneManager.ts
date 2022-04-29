@@ -20,6 +20,14 @@ export class SceneManager {
     public CurrentActiveScene:SceneBase;
 
 
+    public ScenePathMap=new Map(
+
+        [
+           [SceneType.BattleScene,"res/unityscenes/LayaScene_BattleScene/Conventional/BattleScene.ls"],
+           [SceneType.LobbyScene,"res/unityscenes/LayaScene_LobbyScene/Conventional/LobbyScene.ls"],
+        ]
+
+    );
 
     public UIScene;
     public GameScene;
@@ -36,19 +44,10 @@ export class SceneManager {
     public LoadScene3D(sceneType,complete?:Handler|null,progress?:Handler|null)
     {
        
-        // let url=ResMananger.GetInstance().BattleScenePath+sceneType;
-        let url="";
-        switch (sceneType) {
-            case SceneType.BattleScene:
-                url=ResMananger.GetInstance().BattleScenePath+sceneType;
-                break;
-            case SceneType.LobbyScene:
-                url=ResMananger.GetInstance().LobbyScenePath+sceneType;
-                break;
         
-            default:
-                break;
-        }
+
+        let url=this.ScenePathMap.get(sceneType);
+        
         ResMananger.GetInstance().Load3DRes(url,complete,progress)
     }
 
@@ -61,19 +60,14 @@ export class SceneManager {
             }
         }
         else{
-            let url;
-            let scene;
+            let url=this.ScenePathMap.get(sceneType);
+            let scene=ResMananger.GetInstance().GetRes(url);
+            this.GameScene.addChild(scene);
             switch (sceneType) {
                 case SceneType.BattleScene:
-                    url=ResMananger.GetInstance().BattleScenePath+sceneType;
-                    scene=ResMananger.GetInstance().GetRes(url);
-                    this.GameScene.addChild(scene);
                     this.CurrentActiveScene=new BattleScene(scene);
                     break;
                 case SceneType.LobbyScene:
-                    url=ResMananger.GetInstance().LobbyScenePath+sceneType;
-                    scene=ResMananger.GetInstance().GetRes(url);
-                    this.GameScene.addChild(scene);
                     this.CurrentActiveScene=new LobbyScene(scene);
                     break;
             
@@ -83,6 +77,14 @@ export class SceneManager {
             
         }
         
+    }
+
+    public DestroyCurrentScene()
+    {
+        this.CurrentActiveScene.Scene.destroy();
+        let url=this.ScenePathMap.get(this.CurrentActiveScene.SceneType);
+        ResMananger.GetInstance().ReleaseRes(url)
+        this.CurrentActiveScene=null;
     }
 
 

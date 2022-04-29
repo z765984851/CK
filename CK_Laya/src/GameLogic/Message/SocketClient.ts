@@ -162,6 +162,7 @@ export class SocketClient
 
     public SendBizMsg(cmd:number,msg:Uint8Array)
     {
+        console.log("[SocketClient]Send Biz Msg ",cmd);
         let proxtoHead:MiniDataDecryptHead  = MiniDataUtil.GetIntDataDscrptHead(3);
         let cmdHead:MiniDataDecryptHead  = MiniDataUtil.GetIntDataDscrptHead(cmd);
         this.byte.clear();

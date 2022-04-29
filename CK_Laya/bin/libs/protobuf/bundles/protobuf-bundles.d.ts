@@ -114,864 +114,240 @@ declare namespace ResponsePackage {
         public static verify(message: { [k: string]: any }): (string|null);
     }
 
-    /** Properties of a RespMail. */
-    interface IRespMail {
+    /** Properties of a RespCk. */
+    interface IRespCk {
 
-        /** RespMail mails */
-        mails?: (ResponsePackage.IRespMailInfo[]|null);
-
-        /** RespMail mailOp */
-        mailOp?: (ResponsePackage.IRespMailOp|null);
+        /** RespCk roleCks */
+        roleCks?: (ResponsePackage.IRespCkInfo[]|null);
     }
 
-    /** Represents a RespMail. */
-    class RespMail implements IRespMail {
+    /** Represents a RespCk. */
+    class RespCk implements IRespCk {
 
         /**
-         * Constructs a new RespMail.
+         * Constructs a new RespCk.
          * @param [properties] Properties to set
          */
-        constructor(properties?: ResponsePackage.IRespMail);
+        constructor(properties?: ResponsePackage.IRespCk);
 
-        /** RespMail mails. */
-        public mails: ResponsePackage.IRespMailInfo[];
-
-        /** RespMail mailOp. */
-        public mailOp?: (ResponsePackage.IRespMailOp|null);
+        /** RespCk roleCks. */
+        public roleCks: ResponsePackage.IRespCkInfo[];
 
         /**
-         * Creates a new RespMail instance using the specified properties.
+         * Creates a new RespCk instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RespMail instance
+         * @returns RespCk instance
          */
-        public static create(properties?: ResponsePackage.IRespMail): ResponsePackage.RespMail;
+        public static create(properties?: ResponsePackage.IRespCk): ResponsePackage.RespCk;
 
         /**
-         * Encodes the specified RespMail message. Does not implicitly {@link ResponsePackage.RespMail.verify|verify} messages.
-         * @param message RespMail message or plain object to encode
+         * Encodes the specified RespCk message. Does not implicitly {@link ResponsePackage.RespCk.verify|verify} messages.
+         * @param message RespCk message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: ResponsePackage.IRespMail, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: ResponsePackage.IRespCk, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RespMail message, length delimited. Does not implicitly {@link ResponsePackage.RespMail.verify|verify} messages.
-         * @param message RespMail message or plain object to encode
+         * Encodes the specified RespCk message, length delimited. Does not implicitly {@link ResponsePackage.RespCk.verify|verify} messages.
+         * @param message RespCk message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: ResponsePackage.IRespMail, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: ResponsePackage.IRespCk, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RespMail message from the specified reader or buffer.
+         * Decodes a RespCk message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RespMail
+         * @returns RespCk
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespMail;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespCk;
 
         /**
-         * Decodes a RespMail message from the specified reader or buffer, length delimited.
+         * Decodes a RespCk message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RespMail
+         * @returns RespCk
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespMail;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespCk;
 
         /**
-         * Verifies a RespMail message.
+         * Verifies a RespCk message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
     }
 
-    /** Properties of a RespMailOp. */
-    interface IRespMailOp {
+    /** Properties of a RespCkInfo. */
+    interface IRespCkInfo {
 
-        /** RespMailOp id */
+        /** RespCkInfo id */
         id?: (number|null);
 
-        /** RespMailOp read */
-        read?: (boolean|null);
-    }
+        /** RespCkInfo seq */
+        seq?: (number|null);
 
-    /** Represents a RespMailOp. */
-    class RespMailOp implements IRespMailOp {
-
-        /**
-         * Constructs a new RespMailOp.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespMailOp);
-
-        /** RespMailOp id. */
-        public id: number;
-
-        /** RespMailOp read. */
-        public read: boolean;
-
-        /**
-         * Creates a new RespMailOp instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespMailOp instance
-         */
-        public static create(properties?: ResponsePackage.IRespMailOp): ResponsePackage.RespMailOp;
-
-        /**
-         * Encodes the specified RespMailOp message. Does not implicitly {@link ResponsePackage.RespMailOp.verify|verify} messages.
-         * @param message RespMailOp message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespMailOp, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespMailOp message, length delimited. Does not implicitly {@link ResponsePackage.RespMailOp.verify|verify} messages.
-         * @param message RespMailOp message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespMailOp, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespMailOp message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespMailOp
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespMailOp;
-
-        /**
-         * Decodes a RespMailOp message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespMailOp
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespMailOp;
-
-        /**
-         * Verifies a RespMailOp message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespMailInfo. */
-    interface IRespMailInfo {
-
-        /** RespMailInfo id */
-        id?: (number|null);
-
-        /** RespMailInfo senderName */
-        senderName?: (string|null);
-
-        /** RespMailInfo sendIcon */
-        sendIcon?: (number|null);
-
-        /** RespMailInfo sendTime */
-        sendTime?: (number|Long|null);
-
-        /** RespMailInfo type */
-        type?: (number|null);
-
-        /** RespMailInfo title */
-        title?: (string|null);
-
-        /** RespMailInfo context */
-        context?: (string|null);
-
-        /** RespMailInfo params */
-        params?: (string[]|null);
-
-        /** RespMailInfo read */
-        read?: (boolean|null);
-
-        /** RespMailInfo items */
-        items?: (ResponsePackage.IRespFunc[]|null);
-    }
-
-    /** Represents a RespMailInfo. */
-    class RespMailInfo implements IRespMailInfo {
-
-        /**
-         * Constructs a new RespMailInfo.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespMailInfo);
-
-        /** RespMailInfo id. */
-        public id: number;
-
-        /** RespMailInfo senderName. */
-        public senderName: string;
-
-        /** RespMailInfo sendIcon. */
-        public sendIcon: number;
-
-        /** RespMailInfo sendTime. */
-        public sendTime: (number|Long);
-
-        /** RespMailInfo type. */
-        public type: number;
-
-        /** RespMailInfo title. */
-        public title: string;
-
-        /** RespMailInfo context. */
-        public context: string;
-
-        /** RespMailInfo params. */
-        public params: string[];
-
-        /** RespMailInfo read. */
-        public read: boolean;
-
-        /** RespMailInfo items. */
-        public items: ResponsePackage.IRespFunc[];
-
-        /**
-         * Creates a new RespMailInfo instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespMailInfo instance
-         */
-        public static create(properties?: ResponsePackage.IRespMailInfo): ResponsePackage.RespMailInfo;
-
-        /**
-         * Encodes the specified RespMailInfo message. Does not implicitly {@link ResponsePackage.RespMailInfo.verify|verify} messages.
-         * @param message RespMailInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespMailInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespMailInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespMailInfo.verify|verify} messages.
-         * @param message RespMailInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespMailInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespMailInfo message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespMailInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespMailInfo;
-
-        /**
-         * Decodes a RespMailInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespMailInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespMailInfo;
-
-        /**
-         * Verifies a RespMailInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespFunc. */
-    interface IRespFunc {
-
-        /** RespFunc param */
-        param?: (number|null);
-
-        /** RespFunc type */
-        type?: (number|null);
-
-        /** RespFunc value */
-        value?: (number|Long|null);
-
-        /** RespFunc param1 */
-        param1?: (number|null);
-
-        /** RespFunc param2 */
-        param2?: (number|null);
-
-        /** RespFunc param3 */
-        param3?: (number|null);
-    }
-
-    /** Represents a RespFunc. */
-    class RespFunc implements IRespFunc {
-
-        /**
-         * Constructs a new RespFunc.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespFunc);
-
-        /** RespFunc param. */
-        public param: number;
-
-        /** RespFunc type. */
-        public type: number;
-
-        /** RespFunc value. */
-        public value: (number|Long);
-
-        /** RespFunc param1. */
-        public param1: number;
-
-        /** RespFunc param2. */
-        public param2: number;
-
-        /** RespFunc param3. */
-        public param3: number;
-
-        /**
-         * Creates a new RespFunc instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespFunc instance
-         */
-        public static create(properties?: ResponsePackage.IRespFunc): ResponsePackage.RespFunc;
-
-        /**
-         * Encodes the specified RespFunc message. Does not implicitly {@link ResponsePackage.RespFunc.verify|verify} messages.
-         * @param message RespFunc message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespFunc, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespFunc message, length delimited. Does not implicitly {@link ResponsePackage.RespFunc.verify|verify} messages.
-         * @param message RespFunc message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespFunc, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespFunc message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespFunc
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespFunc;
-
-        /**
-         * Decodes a RespFunc message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespFunc
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespFunc;
-
-        /**
-         * Verifies a RespFunc message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespTeam. */
-    interface IRespTeam {
-
-        /** RespTeam teamList */
-        teamList?: (ResponsePackage.IRespTeamInfo[]|null);
-
-        /** RespTeam teamOp */
-        teamOp?: (ResponsePackage.IRespTeamInfo[]|null);
-    }
-
-    /** Represents a RespTeam. */
-    class RespTeam implements IRespTeam {
-
-        /**
-         * Constructs a new RespTeam.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespTeam);
-
-        /** RespTeam teamList. */
-        public teamList: ResponsePackage.IRespTeamInfo[];
-
-        /** RespTeam teamOp. */
-        public teamOp: ResponsePackage.IRespTeamInfo[];
-
-        /**
-         * Creates a new RespTeam instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespTeam instance
-         */
-        public static create(properties?: ResponsePackage.IRespTeam): ResponsePackage.RespTeam;
-
-        /**
-         * Encodes the specified RespTeam message. Does not implicitly {@link ResponsePackage.RespTeam.verify|verify} messages.
-         * @param message RespTeam message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespTeam, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespTeam message, length delimited. Does not implicitly {@link ResponsePackage.RespTeam.verify|verify} messages.
-         * @param message RespTeam message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespTeam, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespTeam message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespTeam
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespTeam;
-
-        /**
-         * Decodes a RespTeam message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespTeam
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespTeam;
-
-        /**
-         * Verifies a RespTeam message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespTeamInfo. */
-    interface IRespTeamInfo {
-
-        /** RespTeamInfo id */
-        id?: (number|null);
-
-        /** RespTeamInfo type */
-        type?: (number|null);
-
-        /** RespTeamInfo ckId */
-        ckId?: (number|null);
-    }
-
-    /** Represents a RespTeamInfo. */
-    class RespTeamInfo implements IRespTeamInfo {
-
-        /**
-         * Constructs a new RespTeamInfo.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespTeamInfo);
-
-        /** RespTeamInfo id. */
-        public id: number;
-
-        /** RespTeamInfo type. */
-        public type: number;
-
-        /** RespTeamInfo ckId. */
-        public ckId: number;
-
-        /**
-         * Creates a new RespTeamInfo instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespTeamInfo instance
-         */
-        public static create(properties?: ResponsePackage.IRespTeamInfo): ResponsePackage.RespTeamInfo;
-
-        /**
-         * Encodes the specified RespTeamInfo message. Does not implicitly {@link ResponsePackage.RespTeamInfo.verify|verify} messages.
-         * @param message RespTeamInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespTeamInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespTeamInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespTeamInfo.verify|verify} messages.
-         * @param message RespTeamInfo message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespTeamInfo, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespTeamInfo message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespTeamInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespTeamInfo;
-
-        /**
-         * Decodes a RespTeamInfo message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespTeamInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespTeamInfo;
-
-        /**
-         * Verifies a RespTeamInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespLong. */
-    interface IRespLong {
-
-        /** RespLong value */
-        value?: (number|Long|null);
-    }
-
-    /** Represents a RespLong. */
-    class RespLong implements IRespLong {
-
-        /**
-         * Constructs a new RespLong.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespLong);
-
-        /** RespLong value. */
-        public value: (number|Long);
-
-        /**
-         * Creates a new RespLong instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespLong instance
-         */
-        public static create(properties?: ResponsePackage.IRespLong): ResponsePackage.RespLong;
-
-        /**
-         * Encodes the specified RespLong message. Does not implicitly {@link ResponsePackage.RespLong.verify|verify} messages.
-         * @param message RespLong message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespLong, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespLong message, length delimited. Does not implicitly {@link ResponsePackage.RespLong.verify|verify} messages.
-         * @param message RespLong message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespLong, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespLong message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespLong
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespLong;
-
-        /**
-         * Decodes a RespLong message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespLong
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespLong;
-
-        /**
-         * Verifies a RespLong message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespChat. */
-    interface IRespChat {
-
-        /** RespChat chatMsgs */
-        chatMsgs?: (ResponsePackage.IRespChatMsg[]|null);
-
-        /** RespChat chatMsg */
-        chatMsg?: (ResponsePackage.IRespChatMsg|null);
-    }
-
-    /** Represents a RespChat. */
-    class RespChat implements IRespChat {
-
-        /**
-         * Constructs a new RespChat.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespChat);
-
-        /** RespChat chatMsgs. */
-        public chatMsgs: ResponsePackage.IRespChatMsg[];
-
-        /** RespChat chatMsg. */
-        public chatMsg?: (ResponsePackage.IRespChatMsg|null);
-
-        /**
-         * Creates a new RespChat instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespChat instance
-         */
-        public static create(properties?: ResponsePackage.IRespChat): ResponsePackage.RespChat;
-
-        /**
-         * Encodes the specified RespChat message. Does not implicitly {@link ResponsePackage.RespChat.verify|verify} messages.
-         * @param message RespChat message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespChat, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespChat message, length delimited. Does not implicitly {@link ResponsePackage.RespChat.verify|verify} messages.
-         * @param message RespChat message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespChat, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespChat message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespChat
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespChat;
-
-        /**
-         * Decodes a RespChat message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespChat
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespChat;
-
-        /**
-         * Verifies a RespChat message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespChatMsg. */
-    interface IRespChatMsg {
-
-        /** RespChatMsg chatType */
-        chatType?: (number|null);
-
-        /** RespChatMsg baseInfo */
-        baseInfo?: (ResponsePackage.IRespRoleBaseInfo|null);
-
-        /** RespChatMsg msg */
-        msg?: (string|null);
-
-        /** RespChatMsg time */
-        time?: (number|Long|null);
-
-        /** RespChatMsg params */
-        params?: (string[]|null);
-    }
-
-    /** Represents a RespChatMsg. */
-    class RespChatMsg implements IRespChatMsg {
-
-        /**
-         * Constructs a new RespChatMsg.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespChatMsg);
-
-        /** RespChatMsg chatType. */
-        public chatType: number;
-
-        /** RespChatMsg baseInfo. */
-        public baseInfo?: (ResponsePackage.IRespRoleBaseInfo|null);
-
-        /** RespChatMsg msg. */
-        public msg: string;
-
-        /** RespChatMsg time. */
-        public time: (number|Long);
-
-        /** RespChatMsg params. */
-        public params: string[];
-
-        /**
-         * Creates a new RespChatMsg instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespChatMsg instance
-         */
-        public static create(properties?: ResponsePackage.IRespChatMsg): ResponsePackage.RespChatMsg;
-
-        /**
-         * Encodes the specified RespChatMsg message. Does not implicitly {@link ResponsePackage.RespChatMsg.verify|verify} messages.
-         * @param message RespChatMsg message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespChatMsg, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespChatMsg message, length delimited. Does not implicitly {@link ResponsePackage.RespChatMsg.verify|verify} messages.
-         * @param message RespChatMsg message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespChatMsg, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespChatMsg message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespChatMsg
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespChatMsg;
-
-        /**
-         * Decodes a RespChatMsg message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespChatMsg
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespChatMsg;
-
-        /**
-         * Verifies a RespChatMsg message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespRoleBaseInfo. */
-    interface IRespRoleBaseInfo {
-
-        /** RespRoleBaseInfo id */
-        id?: (string|null);
-
-        /** RespRoleBaseInfo sid */
-        sid?: (string|null);
-
-        /** RespRoleBaseInfo name */
+        /** RespCkInfo name */
         name?: (string|null);
 
-        /** RespRoleBaseInfo img */
-        img?: (number|null);
+        /** RespCkInfo lock */
+        lock?: (boolean|null);
 
-        /** RespRoleBaseInfo chain */
-        chain?: (number|null);
+        /** RespCkInfo birthTime */
+        birthTime?: (number|Long|null);
 
-        /** RespRoleBaseInfo division */
-        division?: (number|null);
+        /** RespCkInfo launch */
+        launch?: (string|null);
+
+        /** RespCkInfo level */
+        level?: (number|null);
+
+        /** RespCkInfo life */
+        life?: (number|null);
+
+        /** RespCkInfo quality */
+        quality?: (number|null);
+
+        /** RespCkInfo lineage */
+        lineage?: (number|null);
+
+        /** RespCkInfo strength */
+        strength?: (number|null);
+
+        /** RespCkInfo wisdom */
+        wisdom?: (number|null);
+
+        /** RespCkInfo agile */
+        agile?: (number|null);
+
+        /** RespCkInfo health */
+        health?: (number|null);
+
+        /** RespCkInfo spirit */
+        spirit?: (number|null);
+
+        /** RespCkInfo luck */
+        luck?: (number|null);
+
+        /** RespCkInfo professionList */
+        professionList?: (number[]|null);
+
+        /** RespCkInfo specialtyList */
+        specialtyList?: (number[]|null);
     }
 
-    /** Represents a RespRoleBaseInfo. */
-    class RespRoleBaseInfo implements IRespRoleBaseInfo {
+    /** Represents a RespCkInfo. */
+    class RespCkInfo implements IRespCkInfo {
 
         /**
-         * Constructs a new RespRoleBaseInfo.
+         * Constructs a new RespCkInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: ResponsePackage.IRespRoleBaseInfo);
+        constructor(properties?: ResponsePackage.IRespCkInfo);
 
-        /** RespRoleBaseInfo id. */
-        public id: string;
+        /** RespCkInfo id. */
+        public id: number;
 
-        /** RespRoleBaseInfo sid. */
-        public sid: string;
+        /** RespCkInfo seq. */
+        public seq: number;
 
-        /** RespRoleBaseInfo name. */
+        /** RespCkInfo name. */
         public name: string;
 
-        /** RespRoleBaseInfo img. */
-        public img: number;
+        /** RespCkInfo lock. */
+        public lock: boolean;
 
-        /** RespRoleBaseInfo chain. */
-        public chain: number;
+        /** RespCkInfo birthTime. */
+        public birthTime: (number|Long);
 
-        /** RespRoleBaseInfo division. */
-        public division: number;
+        /** RespCkInfo launch. */
+        public launch: string;
+
+        /** RespCkInfo level. */
+        public level: number;
+
+        /** RespCkInfo life. */
+        public life: number;
+
+        /** RespCkInfo quality. */
+        public quality: number;
+
+        /** RespCkInfo lineage. */
+        public lineage: number;
+
+        /** RespCkInfo strength. */
+        public strength: number;
+
+        /** RespCkInfo wisdom. */
+        public wisdom: number;
+
+        /** RespCkInfo agile. */
+        public agile: number;
+
+        /** RespCkInfo health. */
+        public health: number;
+
+        /** RespCkInfo spirit. */
+        public spirit: number;
+
+        /** RespCkInfo luck. */
+        public luck: number;
+
+        /** RespCkInfo professionList. */
+        public professionList: number[];
+
+        /** RespCkInfo specialtyList. */
+        public specialtyList: number[];
 
         /**
-         * Creates a new RespRoleBaseInfo instance using the specified properties.
+         * Creates a new RespCkInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RespRoleBaseInfo instance
+         * @returns RespCkInfo instance
          */
-        public static create(properties?: ResponsePackage.IRespRoleBaseInfo): ResponsePackage.RespRoleBaseInfo;
+        public static create(properties?: ResponsePackage.IRespCkInfo): ResponsePackage.RespCkInfo;
 
         /**
-         * Encodes the specified RespRoleBaseInfo message. Does not implicitly {@link ResponsePackage.RespRoleBaseInfo.verify|verify} messages.
-         * @param message RespRoleBaseInfo message or plain object to encode
+         * Encodes the specified RespCkInfo message. Does not implicitly {@link ResponsePackage.RespCkInfo.verify|verify} messages.
+         * @param message RespCkInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: ResponsePackage.IRespRoleBaseInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: ResponsePackage.IRespCkInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RespRoleBaseInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespRoleBaseInfo.verify|verify} messages.
-         * @param message RespRoleBaseInfo message or plain object to encode
+         * Encodes the specified RespCkInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespCkInfo.verify|verify} messages.
+         * @param message RespCkInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: ResponsePackage.IRespRoleBaseInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: ResponsePackage.IRespCkInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RespRoleBaseInfo message from the specified reader or buffer.
+         * Decodes a RespCkInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RespRoleBaseInfo
+         * @returns RespCkInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespRoleBaseInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespCkInfo;
 
         /**
-         * Decodes a RespRoleBaseInfo message from the specified reader or buffer, length delimited.
+         * Decodes a RespCkInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RespRoleBaseInfo
+         * @returns RespCkInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespRoleBaseInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespCkInfo;
 
         /**
-         * Verifies a RespRoleBaseInfo message.
+         * Verifies a RespCkInfo message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
@@ -1050,11 +426,20 @@ declare namespace ResponsePackage {
     /** Properties of a RespFightResult. */
     interface IRespFightResult {
 
+        /** RespFightResult matchType */
+        matchType?: (number|null);
+
+        /** RespFightResult battleType */
+        battleType?: (number|null);
+
         /** RespFightResult battlerList */
         battlerList?: (ResponsePackage.IRespBattler[]|null);
 
         /** RespFightResult frameList */
         frameList?: (ResponsePackage.IRespFrame[]|null);
+
+        /** RespFightResult clearingList */
+        clearingList?: (ResponsePackage.IRespRoleClearing[]|null);
     }
 
     /** Represents a RespFightResult. */
@@ -1066,11 +451,20 @@ declare namespace ResponsePackage {
          */
         constructor(properties?: ResponsePackage.IRespFightResult);
 
+        /** RespFightResult matchType. */
+        public matchType: number;
+
+        /** RespFightResult battleType. */
+        public battleType: number;
+
         /** RespFightResult battlerList. */
         public battlerList: ResponsePackage.IRespBattler[];
 
         /** RespFightResult frameList. */
         public frameList: ResponsePackage.IRespFrame[];
+
+        /** RespFightResult clearingList. */
+        public clearingList: ResponsePackage.IRespRoleClearing[];
 
         /**
          * Creates a new RespFightResult instance using the specified properties.
@@ -1203,6 +597,105 @@ declare namespace ResponsePackage {
         public static verify(message: { [k: string]: any }): (string|null);
     }
 
+    /** Properties of a RespRoleBaseInfo. */
+    interface IRespRoleBaseInfo {
+
+        /** RespRoleBaseInfo id */
+        id?: (string|null);
+
+        /** RespRoleBaseInfo sid */
+        sid?: (string|null);
+
+        /** RespRoleBaseInfo name */
+        name?: (string|null);
+
+        /** RespRoleBaseInfo img */
+        img?: (number|null);
+
+        /** RespRoleBaseInfo chain */
+        chain?: (number|null);
+
+        /** RespRoleBaseInfo division */
+        division?: (number|null);
+    }
+
+    /** Represents a RespRoleBaseInfo. */
+    class RespRoleBaseInfo implements IRespRoleBaseInfo {
+
+        /**
+         * Constructs a new RespRoleBaseInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespRoleBaseInfo);
+
+        /** RespRoleBaseInfo id. */
+        public id: string;
+
+        /** RespRoleBaseInfo sid. */
+        public sid: string;
+
+        /** RespRoleBaseInfo name. */
+        public name: string;
+
+        /** RespRoleBaseInfo img. */
+        public img: number;
+
+        /** RespRoleBaseInfo chain. */
+        public chain: number;
+
+        /** RespRoleBaseInfo division. */
+        public division: number;
+
+        /**
+         * Creates a new RespRoleBaseInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespRoleBaseInfo instance
+         */
+        public static create(properties?: ResponsePackage.IRespRoleBaseInfo): ResponsePackage.RespRoleBaseInfo;
+
+        /**
+         * Encodes the specified RespRoleBaseInfo message. Does not implicitly {@link ResponsePackage.RespRoleBaseInfo.verify|verify} messages.
+         * @param message RespRoleBaseInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespRoleBaseInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespRoleBaseInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespRoleBaseInfo.verify|verify} messages.
+         * @param message RespRoleBaseInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespRoleBaseInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespRoleBaseInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespRoleBaseInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespRoleBaseInfo;
+
+        /**
+         * Decodes a RespRoleBaseInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespRoleBaseInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespRoleBaseInfo;
+
+        /**
+         * Verifies a RespRoleBaseInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
     /** Properties of a RespBattleCk. */
     interface IRespBattleCk {
 
@@ -1241,6 +734,9 @@ declare namespace ResponsePackage {
 
         /** RespBattleCk specialtyList */
         specialtyList?: (number[]|null);
+
+        /** RespBattleCk hp */
+        hp?: (number|null);
 
         /** RespBattleCk maxHp */
         maxHp?: (number|null);
@@ -1300,6 +796,9 @@ declare namespace ResponsePackage {
         /** RespBattleCk specialtyList. */
         public specialtyList: number[];
 
+        /** RespBattleCk hp. */
+        public hp: number;
+
         /** RespBattleCk maxHp. */
         public maxHp: number;
 
@@ -1356,6 +855,99 @@ declare namespace ResponsePackage {
 
         /**
          * Verifies a RespBattleCk message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespRoleClearing. */
+    interface IRespRoleClearing {
+
+        /** RespRoleClearing rid */
+        rid?: (string|null);
+
+        /** RespRoleClearing rank */
+        rank?: (number|null);
+
+        /** RespRoleClearing win */
+        win?: (boolean|null);
+
+        /** RespRoleClearing gcke */
+        gcke?: (number|null);
+
+        /** RespRoleClearing integral */
+        integral?: (number|null);
+    }
+
+    /** Represents a RespRoleClearing. */
+    class RespRoleClearing implements IRespRoleClearing {
+
+        /**
+         * Constructs a new RespRoleClearing.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespRoleClearing);
+
+        /** RespRoleClearing rid. */
+        public rid: string;
+
+        /** RespRoleClearing rank. */
+        public rank: number;
+
+        /** RespRoleClearing win. */
+        public win: boolean;
+
+        /** RespRoleClearing gcke. */
+        public gcke: number;
+
+        /** RespRoleClearing integral. */
+        public integral: number;
+
+        /**
+         * Creates a new RespRoleClearing instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespRoleClearing instance
+         */
+        public static create(properties?: ResponsePackage.IRespRoleClearing): ResponsePackage.RespRoleClearing;
+
+        /**
+         * Encodes the specified RespRoleClearing message. Does not implicitly {@link ResponsePackage.RespRoleClearing.verify|verify} messages.
+         * @param message RespRoleClearing message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespRoleClearing, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespRoleClearing message, length delimited. Does not implicitly {@link ResponsePackage.RespRoleClearing.verify|verify} messages.
+         * @param message RespRoleClearing message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespRoleClearing, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespRoleClearing message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespRoleClearing
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespRoleClearing;
+
+        /**
+         * Decodes a RespRoleClearing message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespRoleClearing
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespRoleClearing;
+
+        /**
+         * Verifies a RespRoleClearing message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
@@ -1455,11 +1047,11 @@ declare namespace ResponsePackage {
         /** RespOtherEntityFrameInfo faceXY */
         faceXY?: (ResponsePackage.IRespXY|null);
 
-        /** RespOtherEntityFrameInfo arrowAtkActive */
-        arrowAtkActive?: (ResponsePackage.IRespArrowAtkActive|null);
+        /** RespOtherEntityFrameInfo isCreate */
+        isCreate?: (boolean|null);
 
-        /** RespOtherEntityFrameInfo magicAtkActive */
-        magicAtkActive?: (ResponsePackage.IRespMagicAtkActive|null);
+        /** RespOtherEntityFrameInfo isDestroy */
+        isDestroy?: (boolean|null);
     }
 
     /** Represents a RespOtherEntityFrameInfo. */
@@ -1480,11 +1072,11 @@ declare namespace ResponsePackage {
         /** RespOtherEntityFrameInfo faceXY. */
         public faceXY?: (ResponsePackage.IRespXY|null);
 
-        /** RespOtherEntityFrameInfo arrowAtkActive. */
-        public arrowAtkActive?: (ResponsePackage.IRespArrowAtkActive|null);
+        /** RespOtherEntityFrameInfo isCreate. */
+        public isCreate: boolean;
 
-        /** RespOtherEntityFrameInfo magicAtkActive. */
-        public magicAtkActive?: (ResponsePackage.IRespMagicAtkActive|null);
+        /** RespOtherEntityFrameInfo isDestroy. */
+        public isDestroy: boolean;
 
         /**
          * Creates a new RespOtherEntityFrameInfo instance using the specified properties.
@@ -1530,162 +1122,6 @@ declare namespace ResponsePackage {
 
         /**
          * Verifies a RespOtherEntityFrameInfo message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespMagicAtkActive. */
-    interface IRespMagicAtkActive {
-
-        /** RespMagicAtkActive posXY */
-        posXY?: (ResponsePackage.IRespXY|null);
-
-        /** RespMagicAtkActive tagXY */
-        tagXY?: (ResponsePackage.IRespXY|null);
-
-        /** RespMagicAtkActive status */
-        status?: (number|null);
-    }
-
-    /** Represents a RespMagicAtkActive. */
-    class RespMagicAtkActive implements IRespMagicAtkActive {
-
-        /**
-         * Constructs a new RespMagicAtkActive.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespMagicAtkActive);
-
-        /** RespMagicAtkActive posXY. */
-        public posXY?: (ResponsePackage.IRespXY|null);
-
-        /** RespMagicAtkActive tagXY. */
-        public tagXY?: (ResponsePackage.IRespXY|null);
-
-        /** RespMagicAtkActive status. */
-        public status: number;
-
-        /**
-         * Creates a new RespMagicAtkActive instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespMagicAtkActive instance
-         */
-        public static create(properties?: ResponsePackage.IRespMagicAtkActive): ResponsePackage.RespMagicAtkActive;
-
-        /**
-         * Encodes the specified RespMagicAtkActive message. Does not implicitly {@link ResponsePackage.RespMagicAtkActive.verify|verify} messages.
-         * @param message RespMagicAtkActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespMagicAtkActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespMagicAtkActive message, length delimited. Does not implicitly {@link ResponsePackage.RespMagicAtkActive.verify|verify} messages.
-         * @param message RespMagicAtkActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespMagicAtkActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespMagicAtkActive message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespMagicAtkActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespMagicAtkActive;
-
-        /**
-         * Decodes a RespMagicAtkActive message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespMagicAtkActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespMagicAtkActive;
-
-        /**
-         * Verifies a RespMagicAtkActive message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespArrowAtkActive. */
-    interface IRespArrowAtkActive {
-
-        /** RespArrowAtkActive posXY */
-        posXY?: (ResponsePackage.IRespXY|null);
-
-        /** RespArrowAtkActive status */
-        status?: (number|null);
-    }
-
-    /** Represents a RespArrowAtkActive. */
-    class RespArrowAtkActive implements IRespArrowAtkActive {
-
-        /**
-         * Constructs a new RespArrowAtkActive.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespArrowAtkActive);
-
-        /** RespArrowAtkActive posXY. */
-        public posXY?: (ResponsePackage.IRespXY|null);
-
-        /** RespArrowAtkActive status. */
-        public status: number;
-
-        /**
-         * Creates a new RespArrowAtkActive instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespArrowAtkActive instance
-         */
-        public static create(properties?: ResponsePackage.IRespArrowAtkActive): ResponsePackage.RespArrowAtkActive;
-
-        /**
-         * Encodes the specified RespArrowAtkActive message. Does not implicitly {@link ResponsePackage.RespArrowAtkActive.verify|verify} messages.
-         * @param message RespArrowAtkActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespArrowAtkActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespArrowAtkActive message, length delimited. Does not implicitly {@link ResponsePackage.RespArrowAtkActive.verify|verify} messages.
-         * @param message RespArrowAtkActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespArrowAtkActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespArrowAtkActive message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespArrowAtkActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespArrowAtkActive;
-
-        /**
-         * Decodes a RespArrowAtkActive message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespArrowAtkActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespArrowAtkActive;
-
-        /**
-         * Verifies a RespArrowAtkActive message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
@@ -1782,17 +1218,14 @@ declare namespace ResponsePackage {
         /** RespCkFrameInfo faceXY */
         faceXY?: (ResponsePackage.IRespXY|null);
 
-        /** RespCkFrameInfo moveActive */
-        moveActive?: (ResponsePackage.IRespMoveActive|null);
+        /** RespCkFrameInfo isAtk */
+        isAtk?: (boolean|null);
 
-        /** RespCkFrameInfo chaseActive */
-        chaseActive?: (ResponsePackage.IRespChaseActive|null);
+        /** RespCkFrameInfo hit */
+        hit?: (ResponsePackage.IRespHit|null);
 
-        /** RespCkFrameInfo strikeActive */
-        strikeActive?: (ResponsePackage.IRespStrikeActive|null);
-
-        /** RespCkFrameInfo physicalAtkActive */
-        physicalAtkActive?: (ResponsePackage.IRespPhysicalAtkActive|null);
+        /** RespCkFrameInfo isDead */
+        isDead?: (boolean|null);
     }
 
     /** Represents a RespCkFrameInfo. */
@@ -1816,17 +1249,14 @@ declare namespace ResponsePackage {
         /** RespCkFrameInfo faceXY. */
         public faceXY?: (ResponsePackage.IRespXY|null);
 
-        /** RespCkFrameInfo moveActive. */
-        public moveActive?: (ResponsePackage.IRespMoveActive|null);
+        /** RespCkFrameInfo isAtk. */
+        public isAtk: boolean;
 
-        /** RespCkFrameInfo chaseActive. */
-        public chaseActive?: (ResponsePackage.IRespChaseActive|null);
+        /** RespCkFrameInfo hit. */
+        public hit?: (ResponsePackage.IRespHit|null);
 
-        /** RespCkFrameInfo strikeActive. */
-        public strikeActive?: (ResponsePackage.IRespStrikeActive|null);
-
-        /** RespCkFrameInfo physicalAtkActive. */
-        public physicalAtkActive?: (ResponsePackage.IRespPhysicalAtkActive|null);
+        /** RespCkFrameInfo isDead. */
+        public isDead: boolean;
 
         /**
          * Creates a new RespCkFrameInfo instance using the specified properties.
@@ -1878,300 +1308,87 @@ declare namespace ResponsePackage {
         public static verify(message: { [k: string]: any }): (string|null);
     }
 
-    /** Properties of a RespChaseActive. */
-    interface IRespChaseActive {
+    /** Properties of a RespHit. */
+    interface IRespHit {
 
-        /** RespChaseActive posXY */
-        posXY?: (ResponsePackage.IRespXY|null);
+        /** RespHit atkCk */
+        atkCk?: (number|null);
 
-        /** RespChaseActive status */
-        status?: (number|null);
+        /** RespHit hitType */
+        hitType?: (number|null);
+
+        /** RespHit atkType */
+        atkType?: (number|null);
+
+        /** RespHit value */
+        value?: (number|null);
     }
 
-    /** Represents a RespChaseActive. */
-    class RespChaseActive implements IRespChaseActive {
+    /** Represents a RespHit. */
+    class RespHit implements IRespHit {
 
         /**
-         * Constructs a new RespChaseActive.
+         * Constructs a new RespHit.
          * @param [properties] Properties to set
          */
-        constructor(properties?: ResponsePackage.IRespChaseActive);
+        constructor(properties?: ResponsePackage.IRespHit);
 
-        /** RespChaseActive posXY. */
-        public posXY?: (ResponsePackage.IRespXY|null);
+        /** RespHit atkCk. */
+        public atkCk: number;
 
-        /** RespChaseActive status. */
-        public status: number;
+        /** RespHit hitType. */
+        public hitType: number;
+
+        /** RespHit atkType. */
+        public atkType: number;
+
+        /** RespHit value. */
+        public value: number;
 
         /**
-         * Creates a new RespChaseActive instance using the specified properties.
+         * Creates a new RespHit instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RespChaseActive instance
+         * @returns RespHit instance
          */
-        public static create(properties?: ResponsePackage.IRespChaseActive): ResponsePackage.RespChaseActive;
+        public static create(properties?: ResponsePackage.IRespHit): ResponsePackage.RespHit;
 
         /**
-         * Encodes the specified RespChaseActive message. Does not implicitly {@link ResponsePackage.RespChaseActive.verify|verify} messages.
-         * @param message RespChaseActive message or plain object to encode
+         * Encodes the specified RespHit message. Does not implicitly {@link ResponsePackage.RespHit.verify|verify} messages.
+         * @param message RespHit message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: ResponsePackage.IRespChaseActive, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: ResponsePackage.IRespHit, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RespChaseActive message, length delimited. Does not implicitly {@link ResponsePackage.RespChaseActive.verify|verify} messages.
-         * @param message RespChaseActive message or plain object to encode
+         * Encodes the specified RespHit message, length delimited. Does not implicitly {@link ResponsePackage.RespHit.verify|verify} messages.
+         * @param message RespHit message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: ResponsePackage.IRespChaseActive, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: ResponsePackage.IRespHit, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RespChaseActive message from the specified reader or buffer.
+         * Decodes a RespHit message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RespChaseActive
+         * @returns RespHit
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespChaseActive;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespHit;
 
         /**
-         * Decodes a RespChaseActive message from the specified reader or buffer, length delimited.
+         * Decodes a RespHit message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RespChaseActive
+         * @returns RespHit
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespChaseActive;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespHit;
 
         /**
-         * Verifies a RespChaseActive message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespStrikeActive. */
-    interface IRespStrikeActive {
-
-        /** RespStrikeActive count */
-        count?: (number|null);
-
-        /** RespStrikeActive status */
-        status?: (number|null);
-    }
-
-    /** Represents a RespStrikeActive. */
-    class RespStrikeActive implements IRespStrikeActive {
-
-        /**
-         * Constructs a new RespStrikeActive.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespStrikeActive);
-
-        /** RespStrikeActive count. */
-        public count: number;
-
-        /** RespStrikeActive status. */
-        public status: number;
-
-        /**
-         * Creates a new RespStrikeActive instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespStrikeActive instance
-         */
-        public static create(properties?: ResponsePackage.IRespStrikeActive): ResponsePackage.RespStrikeActive;
-
-        /**
-         * Encodes the specified RespStrikeActive message. Does not implicitly {@link ResponsePackage.RespStrikeActive.verify|verify} messages.
-         * @param message RespStrikeActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespStrikeActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespStrikeActive message, length delimited. Does not implicitly {@link ResponsePackage.RespStrikeActive.verify|verify} messages.
-         * @param message RespStrikeActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespStrikeActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespStrikeActive message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespStrikeActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespStrikeActive;
-
-        /**
-         * Decodes a RespStrikeActive message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespStrikeActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespStrikeActive;
-
-        /**
-         * Verifies a RespStrikeActive message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespPhysicalAtkActive. */
-    interface IRespPhysicalAtkActive {
-
-        /** RespPhysicalAtkActive count */
-        count?: (number|null);
-
-        /** RespPhysicalAtkActive status */
-        status?: (number|null);
-    }
-
-    /** Represents a RespPhysicalAtkActive. */
-    class RespPhysicalAtkActive implements IRespPhysicalAtkActive {
-
-        /**
-         * Constructs a new RespPhysicalAtkActive.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespPhysicalAtkActive);
-
-        /** RespPhysicalAtkActive count. */
-        public count: number;
-
-        /** RespPhysicalAtkActive status. */
-        public status: number;
-
-        /**
-         * Creates a new RespPhysicalAtkActive instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespPhysicalAtkActive instance
-         */
-        public static create(properties?: ResponsePackage.IRespPhysicalAtkActive): ResponsePackage.RespPhysicalAtkActive;
-
-        /**
-         * Encodes the specified RespPhysicalAtkActive message. Does not implicitly {@link ResponsePackage.RespPhysicalAtkActive.verify|verify} messages.
-         * @param message RespPhysicalAtkActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespPhysicalAtkActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespPhysicalAtkActive message, length delimited. Does not implicitly {@link ResponsePackage.RespPhysicalAtkActive.verify|verify} messages.
-         * @param message RespPhysicalAtkActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespPhysicalAtkActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespPhysicalAtkActive message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespPhysicalAtkActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespPhysicalAtkActive;
-
-        /**
-         * Decodes a RespPhysicalAtkActive message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespPhysicalAtkActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespPhysicalAtkActive;
-
-        /**
-         * Verifies a RespPhysicalAtkActive message.
-         * @param message Plain object to verify
-         * @returns `null` if valid, otherwise the reason why it is not
-         */
-        public static verify(message: { [k: string]: any }): (string|null);
-    }
-
-    /** Properties of a RespMoveActive. */
-    interface IRespMoveActive {
-
-        /** RespMoveActive posXY */
-        posXY?: (ResponsePackage.IRespXY|null);
-
-        /** RespMoveActive status */
-        status?: (number|null);
-    }
-
-    /** Represents a RespMoveActive. */
-    class RespMoveActive implements IRespMoveActive {
-
-        /**
-         * Constructs a new RespMoveActive.
-         * @param [properties] Properties to set
-         */
-        constructor(properties?: ResponsePackage.IRespMoveActive);
-
-        /** RespMoveActive posXY. */
-        public posXY?: (ResponsePackage.IRespXY|null);
-
-        /** RespMoveActive status. */
-        public status: number;
-
-        /**
-         * Creates a new RespMoveActive instance using the specified properties.
-         * @param [properties] Properties to set
-         * @returns RespMoveActive instance
-         */
-        public static create(properties?: ResponsePackage.IRespMoveActive): ResponsePackage.RespMoveActive;
-
-        /**
-         * Encodes the specified RespMoveActive message. Does not implicitly {@link ResponsePackage.RespMoveActive.verify|verify} messages.
-         * @param message RespMoveActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encode(message: ResponsePackage.IRespMoveActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Encodes the specified RespMoveActive message, length delimited. Does not implicitly {@link ResponsePackage.RespMoveActive.verify|verify} messages.
-         * @param message RespMoveActive message or plain object to encode
-         * @param [writer] Writer to encode to
-         * @returns Writer
-         */
-        public static encodeDelimited(message: ResponsePackage.IRespMoveActive, writer?: protobuf.Writer): protobuf.Writer;
-
-        /**
-         * Decodes a RespMoveActive message from the specified reader or buffer.
-         * @param reader Reader or buffer to decode from
-         * @param [length] Message length if known beforehand
-         * @returns RespMoveActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespMoveActive;
-
-        /**
-         * Decodes a RespMoveActive message from the specified reader or buffer, length delimited.
-         * @param reader Reader or buffer to decode from
-         * @returns RespMoveActive
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {protobuf.util.ProtocolError} If required fields are missing
-         */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespMoveActive;
-
-        /**
-         * Verifies a RespMoveActive message.
+         * Verifies a RespHit message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
@@ -2607,240 +1824,597 @@ declare namespace ResponsePackage {
         public static verify(message: { [k: string]: any }): (string|null);
     }
 
-    /** Properties of a RespCk. */
-    interface IRespCk {
+    /** Properties of a RespTeam. */
+    interface IRespTeam {
 
-        /** RespCk roleCks */
-        roleCks?: (ResponsePackage.IRespCkInfo[]|null);
+        /** RespTeam teamList */
+        teamList?: (ResponsePackage.IRespTeamInfo[]|null);
+
+        /** RespTeam teamOp */
+        teamOp?: (ResponsePackage.IRespTeamInfo[]|null);
     }
 
-    /** Represents a RespCk. */
-    class RespCk implements IRespCk {
+    /** Represents a RespTeam. */
+    class RespTeam implements IRespTeam {
 
         /**
-         * Constructs a new RespCk.
+         * Constructs a new RespTeam.
          * @param [properties] Properties to set
          */
-        constructor(properties?: ResponsePackage.IRespCk);
+        constructor(properties?: ResponsePackage.IRespTeam);
 
-        /** RespCk roleCks. */
-        public roleCks: ResponsePackage.IRespCkInfo[];
+        /** RespTeam teamList. */
+        public teamList: ResponsePackage.IRespTeamInfo[];
+
+        /** RespTeam teamOp. */
+        public teamOp: ResponsePackage.IRespTeamInfo[];
 
         /**
-         * Creates a new RespCk instance using the specified properties.
+         * Creates a new RespTeam instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RespCk instance
+         * @returns RespTeam instance
          */
-        public static create(properties?: ResponsePackage.IRespCk): ResponsePackage.RespCk;
+        public static create(properties?: ResponsePackage.IRespTeam): ResponsePackage.RespTeam;
 
         /**
-         * Encodes the specified RespCk message. Does not implicitly {@link ResponsePackage.RespCk.verify|verify} messages.
-         * @param message RespCk message or plain object to encode
+         * Encodes the specified RespTeam message. Does not implicitly {@link ResponsePackage.RespTeam.verify|verify} messages.
+         * @param message RespTeam message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: ResponsePackage.IRespCk, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: ResponsePackage.IRespTeam, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RespCk message, length delimited. Does not implicitly {@link ResponsePackage.RespCk.verify|verify} messages.
-         * @param message RespCk message or plain object to encode
+         * Encodes the specified RespTeam message, length delimited. Does not implicitly {@link ResponsePackage.RespTeam.verify|verify} messages.
+         * @param message RespTeam message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: ResponsePackage.IRespCk, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: ResponsePackage.IRespTeam, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RespCk message from the specified reader or buffer.
+         * Decodes a RespTeam message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RespCk
+         * @returns RespTeam
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespCk;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespTeam;
 
         /**
-         * Decodes a RespCk message from the specified reader or buffer, length delimited.
+         * Decodes a RespTeam message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RespCk
+         * @returns RespTeam
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespCk;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespTeam;
 
         /**
-         * Verifies a RespCk message.
+         * Verifies a RespTeam message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
         public static verify(message: { [k: string]: any }): (string|null);
     }
 
-    /** Properties of a RespCkInfo. */
-    interface IRespCkInfo {
+    /** Properties of a RespTeamInfo. */
+    interface IRespTeamInfo {
 
-        /** RespCkInfo id */
+        /** RespTeamInfo id */
         id?: (number|null);
 
-        /** RespCkInfo seq */
-        seq?: (number|null);
+        /** RespTeamInfo type */
+        type?: (number|null);
 
-        /** RespCkInfo name */
-        name?: (string|null);
-
-        /** RespCkInfo lock */
-        lock?: (boolean|null);
-
-        /** RespCkInfo birthTime */
-        birthTime?: (number|Long|null);
-
-        /** RespCkInfo launch */
-        launch?: (string|null);
-
-        /** RespCkInfo level */
-        level?: (number|null);
-
-        /** RespCkInfo life */
-        life?: (number|null);
-
-        /** RespCkInfo quality */
-        quality?: (number|null);
-
-        /** RespCkInfo lineage */
-        lineage?: (number|null);
-
-        /** RespCkInfo strength */
-        strength?: (number|null);
-
-        /** RespCkInfo wisdom */
-        wisdom?: (number|null);
-
-        /** RespCkInfo agile */
-        agile?: (number|null);
-
-        /** RespCkInfo health */
-        health?: (number|null);
-
-        /** RespCkInfo spirit */
-        spirit?: (number|null);
-
-        /** RespCkInfo luck */
-        luck?: (number|null);
-
-        /** RespCkInfo professionList */
-        professionList?: (number[]|null);
-
-        /** RespCkInfo specialtyList */
-        specialtyList?: (number[]|null);
+        /** RespTeamInfo ckId */
+        ckId?: (number|null);
     }
 
-    /** Represents a RespCkInfo. */
-    class RespCkInfo implements IRespCkInfo {
+    /** Represents a RespTeamInfo. */
+    class RespTeamInfo implements IRespTeamInfo {
 
         /**
-         * Constructs a new RespCkInfo.
+         * Constructs a new RespTeamInfo.
          * @param [properties] Properties to set
          */
-        constructor(properties?: ResponsePackage.IRespCkInfo);
+        constructor(properties?: ResponsePackage.IRespTeamInfo);
 
-        /** RespCkInfo id. */
+        /** RespTeamInfo id. */
         public id: number;
 
-        /** RespCkInfo seq. */
-        public seq: number;
+        /** RespTeamInfo type. */
+        public type: number;
 
-        /** RespCkInfo name. */
-        public name: string;
-
-        /** RespCkInfo lock. */
-        public lock: boolean;
-
-        /** RespCkInfo birthTime. */
-        public birthTime: (number|Long);
-
-        /** RespCkInfo launch. */
-        public launch: string;
-
-        /** RespCkInfo level. */
-        public level: number;
-
-        /** RespCkInfo life. */
-        public life: number;
-
-        /** RespCkInfo quality. */
-        public quality: number;
-
-        /** RespCkInfo lineage. */
-        public lineage: number;
-
-        /** RespCkInfo strength. */
-        public strength: number;
-
-        /** RespCkInfo wisdom. */
-        public wisdom: number;
-
-        /** RespCkInfo agile. */
-        public agile: number;
-
-        /** RespCkInfo health. */
-        public health: number;
-
-        /** RespCkInfo spirit. */
-        public spirit: number;
-
-        /** RespCkInfo luck. */
-        public luck: number;
-
-        /** RespCkInfo professionList. */
-        public professionList: number[];
-
-        /** RespCkInfo specialtyList. */
-        public specialtyList: number[];
+        /** RespTeamInfo ckId. */
+        public ckId: number;
 
         /**
-         * Creates a new RespCkInfo instance using the specified properties.
+         * Creates a new RespTeamInfo instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RespCkInfo instance
+         * @returns RespTeamInfo instance
          */
-        public static create(properties?: ResponsePackage.IRespCkInfo): ResponsePackage.RespCkInfo;
+        public static create(properties?: ResponsePackage.IRespTeamInfo): ResponsePackage.RespTeamInfo;
 
         /**
-         * Encodes the specified RespCkInfo message. Does not implicitly {@link ResponsePackage.RespCkInfo.verify|verify} messages.
-         * @param message RespCkInfo message or plain object to encode
+         * Encodes the specified RespTeamInfo message. Does not implicitly {@link ResponsePackage.RespTeamInfo.verify|verify} messages.
+         * @param message RespTeamInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: ResponsePackage.IRespCkInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: ResponsePackage.IRespTeamInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RespCkInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespCkInfo.verify|verify} messages.
-         * @param message RespCkInfo message or plain object to encode
+         * Encodes the specified RespTeamInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespTeamInfo.verify|verify} messages.
+         * @param message RespTeamInfo message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: ResponsePackage.IRespCkInfo, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: ResponsePackage.IRespTeamInfo, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RespCkInfo message from the specified reader or buffer.
+         * Decodes a RespTeamInfo message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RespCkInfo
+         * @returns RespTeamInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespCkInfo;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespTeamInfo;
 
         /**
-         * Decodes a RespCkInfo message from the specified reader or buffer, length delimited.
+         * Decodes a RespTeamInfo message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RespCkInfo
+         * @returns RespTeamInfo
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespCkInfo;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespTeamInfo;
 
         /**
-         * Verifies a RespCkInfo message.
+         * Verifies a RespTeamInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespMail. */
+    interface IRespMail {
+
+        /** RespMail mails */
+        mails?: (ResponsePackage.IRespMailInfo[]|null);
+
+        /** RespMail mailOp */
+        mailOp?: (ResponsePackage.IRespMailOp|null);
+    }
+
+    /** Represents a RespMail. */
+    class RespMail implements IRespMail {
+
+        /**
+         * Constructs a new RespMail.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespMail);
+
+        /** RespMail mails. */
+        public mails: ResponsePackage.IRespMailInfo[];
+
+        /** RespMail mailOp. */
+        public mailOp?: (ResponsePackage.IRespMailOp|null);
+
+        /**
+         * Creates a new RespMail instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespMail instance
+         */
+        public static create(properties?: ResponsePackage.IRespMail): ResponsePackage.RespMail;
+
+        /**
+         * Encodes the specified RespMail message. Does not implicitly {@link ResponsePackage.RespMail.verify|verify} messages.
+         * @param message RespMail message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespMail, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespMail message, length delimited. Does not implicitly {@link ResponsePackage.RespMail.verify|verify} messages.
+         * @param message RespMail message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespMail, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespMail message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespMail
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespMail;
+
+        /**
+         * Decodes a RespMail message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespMail
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespMail;
+
+        /**
+         * Verifies a RespMail message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespMailOp. */
+    interface IRespMailOp {
+
+        /** RespMailOp id */
+        id?: (number|null);
+
+        /** RespMailOp read */
+        read?: (boolean|null);
+    }
+
+    /** Represents a RespMailOp. */
+    class RespMailOp implements IRespMailOp {
+
+        /**
+         * Constructs a new RespMailOp.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespMailOp);
+
+        /** RespMailOp id. */
+        public id: number;
+
+        /** RespMailOp read. */
+        public read: boolean;
+
+        /**
+         * Creates a new RespMailOp instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespMailOp instance
+         */
+        public static create(properties?: ResponsePackage.IRespMailOp): ResponsePackage.RespMailOp;
+
+        /**
+         * Encodes the specified RespMailOp message. Does not implicitly {@link ResponsePackage.RespMailOp.verify|verify} messages.
+         * @param message RespMailOp message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespMailOp, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespMailOp message, length delimited. Does not implicitly {@link ResponsePackage.RespMailOp.verify|verify} messages.
+         * @param message RespMailOp message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespMailOp, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespMailOp message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespMailOp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespMailOp;
+
+        /**
+         * Decodes a RespMailOp message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespMailOp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespMailOp;
+
+        /**
+         * Verifies a RespMailOp message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespMailInfo. */
+    interface IRespMailInfo {
+
+        /** RespMailInfo id */
+        id?: (number|null);
+
+        /** RespMailInfo senderName */
+        senderName?: (string|null);
+
+        /** RespMailInfo sendIcon */
+        sendIcon?: (number|null);
+
+        /** RespMailInfo sendTime */
+        sendTime?: (number|Long|null);
+
+        /** RespMailInfo type */
+        type?: (number|null);
+
+        /** RespMailInfo title */
+        title?: (string|null);
+
+        /** RespMailInfo context */
+        context?: (string|null);
+
+        /** RespMailInfo params */
+        params?: (string[]|null);
+
+        /** RespMailInfo read */
+        read?: (boolean|null);
+
+        /** RespMailInfo items */
+        items?: (ResponsePackage.IRespFunc[]|null);
+    }
+
+    /** Represents a RespMailInfo. */
+    class RespMailInfo implements IRespMailInfo {
+
+        /**
+         * Constructs a new RespMailInfo.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespMailInfo);
+
+        /** RespMailInfo id. */
+        public id: number;
+
+        /** RespMailInfo senderName. */
+        public senderName: string;
+
+        /** RespMailInfo sendIcon. */
+        public sendIcon: number;
+
+        /** RespMailInfo sendTime. */
+        public sendTime: (number|Long);
+
+        /** RespMailInfo type. */
+        public type: number;
+
+        /** RespMailInfo title. */
+        public title: string;
+
+        /** RespMailInfo context. */
+        public context: string;
+
+        /** RespMailInfo params. */
+        public params: string[];
+
+        /** RespMailInfo read. */
+        public read: boolean;
+
+        /** RespMailInfo items. */
+        public items: ResponsePackage.IRespFunc[];
+
+        /**
+         * Creates a new RespMailInfo instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespMailInfo instance
+         */
+        public static create(properties?: ResponsePackage.IRespMailInfo): ResponsePackage.RespMailInfo;
+
+        /**
+         * Encodes the specified RespMailInfo message. Does not implicitly {@link ResponsePackage.RespMailInfo.verify|verify} messages.
+         * @param message RespMailInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespMailInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespMailInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespMailInfo.verify|verify} messages.
+         * @param message RespMailInfo message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespMailInfo, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespMailInfo message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespMailInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespMailInfo;
+
+        /**
+         * Decodes a RespMailInfo message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespMailInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespMailInfo;
+
+        /**
+         * Verifies a RespMailInfo message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespFunc. */
+    interface IRespFunc {
+
+        /** RespFunc param */
+        param?: (number|null);
+
+        /** RespFunc type */
+        type?: (number|null);
+
+        /** RespFunc value */
+        value?: (number|Long|null);
+
+        /** RespFunc param1 */
+        param1?: (number|null);
+
+        /** RespFunc param2 */
+        param2?: (number|null);
+
+        /** RespFunc param3 */
+        param3?: (number|null);
+    }
+
+    /** Represents a RespFunc. */
+    class RespFunc implements IRespFunc {
+
+        /**
+         * Constructs a new RespFunc.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespFunc);
+
+        /** RespFunc param. */
+        public param: number;
+
+        /** RespFunc type. */
+        public type: number;
+
+        /** RespFunc value. */
+        public value: (number|Long);
+
+        /** RespFunc param1. */
+        public param1: number;
+
+        /** RespFunc param2. */
+        public param2: number;
+
+        /** RespFunc param3. */
+        public param3: number;
+
+        /**
+         * Creates a new RespFunc instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespFunc instance
+         */
+        public static create(properties?: ResponsePackage.IRespFunc): ResponsePackage.RespFunc;
+
+        /**
+         * Encodes the specified RespFunc message. Does not implicitly {@link ResponsePackage.RespFunc.verify|verify} messages.
+         * @param message RespFunc message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespFunc, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespFunc message, length delimited. Does not implicitly {@link ResponsePackage.RespFunc.verify|verify} messages.
+         * @param message RespFunc message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespFunc, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespFunc message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespFunc
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespFunc;
+
+        /**
+         * Decodes a RespFunc message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespFunc
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespFunc;
+
+        /**
+         * Verifies a RespFunc message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespLong. */
+    interface IRespLong {
+
+        /** RespLong value */
+        value?: (number|Long|null);
+    }
+
+    /** Represents a RespLong. */
+    class RespLong implements IRespLong {
+
+        /**
+         * Constructs a new RespLong.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespLong);
+
+        /** RespLong value. */
+        public value: (number|Long);
+
+        /**
+         * Creates a new RespLong instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespLong instance
+         */
+        public static create(properties?: ResponsePackage.IRespLong): ResponsePackage.RespLong;
+
+        /**
+         * Encodes the specified RespLong message. Does not implicitly {@link ResponsePackage.RespLong.verify|verify} messages.
+         * @param message RespLong message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespLong, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespLong message, length delimited. Does not implicitly {@link ResponsePackage.RespLong.verify|verify} messages.
+         * @param message RespLong message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespLong, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespLong message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespLong
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespLong;
+
+        /**
+         * Decodes a RespLong message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespLong
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespLong;
+
+        /**
+         * Verifies a RespLong message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
@@ -2858,6 +2432,9 @@ declare namespace ResponsePackage {
 
         /** RespMatch joinRole */
         joinRole?: (ResponsePackage.IRespRoomRole|null);
+
+        /** RespMatch respChampionship */
+        respChampionship?: (ResponsePackage.IRespChampionship|null);
     }
 
     /** Represents a RespMatch. */
@@ -2877,6 +2454,9 @@ declare namespace ResponsePackage {
 
         /** RespMatch joinRole. */
         public joinRole?: (ResponsePackage.IRespRoomRole|null);
+
+        /** RespMatch respChampionship. */
+        public respChampionship?: (ResponsePackage.IRespChampionship|null);
 
         /**
          * Creates a new RespMatch instance using the specified properties.
@@ -2922,6 +2502,81 @@ declare namespace ResponsePackage {
 
         /**
          * Verifies a RespMatch message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespRoomRole. */
+    interface IRespRoomRole {
+
+        /** RespRoomRole index */
+        index?: (number|null);
+
+        /** RespRoomRole roleBaseInfo */
+        roleBaseInfo?: (ResponsePackage.IRespRoleBaseInfo|null);
+    }
+
+    /** Represents a RespRoomRole. */
+    class RespRoomRole implements IRespRoomRole {
+
+        /**
+         * Constructs a new RespRoomRole.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespRoomRole);
+
+        /** RespRoomRole index. */
+        public index: number;
+
+        /** RespRoomRole roleBaseInfo. */
+        public roleBaseInfo?: (ResponsePackage.IRespRoleBaseInfo|null);
+
+        /**
+         * Creates a new RespRoomRole instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespRoomRole instance
+         */
+        public static create(properties?: ResponsePackage.IRespRoomRole): ResponsePackage.RespRoomRole;
+
+        /**
+         * Encodes the specified RespRoomRole message. Does not implicitly {@link ResponsePackage.RespRoomRole.verify|verify} messages.
+         * @param message RespRoomRole message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespRoomRole, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespRoomRole message, length delimited. Does not implicitly {@link ResponsePackage.RespRoomRole.verify|verify} messages.
+         * @param message RespRoomRole message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespRoomRole, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespRoomRole message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespRoomRole
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespRoomRole;
+
+        /**
+         * Decodes a RespRoomRole message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespRoomRole
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespRoomRole;
+
+        /**
+         * Verifies a RespRoomRole message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */
@@ -3021,75 +2676,255 @@ declare namespace ResponsePackage {
         public static verify(message: { [k: string]: any }): (string|null);
     }
 
-    /** Properties of a RespRoomRole. */
-    interface IRespRoomRole {
+    /** Properties of a RespChampionship. */
+    interface IRespChampionship {
 
-        /** RespRoomRole index */
-        index?: (number|null);
+        /** RespChampionship cid */
+        cid?: (number|null);
 
-        /** RespRoomRole roleBaseInfo */
-        roleBaseInfo?: (ResponsePackage.IRespRoleBaseInfo|null);
+        /** RespChampionship teamEnd */
+        teamEnd?: (boolean|null);
+
+        /** RespChampionship survivalEnd */
+        survivalEnd?: (boolean|null);
+
+        /** RespChampionship startTime */
+        startTime?: (number|Long|null);
     }
 
-    /** Represents a RespRoomRole. */
-    class RespRoomRole implements IRespRoomRole {
+    /** Represents a RespChampionship. */
+    class RespChampionship implements IRespChampionship {
 
         /**
-         * Constructs a new RespRoomRole.
+         * Constructs a new RespChampionship.
          * @param [properties] Properties to set
          */
-        constructor(properties?: ResponsePackage.IRespRoomRole);
+        constructor(properties?: ResponsePackage.IRespChampionship);
 
-        /** RespRoomRole index. */
-        public index: number;
+        /** RespChampionship cid. */
+        public cid: number;
 
-        /** RespRoomRole roleBaseInfo. */
-        public roleBaseInfo?: (ResponsePackage.IRespRoleBaseInfo|null);
+        /** RespChampionship teamEnd. */
+        public teamEnd: boolean;
+
+        /** RespChampionship survivalEnd. */
+        public survivalEnd: boolean;
+
+        /** RespChampionship startTime. */
+        public startTime: (number|Long);
 
         /**
-         * Creates a new RespRoomRole instance using the specified properties.
+         * Creates a new RespChampionship instance using the specified properties.
          * @param [properties] Properties to set
-         * @returns RespRoomRole instance
+         * @returns RespChampionship instance
          */
-        public static create(properties?: ResponsePackage.IRespRoomRole): ResponsePackage.RespRoomRole;
+        public static create(properties?: ResponsePackage.IRespChampionship): ResponsePackage.RespChampionship;
 
         /**
-         * Encodes the specified RespRoomRole message. Does not implicitly {@link ResponsePackage.RespRoomRole.verify|verify} messages.
-         * @param message RespRoomRole message or plain object to encode
+         * Encodes the specified RespChampionship message. Does not implicitly {@link ResponsePackage.RespChampionship.verify|verify} messages.
+         * @param message RespChampionship message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encode(message: ResponsePackage.IRespRoomRole, writer?: protobuf.Writer): protobuf.Writer;
+        public static encode(message: ResponsePackage.IRespChampionship, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Encodes the specified RespRoomRole message, length delimited. Does not implicitly {@link ResponsePackage.RespRoomRole.verify|verify} messages.
-         * @param message RespRoomRole message or plain object to encode
+         * Encodes the specified RespChampionship message, length delimited. Does not implicitly {@link ResponsePackage.RespChampionship.verify|verify} messages.
+         * @param message RespChampionship message or plain object to encode
          * @param [writer] Writer to encode to
          * @returns Writer
          */
-        public static encodeDelimited(message: ResponsePackage.IRespRoomRole, writer?: protobuf.Writer): protobuf.Writer;
+        public static encodeDelimited(message: ResponsePackage.IRespChampionship, writer?: protobuf.Writer): protobuf.Writer;
 
         /**
-         * Decodes a RespRoomRole message from the specified reader or buffer.
+         * Decodes a RespChampionship message from the specified reader or buffer.
          * @param reader Reader or buffer to decode from
          * @param [length] Message length if known beforehand
-         * @returns RespRoomRole
+         * @returns RespChampionship
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespRoomRole;
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespChampionship;
 
         /**
-         * Decodes a RespRoomRole message from the specified reader or buffer, length delimited.
+         * Decodes a RespChampionship message from the specified reader or buffer, length delimited.
          * @param reader Reader or buffer to decode from
-         * @returns RespRoomRole
+         * @returns RespChampionship
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {protobuf.util.ProtocolError} If required fields are missing
          */
-        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespRoomRole;
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespChampionship;
 
         /**
-         * Verifies a RespRoomRole message.
+         * Verifies a RespChampionship message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespChat. */
+    interface IRespChat {
+
+        /** RespChat chatMsgs */
+        chatMsgs?: (ResponsePackage.IRespChatMsg[]|null);
+
+        /** RespChat chatMsg */
+        chatMsg?: (ResponsePackage.IRespChatMsg|null);
+    }
+
+    /** Represents a RespChat. */
+    class RespChat implements IRespChat {
+
+        /**
+         * Constructs a new RespChat.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespChat);
+
+        /** RespChat chatMsgs. */
+        public chatMsgs: ResponsePackage.IRespChatMsg[];
+
+        /** RespChat chatMsg. */
+        public chatMsg?: (ResponsePackage.IRespChatMsg|null);
+
+        /**
+         * Creates a new RespChat instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespChat instance
+         */
+        public static create(properties?: ResponsePackage.IRespChat): ResponsePackage.RespChat;
+
+        /**
+         * Encodes the specified RespChat message. Does not implicitly {@link ResponsePackage.RespChat.verify|verify} messages.
+         * @param message RespChat message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespChat, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespChat message, length delimited. Does not implicitly {@link ResponsePackage.RespChat.verify|verify} messages.
+         * @param message RespChat message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespChat, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespChat message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespChat
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespChat;
+
+        /**
+         * Decodes a RespChat message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespChat
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespChat;
+
+        /**
+         * Verifies a RespChat message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+    }
+
+    /** Properties of a RespChatMsg. */
+    interface IRespChatMsg {
+
+        /** RespChatMsg chatType */
+        chatType?: (number|null);
+
+        /** RespChatMsg baseInfo */
+        baseInfo?: (ResponsePackage.IRespRoleBaseInfo|null);
+
+        /** RespChatMsg msg */
+        msg?: (string|null);
+
+        /** RespChatMsg time */
+        time?: (number|Long|null);
+
+        /** RespChatMsg params */
+        params?: (string[]|null);
+    }
+
+    /** Represents a RespChatMsg. */
+    class RespChatMsg implements IRespChatMsg {
+
+        /**
+         * Constructs a new RespChatMsg.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ResponsePackage.IRespChatMsg);
+
+        /** RespChatMsg chatType. */
+        public chatType: number;
+
+        /** RespChatMsg baseInfo. */
+        public baseInfo?: (ResponsePackage.IRespRoleBaseInfo|null);
+
+        /** RespChatMsg msg. */
+        public msg: string;
+
+        /** RespChatMsg time. */
+        public time: (number|Long);
+
+        /** RespChatMsg params. */
+        public params: string[];
+
+        /**
+         * Creates a new RespChatMsg instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns RespChatMsg instance
+         */
+        public static create(properties?: ResponsePackage.IRespChatMsg): ResponsePackage.RespChatMsg;
+
+        /**
+         * Encodes the specified RespChatMsg message. Does not implicitly {@link ResponsePackage.RespChatMsg.verify|verify} messages.
+         * @param message RespChatMsg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ResponsePackage.IRespChatMsg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Encodes the specified RespChatMsg message, length delimited. Does not implicitly {@link ResponsePackage.RespChatMsg.verify|verify} messages.
+         * @param message RespChatMsg message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ResponsePackage.IRespChatMsg, writer?: protobuf.Writer): protobuf.Writer;
+
+        /**
+         * Decodes a RespChatMsg message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns RespChatMsg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: (protobuf.Reader|Uint8Array), length?: number): ResponsePackage.RespChatMsg;
+
+        /**
+         * Decodes a RespChatMsg message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns RespChatMsg
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: (protobuf.Reader|Uint8Array)): ResponsePackage.RespChatMsg;
+
+        /**
+         * Verifies a RespChatMsg message.
          * @param message Plain object to verify
          * @returns `null` if valid, otherwise the reason why it is not
          */

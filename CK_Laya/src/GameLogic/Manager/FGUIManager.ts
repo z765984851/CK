@@ -7,6 +7,7 @@ import { PanelExample } from "../FGUI/PanelExample";
 import { WindowExample } from "../FGUI/WindowExample";
 import { SceneManager } from "./SceneManager";
 import { FGUI_TopBarPanel } from "../FGUI/Panel/FGUI_TopBarPanel";
+import { FGUI_BattlePanel } from "../FGUI/Panel/FGUI_BattlePanel";
 
 export class FGUIManager {
 
@@ -144,19 +145,22 @@ export class FGUIManager {
 
 
     //can not open mutiple and is fullscreen
-    public OpenPanel(uiType:CK_UIType,onLoadFinish,ifDestroyLast=true,args?:any)
+    public OpenPanel(uiType:CK_UIType,onOpenFinish,ifDestroyLast=true,args?:any)
     {
         let config=CK_FGUIConfig.GetInstance().Config.get(uiType);
         let openUI =()=>{
             let ui:FGUIBase=null;
             
             if ( this.CurrentCreatedUI.has(uiType)==false) {
+                
+                
                 ui= this.CreateNewUI(uiType);
                 ui.Init();
                 this.CurrentCreatedUI.set(uiType,ui);
             }
             else
             {
+               
                 ui=this.CurrentCreatedUI.get(uiType);
             }
            
@@ -179,7 +183,7 @@ export class FGUIManager {
         
         this.LoadUIPackage(config.PackageName,()=>{
             openUI();
-            onLoadFinish();
+            onOpenFinish();
         });
 
     }
@@ -202,7 +206,6 @@ export class FGUIManager {
 
     public GetPanel(uiType)
     {
-         console.log("[FGUIManager]",this.CurrentOpenPanel);
        
         for (let index = 0; index < this.CurrentOpenPanel.length; index++) {
             let element:FGUIBase = this.CurrentOpenPanel[index];
@@ -263,6 +266,13 @@ export class FGUIManager {
         this.CurrentOpenWindow.clear();
     }
 
+    public CloseAllPanel(){
+        while (this.CurrentOpenPanel.length!=0) {
+            let panel:FGUIBase=this.CurrentOpenPanel.pop();
+            panel.Destroy();
+        }
+    }
+
 
     private IfOpenThisWindow(uiType):boolean
     {
@@ -299,6 +309,10 @@ export class FGUIManager {
             
             case CK_UIType.TopBarPanel:
                 ui=new FGUI_TopBarPanel();
+                break;  
+
+            case CK_UIType.BattlePanel:
+                ui=new FGUI_BattlePanel();
                 break;  
             default:
                 break;

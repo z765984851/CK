@@ -18,10 +18,6 @@ export class ResMananger {
 
 
   
-    //scene local path
-    public BattleScenePath="res/unityscenes/LayaScene_BattleScene/Conventional/";
-    //scene local path
-    public LobbyScenePath="res/unityscenes/LayaScene_LobbyScene/Conventional/";
     //mat local path
     public BasePrefabPath="res/unityscenes/LayaScene_PrefabScene/Conventional/";
 
@@ -153,6 +149,7 @@ export class ResMananger {
     public ReleaseRes(path:string)
     {
         if (this.IsLoaded(path)) {
+            console.log("[ResMananger] ReleaseRes",path);
             Laya.loader.clearRes(path)
             ArrayHelper.GetInstance().RemoveElementFromArray(this.loadedPath,path);
         }

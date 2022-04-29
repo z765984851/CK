@@ -1,8 +1,12 @@
-import { BallType } from "../Common/BallType";
-import { UIHpSlider } from "../FGUI/UIHpSlider";
-import { BallFactory } from "../Manager/BallFactory";
-import { ResMananger } from "../Manager/ResMananger";
-import { SceneType } from "../Manager/SceneManager";
+
+import { CK_UIType } from "../FGUI/CK_FGUIConfig";
+import { FGUI_BattlePanel } from "../FGUI/Panel/FGUI_BattlePanel";
+import { MainPanelType } from "../FGUI/Panel/FGUI_MainPanel";
+import { DataManager } from "../Manager/DataManager";
+import { FGUIManager } from "../Manager/FGUIManager";
+import { SceneManager, SceneType } from "../Manager/SceneManager";
+import { BattleBall } from "../Model/BattleBall";
+import { CameraComponent } from "../Model/CameraComponent";
 import { SceneBase } from "./SceneBase";
 
 export class BattleScene implements SceneBase {
@@ -11,8 +15,26 @@ export class BattleScene implements SceneBase {
     Camera: Laya.Camera;
     Light: Laya.DirectionLight;
     SceneType: SceneType =SceneType.BattleScene;
-    private ball:Laya.Sprite3D;
-   
+
+    private balls:BattleBall[]=new Array();
+    private mainUser:BattleBall;
+    private currentBattleData:ResponsePackage.RespFightResult;
+    private currentFrameId=0;
+    private cameraComp:CameraComponent;
+
+    //--------------------------data------------------------------
+    //roleid,ball
+    private roleMap=new Map();
+    //ckid,ball
+    private ckMap=new Map();
+  
+    private battleFrames:ResponsePackage.IRespFrame[];
+    private frameTime=10;
+    private endFrameId=0;
+
+    private battlePanel:FGUI_BattlePanel;
+
+
     constructor(scene) {
         this.Scene =scene;
         this.Init();
@@ -26,12 +48,12 @@ export class BattleScene implements SceneBase {
 
         this.Camera=this.Scene.getChildByName("Main Camera") as Laya.Camera;
         this.Light=this.Scene.getChildByName("Directional Light") as Laya.DirectionLight;
-      
+       
         this.OpenShadow();
         this.BindEvent();
-        this.CreateBall();
-
-        // console.log("Camera",this.Camera);
+        this.CameraInit();
+       
+        
         
     }
 
@@ -41,93 +63,158 @@ export class BattleScene implements SceneBase {
 
     }
 
+    
 
-    private slider:UIHpSlider;
-    private CreateBall()
+
+   
+
+    private CameraInit(){
+        this.cameraComp=new CameraComponent(this.Camera);
+
+    }
+
+    GameInit(battleData)
     {
+        this.currentBattleData=battleData;
+        this.DataHandle();
+    }
 
+    private DataHandle()
+    {
+        this.battleFrames=this.currentBattleData.frameList;
+        let battlerList=this.currentBattleData.battlerList;
+        for (let index = 0; index < battlerList.length; index++) {
+            const battler = battlerList[index];
+            let roleInfo=battler.roleInfo as ResponsePackage.RespRoleBaseInfo;
+            let ckInfo=battler.battleCk as ResponsePackage.RespBattleCk;
+
+
+            let battleBall=new BattleBall(battler,this);
+            battleBall.Transport(ckInfo.posX/1000,ckInfo.posY/1000);
+            this.balls.push(battleBall);
+            this.roleMap.set(roleInfo.id,battleBall);
+            this.ckMap.set(ckInfo.id,battleBall);
+            if (roleInfo.id== DataManager.GetInstance().PlayerData.ID )
+            {
+               this.mainUser=battleBall;
+               this.cameraComp.StartFollow(battleBall.GetBallGameObject());
+            }
+            
+        }
         
-        this.ball= BallFactory.GetInstance().GetBall(BallType.Dragon);
-        this.Scene.addChild(this.ball);
-        this.ball.transform.localPosition=new Laya.Vector3(0,0,0);
-        this.ball.transform.localScale=new Laya.Vector3(1,1,1);
-        this.ball.active=true;
+    }
+
+
+
+    GameStart()
+    {
+        FGUIManager.GetInstance().OpenPanel(CK_UIType.BattlePanel,()=>{},true,this.currentBattleData);
+        this.battlePanel=FGUIManager.GetInstance().GetPanel(CK_UIType.BattlePanel) as FGUI_BattlePanel;
+        this.endFrameId=this.battleFrames.length;
+        this.FrameLogic();
         
        
-        this.slider=new UIHpSlider(this.ball,this.Camera);
-        this.slider.Show();
-        this.slider.Follow();
     }
 
-  
+    private FrameLogic()
+    {
+        let frameData=this.battleFrames[this.currentFrameId];
 
-    private  tempX:number;
-    private  tempY:number;
-    private  tempZ:number;
-    private currentPos:Laya.Vector3;
-    private newPos:Laya.Vector3;
-    private r_ball=0.5;
-    private PI=3.14;
-    private BindEvent(){
+   
+        //TODO handle other entity 
+
+        //handle ck
+        let ckframeInfos:ResponsePackage.IRespCkFrameInfo[]=frameData.ckFrameInfoList;
+        for (let index = 0; index < ckframeInfos.length; index++) {
+            const ckInfo = ckframeInfos[index];
+            //find ball by id
+            let battleBall:BattleBall= this.ckMap.get(ckInfo.id);
+            // //changeHp
+            battleBall.ChangeHp(ckInfo.hp);
+            //check if dead
+            if (ckInfo.isDead==true) 
+            {
+                
+                battleBall.Died();
+                if (ckInfo.id==this.mainUser.CkId) {
+                    //game end because of user die
+                    this.GameOver();
+                    return;
+                }
+            }
+            //move
+            battleBall.Move(ckInfo.posXY.x/1000,ckInfo.posXY.y/1000);
+            
+        }
+
+        this.currentFrameId++;
+        this.battlePanel.ChangeTime(this.currentFrameId*this.frameTime);
+        if (this.currentFrameId!=this.endFrameId) {
+            Laya.timer.once(this.frameTime,this,this.FrameLogic);
+        }
+        else
+        {
+            this.GameOver();
+
+        }
         
-        Laya.stage.on(Laya.Event.KEY_PRESS,this,(e:Laya.Event)=>{
-            let keyCode=e.keyCode;
+    }
+
+    private GameOver(){
+        console.log("[BattleScene] Game Over");
+
+        //open result panel TODO
+        
+        this.EnterLobby();
+        
+
+    }
+
+    private EnterLobby()
+    {
+        this.cameraComp.StopFollow();
+        for (let index = 0; index < this.balls.length; index++) {
+            const ball:BattleBall = this.balls[index];
+            ball.Destroy();
+        }
+        FGUIManager.GetInstance().CloseAllPanel();
+        FGUIManager.GetInstance().CloseAllWindow();
+        SceneManager.GetInstance().DestroyCurrentScene();
+        SceneManager.GetInstance().LoadScene3D(SceneType.LobbyScene,Laya.Handler.create(this,()=>{
+             SceneManager.GetInstance().ChangeScene3D(SceneType.LobbyScene);
+             FGUIManager.GetInstance().OpenPanel(CK_UIType.MainPanel,()=>{},true,MainPanelType.Lobby);
+             FGUIManager.GetInstance().OpenPanel(CK_UIType.TopBarPanel,()=>{},false);
+        }))
+    }
+
+    private BindEvent()
+    {
+        let focusBall=0;
+        Laya.stage.on(Laya.Event.KEY_DOWN,this,(e)=>{
+            let keyCode=e.keyCode
             console.log(keyCode);
-            //w87 a65 s83 d68
-
-
-            this.currentPos = this.ball.transform.position;
-            this.tempX = this.currentPos.x;
-            this.tempY = this.currentPos.y;
-            this.tempZ = this.currentPos.z;
-            if (keyCode==115) {
-                
-               this.tempZ+=0.01; 
-             
-            }
-            if (keyCode==119) {
-                this.tempZ-=0.01; 
-                
-            }
-            if (keyCode==100) {
-                this.tempX+=0.01; 
-            }
-            if (keyCode==97) {
-                this.tempX-=0.01; 
-            }
-            
-
-           this.newPos= new Laya.Vector3(this.tempX, this.tempY, this.tempZ);
-
-           if (this.newPos!=this.currentPos) {
-
-               let dis=Laya.Vector3.distance(this.newPos,this.currentPos);
-               let angle=360 * (dis / (this.r_ball * this.PI));
+            if (keyCode=65) 
+            {
                
-               let forward:Laya.Vector3=new Laya.Vector3(0,0,0);
-               Laya.Vector3.subtract(this.newPos,this.currentPos,forward);
-               Laya.Vector3.cross(new Laya.Vector3(0,1,0),forward,forward);
-               Laya.Vector3.scale(forward,angle*100,forward);
-               console.log(forward);
-               this.ball.transform.rotate(forward,false,false);
-
-               this.ball.transform.position=this.newPos;
-           }
-
-
-
-
+                let ball=this.balls[focusBall];
+                this.cameraComp.StartFollow(ball.GetBallGameObject());
+                focusBall++;
+                if (focusBall==this.balls.length) {
+                    focusBall=0;
+                }
+            }
             
-        });
-      
-        Laya.timer.frameLoop(1,this,()=>{
-           
-            this.Camera.transform.position=new Laya.Vector3(this.ball.transform.position.x,4,this.ball.transform.position.z);
+
         })
+        // Laya.timer.frameLoop(1,this,()=>{
+           
+        //     this.Camera.transform.position=new Laya.Vector3(this.ball.transform.position.x,4,this.ball.transform.position.z);
+        // })
         
     }
 
-
+   
+   
    
 
 }

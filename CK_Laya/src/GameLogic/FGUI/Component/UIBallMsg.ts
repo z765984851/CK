@@ -5,7 +5,7 @@ import { CkQuality, CkQualityConfig } from "../../Generate/Config/CkQuality";
 import { CkWeapon, CkWeaponConfig } from "../../Generate/Config/CkWeapon";
 import { SceneManager } from "../../Manager/SceneManager";
 import { LobbyScene } from "../../Scene/LobbyScene";
-import { UIBall } from "./UIBall";
+
 
 export class UIBallMsg {
 

@@ -8,7 +8,7 @@ export class PropertyGroup {
     private healthText:fgui.GTextField;
     private spiritText:fgui.GTextField;
     private luckText:fgui.GTextField;
-
+    private hpText:fgui.GTextField;
     constructor(content) {
         this.content=content;
         this.InitComp();
@@ -21,6 +21,7 @@ export class PropertyGroup {
         this.healthText=this.content.getChild("common_con_txt").asTextField;
         this.spiritText=this.content.getChild("common_spi_txt").asTextField;
         this.luckText=this.content.getChild("common_luk_txt").asTextField;
+        this.hpText=this.content.getChild("common_hpnumber_txt").asTextField;
     }
 
     public SetData(ckInfo:ResponsePackage.RespCkInfo)
@@ -32,6 +33,7 @@ export class PropertyGroup {
         this.healthText.text=ckInfo.health.toString();
         this.spiritText.text=ckInfo.spirit.toString();
         this.luckText.text=ckInfo.luck.toString();
+        // this.hpText.text=ckInfo.health.toString();
     }
 
 }

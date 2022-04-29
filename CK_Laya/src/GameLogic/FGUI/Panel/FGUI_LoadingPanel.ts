@@ -35,7 +35,9 @@ export class FGUI_LoadingPanel implements FGUIBase {
         this.SetVisible(true);
         this.animRotate.play(null,-1);
         this.animText.play(null,-1);
+        this.progressText.text="0%";
         Laya.stage.on(CK_EventCode.LoadingProgressChange,this,this.ChangeProgress)
+
     }
 
 
@@ -48,11 +50,13 @@ export class FGUI_LoadingPanel implements FGUIBase {
     }
 
     Destroy() {
+       
         this.Content?.dispose()
-        // fgui.UIPackage.removePackage(this.Config.PackageName)
         this.IsInitFinish=false;
         this.ID=0;
+        Laya.stage.off(CK_EventCode.LoadingProgressChange,this,this.ChangeProgress)
         Laya.stage.event(CK_EventCode.PanelDestroy,this.UIType);
+       
     }
 
 
@@ -70,11 +74,10 @@ export class FGUI_LoadingPanel implements FGUIBase {
        
     }
 
-    private ChangeProgress(data:EventProperty.LoadProgressProperty)
+    public ChangeProgress(data:EventProperty.LoadProgressProperty)
     {
 
         let value:number=data.Value;
-        // let ifTween:boolean=data.IfTween;
         let ifTween:boolean=false;
         
         if (ifTween) {
@@ -89,6 +92,7 @@ export class FGUI_LoadingPanel implements FGUIBase {
         
     }
 
+ 
 
      
 

@@ -31,7 +31,7 @@ export class FGUI_MainPanel implements FGUIBase{
             fgui.GRoot.inst.addChild(this.Content);
             this.Content.makeFullScreen();
             this.InitComp();
-            this.InitMap()
+            this.InitMap();
             this.SetVisible(false);
             this.IsInitFinish=true;               
             

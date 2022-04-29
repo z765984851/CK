@@ -3,7 +3,7 @@
 
 
 import { CK_EventCode } from "../Common/CK_EventCode";
-import { CK_MsgCMD } from "../Common/CK_MsgCMD";
+import { RequestCMD } from "../Common/RequestCMD";
 import { CK_UIType } from "../FGUI/CK_FGUIConfig";
 import { MainPanelType } from "../FGUI/Panel/FGUI_MainPanel";
 import { EventProperty } from "../Model/LoadProgressProperty";
@@ -23,35 +23,25 @@ export default class GameManager extends Laya.Script {
 
         this.Init();
        
-        
-
-        // SocketClient.GetInstance().ServerId="7001";
-        // SocketClient.GetInstance().IP="192.168.10.26";
-        // SocketClient.GetInstance().Port=8199;
-        // SocketClient.GetInstance().Connect();
-
-
-   
-        
-        
       
        
     }
-
+    
+    //1. init SceneManager , FGUIManager
+    //2. load and add uipackage loading,font
+    //3. show loading panel
+    //4. rqst server resp
+    //5. socket connect
+    //   5.1 shank hand
+    //   5.2 send regular
+    //   5.3 send check msg 201 to get if has character 
+    //      *5.3.1 if not has character send 202 
+    //   5.4 send enter game 203
+    //6. preload some res
     private Init()
     {
 
-        //1. init SceneManager , FGUIManager
-        //2. load and add uipackage loading,font
-        //3. show loading panel
-        //4. rqst server resp
-        //5. socket connect
-        //   5.1 shank hand
-        //   5.2 send regular
-        //   5.3 send check msg 201 to get if has character 
-        //      *5.3.1 if not has character send 202 
-        //   5.4 send enter game 203
-        //6. preload some res
+        
 
         this.InitManager();
         this.InitFGUI();
@@ -115,7 +105,7 @@ export default class GameManager extends Laya.Script {
     {
         this.ChangeLoadingProgress(20);
 
-        Laya.stage.once(CK_MsgCMD.Verify.toString(),this,this.OnVerifySuccess)
+        Laya.stage.once(RequestCMD.Verify.toString(),this,this.OnVerifySuccess)
         LoginManager.GetInstance().SendVerify();
 
 
@@ -130,7 +120,7 @@ export default class GameManager extends Laya.Script {
         //need to create role 
         if (ifCreateRole) 
         {
-            Laya.stage.once(CK_MsgCMD.CreateRole.toString(),this,this.OnCreateRoleSuccess)
+            Laya.stage.once(RequestCMD.CreateRole.toString(),this,this.OnCreateRoleSuccess)
             LoginManager.GetInstance().SendCreateRole();
             
         }
@@ -146,7 +136,7 @@ export default class GameManager extends Laya.Script {
         
 
         this.ChangeLoadingProgress(35);
-        Laya.stage.once(CK_MsgCMD.EnterGame.toString(),this,this.OnRqstRoleInfoSuccess)
+        Laya.stage.once(RequestCMD.EnterGame.toString(),this,this.OnRqstRoleInfoSuccess)
         LoginManager.GetInstance().SendRqstRoleInfo();
     }
 
@@ -216,7 +206,7 @@ export default class GameManager extends Laya.Script {
 
 
 
-    private ChangeLoadingProgress(value,isTween=false)
+    public ChangeLoadingProgress(value,isTween=false)
     {
         let data:EventProperty.LoadProgressProperty=new EventProperty.LoadProgressProperty(value,isTween);
         Laya.stage.event(CK_EventCode.LoadingProgressChange,data);
