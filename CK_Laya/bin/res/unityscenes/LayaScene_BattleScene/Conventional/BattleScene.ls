@@ -114,8 +114,8 @@
 						1
 					],
 					"clearFlag":0,
-					"orthographic":false,
-					"orthographicVerticalSize":10,
+					"orthographic":true,
+					"orthographicVerticalSize":4.46,
 					"fieldOfView":60,
 					"enableHDR":true,
 					"nearPlane":0.3,
@@ -392,6 +392,62 @@
 						]
 					}
 				]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":9,
+				"props":{
+					"name":"BallLayer",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0,
+						0,
+						0
+					],
+					"rotation":[
+						0,
+						0,
+						0,
+						-1
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[]
+			},
+			{
+				"type":"Sprite3D",
+				"instanceID":10,
+				"props":{
+					"name":"UILayer",
+					"active":true,
+					"isStatic":false,
+					"layer":0,
+					"position":[
+						0,
+						0,
+						0
+					],
+					"rotation":[
+						0,
+						0,
+						0,
+						-1
+					],
+					"scale":[
+						1,
+						1,
+						1
+					]
+				},
+				"components":[],
+				"child":[]
 			}
 		]
 	}

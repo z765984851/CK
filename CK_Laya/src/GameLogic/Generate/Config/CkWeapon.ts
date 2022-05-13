@@ -16,10 +16,10 @@ export class CkWeaponConfig {
 
     public Data=new Map(
         [
-    			["id_10100001",new CkWeapon(10100001,1,1,"ui://hhm821bghasg9","ui://hhm821bghasg4",20,60,100,0)],
-				["id_10100002",new CkWeapon(10100002,2,2,"ui://hhm821bghasga","ui://hhm821bghasg6",30,80,130,0)],
-				["id_10100003",new CkWeapon(10100003,3,3,"ui://hhm821bghasga","ui://hhm821bghasg5",200,40,120,0)],
-				["id_10100004",new CkWeapon(10100004,4,4,"ui://hhm821bghasg8","ui://hhm821bghasg7",150,60,100,130)],
+    			["id_10100001",new CkWeapon(10100001,1,1,101000011,"ui://hhm821bgkncbj","ui://hhm821bgkncbf",750,6,100,0)],
+				["id_10100002",new CkWeapon(10100002,2,2,101000021,"ui://hhm821bgkncbj","ui://hhm821bgkncbf",800,8,130,0)],
+				["id_10100003",new CkWeapon(10100003,3,3,101000031,"ui://hhm821bgkncbh","ui://hhm821bgkncbk",1500,4,120,0)],
+				["id_10100004",new CkWeapon(10100004,4,4,101000041,"ui://hhm821bgkncbi","ui://hhm821bgkncbl",1200,10,100,130)],
 	
             ]
     );
@@ -38,6 +38,7 @@ export class CkWeapon {
     public	id:number;
 	public	weaponId:number;
 	public	weapontype:number;
+	public	classLang:number;
 	public	weaponIcon:string;
 	public	cap:string;
 	public	atkDistance:number;
@@ -49,6 +50,7 @@ export class CkWeapon {
 		id:number,
 		weaponId:number,
 		weapontype:number,
+		classLang:number,
 		weaponIcon:string,
 		cap:string,
 		atkDistance:number,
@@ -59,6 +61,7 @@ export class CkWeapon {
     	this.id=id;
 		this.weaponId=weaponId;
 		this.weapontype=weapontype;
+		this.classLang=classLang;
 		this.weaponIcon=weaponIcon;
 		this.cap=cap;
 		this.atkDistance=atkDistance;

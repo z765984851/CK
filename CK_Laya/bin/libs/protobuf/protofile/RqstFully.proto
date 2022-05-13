@@ -1,5 +1,10 @@
 package RequestPackage;
 syntax="proto3";
+message RqstAllotProperty {  
+ sint32 ckId=1;
+// k:属性, v:分配数值
+ map<int32, int32> allotMap=2;
+}
 message RqstInt {  
  sint32 value=1;
 }

@@ -5,7 +5,7 @@ export enum BattleType {
 }
 
 export enum MatchType {
-   Free=1401,
-   Championship=1402,
+   Free=1,
+   Championship=2,
 
 }

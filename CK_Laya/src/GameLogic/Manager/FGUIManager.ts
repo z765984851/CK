@@ -8,6 +8,12 @@ import { WindowExample } from "../FGUI/WindowExample";
 import { SceneManager } from "./SceneManager";
 import { FGUI_TopBarPanel } from "../FGUI/Panel/FGUI_TopBarPanel";
 import { FGUI_BattlePanel } from "../FGUI/Panel/FGUI_BattlePanel";
+import { FGUI_MatchWaitingPanel } from "../FGUI/Panel/FGUI_MatchWatingPanel";
+import { FGUI_BattleResultPanel } from "../FGUI/Panel/FGUI_BattleResultPanel";
+import { FGUI_BagPanel } from "../FGUI/Panel/FGUI_BagPanel";
+import { FGUI_TipWIndow } from "../FGUI/Window/FGUI_TipWIndow";
+import { FGUI_UpgradeWindow } from "../FGUI/Window/FGUI_UpgradeWindow";
+import { FGUI_SpecialtyWindow } from "../FGUI/Window/FGUI_SpecialtyWindow";
 
 export class FGUIManager {
 
@@ -314,10 +320,27 @@ export class FGUIManager {
             case CK_UIType.BattlePanel:
                 ui=new FGUI_BattlePanel();
                 break;  
+            case CK_UIType.MatchWaitingPanel:
+                ui=new FGUI_MatchWaitingPanel();
+                break;      
+            case CK_UIType.BattleResultPanel:
+                ui=new FGUI_BattleResultPanel();
+                break;  
+            case CK_UIType.BagPanel:
+                ui = new FGUI_BagPanel();
+                break;   
+            case CK_UIType.FGUITipWIndow:
+                ui = new FGUI_TipWIndow(); 
+                break;
+            case CK_UIType.UpgradeWindow:
+                ui = new FGUI_UpgradeWindow();
+                break;
+            case CK_UIType.SpecialtyWindow:
+                ui = new FGUI_SpecialtyWindow();
+                break;
             default:
                 break;
         }
-
         return ui;
     }
 

@@ -40,23 +40,27 @@ export class FGUI_TopBarPanel implements FGUIBase{
     }
     Show(args?: any) {
         this.SetVisible(true);
+        this.AddEvent();
         this.SetCKE();
         this.SetCKT();
         this.SetID();
-        this.SetRankInfo()
+        this.SetRankInfo();
     }
     
     Close() {
         this.SetVisible(false);
+        this.RemoveEvent();
         this.ID=0;
         Laya.stage.event(CK_EventCode.PanelDestroy,this.ID);
     }
+
     Destroy() {
         this.Content?.dispose()
         this.IsInitFinish=false;
         this.ID=0;
         Laya.stage.event(CK_EventCode.PanelDestroy,this.UIType);
     }
+    
     SetVisible(visible: boolean) {
         if (this.Content!=null) {
             this.Content.visible=visible;
@@ -85,7 +89,7 @@ export class FGUI_TopBarPanel implements FGUIBase{
 
     SetCKE()
     {
-        this.ckeText.text=DataManager.GetInstance().PlayerData.CKE.toLocaleString();
+        this.ckeText.text=DataManager.GetInstance().PlayerData.GCKE.toLocaleString();
 
     }
 
@@ -112,4 +116,19 @@ export class FGUI_TopBarPanel implements FGUIBase{
         
     }
 
+    //event
+    private AddEvent()
+    {
+        Laya.stage.on(CK_EventCode.UpdateRoleInfo,this,this.RefreshMoney);
+    }
+    private RemoveEvent()
+    {
+        Laya.stage.off(CK_EventCode.UpdateRoleInfo,this,this.RefreshMoney);
+    }
+    //eventCallback
+    private RefreshMoney()
+    {
+        this.SetCKT();
+        this.SetCKE();
+    }
 }

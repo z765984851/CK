@@ -1,5 +1,5 @@
 import { BallType } from "../../Common/BallType";
-import { BallFactory } from "../../Manager/BallFactory";
+import { BallFactory } from "../../Battle/BallFactory";
 
 export class UIBall {
 

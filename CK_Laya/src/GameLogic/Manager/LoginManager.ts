@@ -20,7 +20,12 @@ export class LoginManager {
 
     //"http://192.168.10.26:8001/api/version/config?channel=trunk&version=1.0.1"
     public LoginURL="http://192.168.10.26:8001/api/version/config";
+    // public LoginURL="http://8.134.111.121:8001/api/version/config";
     public Channel="trunk";
+
+    // public LoginURL="http://18.166.33.232:8001/api/version/config";
+    // public Channel="test";  
+
     public Version="1.0.1";
     
 

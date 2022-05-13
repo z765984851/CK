@@ -75,7 +75,7 @@ export class ResMananger {
            
         }
         let needLoadLength=preload3DPath.length;
-        //preload 2dRes
+        //preload 3dRes
         let preloadFunc=()=>{
             if (preload3DPath.length!=0) {
                 let path=preload3DPath.pop();
@@ -122,6 +122,7 @@ export class ResMananger {
             return;
         }
         Laya.loader.create(path,Laya.Handler.create(this,(result)=>{
+            // console.log("[ResMananger]Load3DRes",path);
             this.loadedPath.push(path);
             complete?.runWith(result);
         }),progress)
@@ -149,7 +150,7 @@ export class ResMananger {
     public ReleaseRes(path:string)
     {
         if (this.IsLoaded(path)) {
-            console.log("[ResMananger] ReleaseRes",path);
+            // console.log("[ResMananger] ReleaseRes",path);
             Laya.loader.clearRes(path)
             ArrayHelper.GetInstance().RemoveElementFromArray(this.loadedPath,path);
         }

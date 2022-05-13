@@ -7,4 +7,5 @@ export enum CK_EventCode
     GetServerResp="GetServerResp",
     LoadingProgressChange="LoadingProgressChange",
     RegularSuccess="RegularSuccess",
+    UpdateRoleInfo="UpdateRoleInfo",
 }

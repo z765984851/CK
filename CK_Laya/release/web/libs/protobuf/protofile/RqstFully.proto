@@ -1,0 +1,39 @@
+package RequestPackage;
+syntax="proto3";
+message RqstInt {  
+ sint32 value=1;
+}
+message RqstIntKeyIntValue {  
+ sint32 key=1;
+ sint32 value=2;
+}
+message RqstIntKeyStrValue {  
+ sint32 key=1;
+ string value=2;
+}
+message RqstLoadRole {  
+ string sid=1;
+ string ip=2;
+}
+message RqstLong {  
+ sint64 value=1;
+}
+message RqstStr {  
+ string value=1;
+}
+message RqstStrKeyStrValue {  
+ string key=1;
+ string value=2;
+}
+message RqstUpdateTeam {  
+// 队伍类型
+ sint32 type=1;
+// 队伍信息Pos
+repeated sint32 posHid=2;
+}
+message RqstVerify {  
+ string uid=1;
+ string sid=2;
+ string access=3;
+ string ip=4;
+}

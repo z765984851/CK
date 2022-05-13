@@ -32,7 +32,8 @@ export class DataManager {
         this.PlayerData=new PlayerData(respfully);
         this.ServerTime=respfully.respRole.roleInfo.serverTime;
         Laya.timer.loop(1000,this,this.ServerTimeUpdate)
-        console.log("SetPlayerData",this.PlayerData);
+        // console.log("DataManager SetPlayerData",this.PlayerData);
+        console.log("[DataManager]SetPlayerData",this.PlayerData);
         
     }
 

@@ -29,6 +29,7 @@ $root.ResponsePackage = (function() {
          * @property {ResponsePackage.IRespFight|null} [respFight] RespFully respFight
          * @property {ResponsePackage.IRespTeam|null} [respTeam] RespFully respTeam
          * @property {ResponsePackage.IRespMatch|null} [respMatch] RespFully respMatch
+         * @property {ResponsePackage.IRespDepot|null} [respDepot] RespFully respDepot
          */
 
         /**
@@ -111,6 +112,14 @@ $root.ResponsePackage = (function() {
         RespFully.prototype.respMatch = null;
 
         /**
+         * RespFully respDepot.
+         * @member {ResponsePackage.IRespDepot|null|undefined} respDepot
+         * @memberof ResponsePackage.RespFully
+         * @instance
+         */
+        RespFully.prototype.respDepot = null;
+
+        /**
          * Creates a new RespFully instance using the specified properties.
          * @function create
          * @memberof ResponsePackage.RespFully
@@ -150,6 +159,8 @@ $root.ResponsePackage = (function() {
                 $root.ResponsePackage.RespTeam.encode(message.respTeam, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
             if (message.respMatch != null && message.hasOwnProperty("respMatch"))
                 $root.ResponsePackage.RespMatch.encode(message.respMatch, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
+            if (message.respDepot != null && message.hasOwnProperty("respDepot"))
+                $root.ResponsePackage.RespDepot.encode(message.respDepot, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
             return writer;
         };
 
@@ -207,6 +218,9 @@ $root.ResponsePackage = (function() {
                     break;
                 case 8:
                     message.respMatch = $root.ResponsePackage.RespMatch.decode(reader, reader.uint32());
+                    break;
+                case 9:
+                    message.respDepot = $root.ResponsePackage.RespDepot.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -283,619 +297,15 @@ $root.ResponsePackage = (function() {
                 if (error)
                     return "respMatch." + error;
             }
+            if (message.respDepot != null && message.hasOwnProperty("respDepot")) {
+                var error = $root.ResponsePackage.RespDepot.verify(message.respDepot);
+                if (error)
+                    return "respDepot." + error;
+            }
             return null;
         };
 
         return RespFully;
-    })();
-
-    ResponsePackage.RespCk = (function() {
-
-        /**
-         * Properties of a RespCk.
-         * @memberof ResponsePackage
-         * @interface IRespCk
-         * @property {Array.<ResponsePackage.IRespCkInfo>|null} [roleCks] RespCk roleCks
-         */
-
-        /**
-         * Constructs a new RespCk.
-         * @memberof ResponsePackage
-         * @classdesc Represents a RespCk.
-         * @implements IRespCk
-         * @constructor
-         * @param {ResponsePackage.IRespCk=} [properties] Properties to set
-         */
-        function RespCk(properties) {
-            this.roleCks = [];
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * RespCk roleCks.
-         * @member {Array.<ResponsePackage.IRespCkInfo>} roleCks
-         * @memberof ResponsePackage.RespCk
-         * @instance
-         */
-        RespCk.prototype.roleCks = $util.emptyArray;
-
-        /**
-         * Creates a new RespCk instance using the specified properties.
-         * @function create
-         * @memberof ResponsePackage.RespCk
-         * @static
-         * @param {ResponsePackage.IRespCk=} [properties] Properties to set
-         * @returns {ResponsePackage.RespCk} RespCk instance
-         */
-        RespCk.create = function create(properties) {
-            return new RespCk(properties);
-        };
-
-        /**
-         * Encodes the specified RespCk message. Does not implicitly {@link ResponsePackage.RespCk.verify|verify} messages.
-         * @function encode
-         * @memberof ResponsePackage.RespCk
-         * @static
-         * @param {ResponsePackage.IRespCk} message RespCk message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespCk.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.roleCks != null && message.roleCks.length)
-                for (var i = 0; i < message.roleCks.length; ++i)
-                    $root.ResponsePackage.RespCkInfo.encode(message.roleCks[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            return writer;
-        };
-
-        /**
-         * Encodes the specified RespCk message, length delimited. Does not implicitly {@link ResponsePackage.RespCk.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof ResponsePackage.RespCk
-         * @static
-         * @param {ResponsePackage.IRespCk} message RespCk message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespCk.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a RespCk message from the specified reader or buffer.
-         * @function decode
-         * @memberof ResponsePackage.RespCk
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespCk} RespCk
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespCk.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespCk();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    if (!(message.roleCks && message.roleCks.length))
-                        message.roleCks = [];
-                    message.roleCks.push($root.ResponsePackage.RespCkInfo.decode(reader, reader.uint32()));
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a RespCk message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof ResponsePackage.RespCk
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespCk} RespCk
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespCk.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a RespCk message.
-         * @function verify
-         * @memberof ResponsePackage.RespCk
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        RespCk.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.roleCks != null && message.hasOwnProperty("roleCks")) {
-                if (!Array.isArray(message.roleCks))
-                    return "roleCks: array expected";
-                for (var i = 0; i < message.roleCks.length; ++i) {
-                    var error = $root.ResponsePackage.RespCkInfo.verify(message.roleCks[i]);
-                    if (error)
-                        return "roleCks." + error;
-                }
-            }
-            return null;
-        };
-
-        return RespCk;
-    })();
-
-    ResponsePackage.RespCkInfo = (function() {
-
-        /**
-         * Properties of a RespCkInfo.
-         * @memberof ResponsePackage
-         * @interface IRespCkInfo
-         * @property {number|null} [id] RespCkInfo id
-         * @property {number|null} [seq] RespCkInfo seq
-         * @property {string|null} [name] RespCkInfo name
-         * @property {boolean|null} [lock] RespCkInfo lock
-         * @property {number|Long|null} [birthTime] RespCkInfo birthTime
-         * @property {string|null} [launch] RespCkInfo launch
-         * @property {number|null} [level] RespCkInfo level
-         * @property {number|null} [life] RespCkInfo life
-         * @property {number|null} [quality] RespCkInfo quality
-         * @property {number|null} [lineage] RespCkInfo lineage
-         * @property {number|null} [strength] RespCkInfo strength
-         * @property {number|null} [wisdom] RespCkInfo wisdom
-         * @property {number|null} [agile] RespCkInfo agile
-         * @property {number|null} [health] RespCkInfo health
-         * @property {number|null} [spirit] RespCkInfo spirit
-         * @property {number|null} [luck] RespCkInfo luck
-         * @property {Array.<number>|null} [professionList] RespCkInfo professionList
-         * @property {Array.<number>|null} [specialtyList] RespCkInfo specialtyList
-         */
-
-        /**
-         * Constructs a new RespCkInfo.
-         * @memberof ResponsePackage
-         * @classdesc Represents a RespCkInfo.
-         * @implements IRespCkInfo
-         * @constructor
-         * @param {ResponsePackage.IRespCkInfo=} [properties] Properties to set
-         */
-        function RespCkInfo(properties) {
-            this.professionList = [];
-            this.specialtyList = [];
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * RespCkInfo id.
-         * @member {number} id
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.id = 0;
-
-        /**
-         * RespCkInfo seq.
-         * @member {number} seq
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.seq = 0;
-
-        /**
-         * RespCkInfo name.
-         * @member {string} name
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.name = "";
-
-        /**
-         * RespCkInfo lock.
-         * @member {boolean} lock
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.lock = false;
-
-        /**
-         * RespCkInfo birthTime.
-         * @member {number|Long} birthTime
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.birthTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
-         * RespCkInfo launch.
-         * @member {string} launch
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.launch = "";
-
-        /**
-         * RespCkInfo level.
-         * @member {number} level
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.level = 0;
-
-        /**
-         * RespCkInfo life.
-         * @member {number} life
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.life = 0;
-
-        /**
-         * RespCkInfo quality.
-         * @member {number} quality
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.quality = 0;
-
-        /**
-         * RespCkInfo lineage.
-         * @member {number} lineage
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.lineage = 0;
-
-        /**
-         * RespCkInfo strength.
-         * @member {number} strength
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.strength = 0;
-
-        /**
-         * RespCkInfo wisdom.
-         * @member {number} wisdom
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.wisdom = 0;
-
-        /**
-         * RespCkInfo agile.
-         * @member {number} agile
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.agile = 0;
-
-        /**
-         * RespCkInfo health.
-         * @member {number} health
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.health = 0;
-
-        /**
-         * RespCkInfo spirit.
-         * @member {number} spirit
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.spirit = 0;
-
-        /**
-         * RespCkInfo luck.
-         * @member {number} luck
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.luck = 0;
-
-        /**
-         * RespCkInfo professionList.
-         * @member {Array.<number>} professionList
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.professionList = $util.emptyArray;
-
-        /**
-         * RespCkInfo specialtyList.
-         * @member {Array.<number>} specialtyList
-         * @memberof ResponsePackage.RespCkInfo
-         * @instance
-         */
-        RespCkInfo.prototype.specialtyList = $util.emptyArray;
-
-        /**
-         * Creates a new RespCkInfo instance using the specified properties.
-         * @function create
-         * @memberof ResponsePackage.RespCkInfo
-         * @static
-         * @param {ResponsePackage.IRespCkInfo=} [properties] Properties to set
-         * @returns {ResponsePackage.RespCkInfo} RespCkInfo instance
-         */
-        RespCkInfo.create = function create(properties) {
-            return new RespCkInfo(properties);
-        };
-
-        /**
-         * Encodes the specified RespCkInfo message. Does not implicitly {@link ResponsePackage.RespCkInfo.verify|verify} messages.
-         * @function encode
-         * @memberof ResponsePackage.RespCkInfo
-         * @static
-         * @param {ResponsePackage.IRespCkInfo} message RespCkInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespCkInfo.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.id != null && message.hasOwnProperty("id"))
-                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.id);
-            if (message.seq != null && message.hasOwnProperty("seq"))
-                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.seq);
-            if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
-            if (message.lock != null && message.hasOwnProperty("lock"))
-                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.lock);
-            if (message.birthTime != null && message.hasOwnProperty("birthTime"))
-                writer.uint32(/* id 5, wireType 0 =*/40).sint64(message.birthTime);
-            if (message.launch != null && message.hasOwnProperty("launch"))
-                writer.uint32(/* id 6, wireType 2 =*/50).string(message.launch);
-            if (message.level != null && message.hasOwnProperty("level"))
-                writer.uint32(/* id 7, wireType 0 =*/56).sint32(message.level);
-            if (message.life != null && message.hasOwnProperty("life"))
-                writer.uint32(/* id 8, wireType 0 =*/64).sint32(message.life);
-            if (message.quality != null && message.hasOwnProperty("quality"))
-                writer.uint32(/* id 9, wireType 0 =*/72).sint32(message.quality);
-            if (message.lineage != null && message.hasOwnProperty("lineage"))
-                writer.uint32(/* id 10, wireType 0 =*/80).sint32(message.lineage);
-            if (message.strength != null && message.hasOwnProperty("strength"))
-                writer.uint32(/* id 11, wireType 0 =*/88).sint32(message.strength);
-            if (message.wisdom != null && message.hasOwnProperty("wisdom"))
-                writer.uint32(/* id 12, wireType 0 =*/96).sint32(message.wisdom);
-            if (message.agile != null && message.hasOwnProperty("agile"))
-                writer.uint32(/* id 13, wireType 0 =*/104).sint32(message.agile);
-            if (message.health != null && message.hasOwnProperty("health"))
-                writer.uint32(/* id 14, wireType 0 =*/112).sint32(message.health);
-            if (message.spirit != null && message.hasOwnProperty("spirit"))
-                writer.uint32(/* id 15, wireType 0 =*/120).sint32(message.spirit);
-            if (message.luck != null && message.hasOwnProperty("luck"))
-                writer.uint32(/* id 16, wireType 0 =*/128).sint32(message.luck);
-            if (message.professionList != null && message.professionList.length) {
-                writer.uint32(/* id 17, wireType 2 =*/138).fork();
-                for (var i = 0; i < message.professionList.length; ++i)
-                    writer.sint32(message.professionList[i]);
-                writer.ldelim();
-            }
-            if (message.specialtyList != null && message.specialtyList.length) {
-                writer.uint32(/* id 18, wireType 2 =*/146).fork();
-                for (var i = 0; i < message.specialtyList.length; ++i)
-                    writer.sint32(message.specialtyList[i]);
-                writer.ldelim();
-            }
-            return writer;
-        };
-
-        /**
-         * Encodes the specified RespCkInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespCkInfo.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof ResponsePackage.RespCkInfo
-         * @static
-         * @param {ResponsePackage.IRespCkInfo} message RespCkInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespCkInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a RespCkInfo message from the specified reader or buffer.
-         * @function decode
-         * @memberof ResponsePackage.RespCkInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespCkInfo} RespCkInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespCkInfo.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespCkInfo();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.id = reader.sint32();
-                    break;
-                case 2:
-                    message.seq = reader.sint32();
-                    break;
-                case 3:
-                    message.name = reader.string();
-                    break;
-                case 4:
-                    message.lock = reader.bool();
-                    break;
-                case 5:
-                    message.birthTime = reader.sint64();
-                    break;
-                case 6:
-                    message.launch = reader.string();
-                    break;
-                case 7:
-                    message.level = reader.sint32();
-                    break;
-                case 8:
-                    message.life = reader.sint32();
-                    break;
-                case 9:
-                    message.quality = reader.sint32();
-                    break;
-                case 10:
-                    message.lineage = reader.sint32();
-                    break;
-                case 11:
-                    message.strength = reader.sint32();
-                    break;
-                case 12:
-                    message.wisdom = reader.sint32();
-                    break;
-                case 13:
-                    message.agile = reader.sint32();
-                    break;
-                case 14:
-                    message.health = reader.sint32();
-                    break;
-                case 15:
-                    message.spirit = reader.sint32();
-                    break;
-                case 16:
-                    message.luck = reader.sint32();
-                    break;
-                case 17:
-                    if (!(message.professionList && message.professionList.length))
-                        message.professionList = [];
-                    if ((tag & 7) === 2) {
-                        var end2 = reader.uint32() + reader.pos;
-                        while (reader.pos < end2)
-                            message.professionList.push(reader.sint32());
-                    } else
-                        message.professionList.push(reader.sint32());
-                    break;
-                case 18:
-                    if (!(message.specialtyList && message.specialtyList.length))
-                        message.specialtyList = [];
-                    if ((tag & 7) === 2) {
-                        var end2 = reader.uint32() + reader.pos;
-                        while (reader.pos < end2)
-                            message.specialtyList.push(reader.sint32());
-                    } else
-                        message.specialtyList.push(reader.sint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a RespCkInfo message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof ResponsePackage.RespCkInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespCkInfo} RespCkInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespCkInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a RespCkInfo message.
-         * @function verify
-         * @memberof ResponsePackage.RespCkInfo
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        RespCkInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isInteger(message.id))
-                    return "id: integer expected";
-            if (message.seq != null && message.hasOwnProperty("seq"))
-                if (!$util.isInteger(message.seq))
-                    return "seq: integer expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.lock != null && message.hasOwnProperty("lock"))
-                if (typeof message.lock !== "boolean")
-                    return "lock: boolean expected";
-            if (message.birthTime != null && message.hasOwnProperty("birthTime"))
-                if (!$util.isInteger(message.birthTime) && !(message.birthTime && $util.isInteger(message.birthTime.low) && $util.isInteger(message.birthTime.high)))
-                    return "birthTime: integer|Long expected";
-            if (message.launch != null && message.hasOwnProperty("launch"))
-                if (!$util.isString(message.launch))
-                    return "launch: string expected";
-            if (message.level != null && message.hasOwnProperty("level"))
-                if (!$util.isInteger(message.level))
-                    return "level: integer expected";
-            if (message.life != null && message.hasOwnProperty("life"))
-                if (!$util.isInteger(message.life))
-                    return "life: integer expected";
-            if (message.quality != null && message.hasOwnProperty("quality"))
-                if (!$util.isInteger(message.quality))
-                    return "quality: integer expected";
-            if (message.lineage != null && message.hasOwnProperty("lineage"))
-                if (!$util.isInteger(message.lineage))
-                    return "lineage: integer expected";
-            if (message.strength != null && message.hasOwnProperty("strength"))
-                if (!$util.isInteger(message.strength))
-                    return "strength: integer expected";
-            if (message.wisdom != null && message.hasOwnProperty("wisdom"))
-                if (!$util.isInteger(message.wisdom))
-                    return "wisdom: integer expected";
-            if (message.agile != null && message.hasOwnProperty("agile"))
-                if (!$util.isInteger(message.agile))
-                    return "agile: integer expected";
-            if (message.health != null && message.hasOwnProperty("health"))
-                if (!$util.isInteger(message.health))
-                    return "health: integer expected";
-            if (message.spirit != null && message.hasOwnProperty("spirit"))
-                if (!$util.isInteger(message.spirit))
-                    return "spirit: integer expected";
-            if (message.luck != null && message.hasOwnProperty("luck"))
-                if (!$util.isInteger(message.luck))
-                    return "luck: integer expected";
-            if (message.professionList != null && message.hasOwnProperty("professionList")) {
-                if (!Array.isArray(message.professionList))
-                    return "professionList: array expected";
-                for (var i = 0; i < message.professionList.length; ++i)
-                    if (!$util.isInteger(message.professionList[i]))
-                        return "professionList: integer[] expected";
-            }
-            if (message.specialtyList != null && message.hasOwnProperty("specialtyList")) {
-                if (!Array.isArray(message.specialtyList))
-                    return "specialtyList: array expected";
-                for (var i = 0; i < message.specialtyList.length; ++i)
-                    if (!$util.isInteger(message.specialtyList[i]))
-                        return "specialtyList: integer[] expected";
-            }
-            return null;
-        };
-
-        return RespCkInfo;
     })();
 
     ResponsePackage.RespFight = (function() {
@@ -1049,7 +459,7 @@ $root.ResponsePackage = (function() {
          * @property {number|null} [battleType] RespFightResult battleType
          * @property {Array.<ResponsePackage.IRespBattler>|null} [battlerList] RespFightResult battlerList
          * @property {Array.<ResponsePackage.IRespFrame>|null} [frameList] RespFightResult frameList
-         * @property {Array.<ResponsePackage.IRespRoleClearing>|null} [clearingList] RespFightResult clearingList
+         * @property {ResponsePackage.IRespFightClearing|null} [fightClearing] RespFightResult fightClearing
          */
 
         /**
@@ -1063,7 +473,6 @@ $root.ResponsePackage = (function() {
         function RespFightResult(properties) {
             this.battlerList = [];
             this.frameList = [];
-            this.clearingList = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -1103,12 +512,12 @@ $root.ResponsePackage = (function() {
         RespFightResult.prototype.frameList = $util.emptyArray;
 
         /**
-         * RespFightResult clearingList.
-         * @member {Array.<ResponsePackage.IRespRoleClearing>} clearingList
+         * RespFightResult fightClearing.
+         * @member {ResponsePackage.IRespFightClearing|null|undefined} fightClearing
          * @memberof ResponsePackage.RespFightResult
          * @instance
          */
-        RespFightResult.prototype.clearingList = $util.emptyArray;
+        RespFightResult.prototype.fightClearing = null;
 
         /**
          * Creates a new RespFightResult instance using the specified properties.
@@ -1144,9 +553,8 @@ $root.ResponsePackage = (function() {
             if (message.frameList != null && message.frameList.length)
                 for (var i = 0; i < message.frameList.length; ++i)
                     $root.ResponsePackage.RespFrame.encode(message.frameList[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
-            if (message.clearingList != null && message.clearingList.length)
-                for (var i = 0; i < message.clearingList.length; ++i)
-                    $root.ResponsePackage.RespRoleClearing.encode(message.clearingList[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
+            if (message.fightClearing != null && message.hasOwnProperty("fightClearing"))
+                $root.ResponsePackage.RespFightClearing.encode(message.fightClearing, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             return writer;
         };
 
@@ -1198,9 +606,7 @@ $root.ResponsePackage = (function() {
                     message.frameList.push($root.ResponsePackage.RespFrame.decode(reader, reader.uint32()));
                     break;
                 case 5:
-                    if (!(message.clearingList && message.clearingList.length))
-                        message.clearingList = [];
-                    message.clearingList.push($root.ResponsePackage.RespRoleClearing.decode(reader, reader.uint32()));
+                    message.fightClearing = $root.ResponsePackage.RespFightClearing.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1261,14 +667,10 @@ $root.ResponsePackage = (function() {
                         return "frameList." + error;
                 }
             }
-            if (message.clearingList != null && message.hasOwnProperty("clearingList")) {
-                if (!Array.isArray(message.clearingList))
-                    return "clearingList: array expected";
-                for (var i = 0; i < message.clearingList.length; ++i) {
-                    var error = $root.ResponsePackage.RespRoleClearing.verify(message.clearingList[i]);
-                    if (error)
-                        return "clearingList." + error;
-                }
+            if (message.fightClearing != null && message.hasOwnProperty("fightClearing")) {
+                var error = $root.ResponsePackage.RespFightClearing.verify(message.fightClearing);
+                if (error)
+                    return "fightClearing." + error;
             }
             return null;
         };
@@ -1283,7 +685,7 @@ $root.ResponsePackage = (function() {
          * @memberof ResponsePackage
          * @interface IRespBattler
          * @property {number|null} [camp] RespBattler camp
-         * @property {ResponsePackage.IRespRoleBaseInfo|null} [roleInfo] RespBattler roleInfo
+         * @property {ResponsePackage.IRespRoleBaseInfo|null} [roleBaseInfo] RespBattler roleBaseInfo
          * @property {ResponsePackage.IRespBattleCk|null} [battleCk] RespBattler battleCk
          */
 
@@ -1311,12 +713,12 @@ $root.ResponsePackage = (function() {
         RespBattler.prototype.camp = 0;
 
         /**
-         * RespBattler roleInfo.
-         * @member {ResponsePackage.IRespRoleBaseInfo|null|undefined} roleInfo
+         * RespBattler roleBaseInfo.
+         * @member {ResponsePackage.IRespRoleBaseInfo|null|undefined} roleBaseInfo
          * @memberof ResponsePackage.RespBattler
          * @instance
          */
-        RespBattler.prototype.roleInfo = null;
+        RespBattler.prototype.roleBaseInfo = null;
 
         /**
          * RespBattler battleCk.
@@ -1352,8 +754,8 @@ $root.ResponsePackage = (function() {
                 writer = $Writer.create();
             if (message.camp != null && message.hasOwnProperty("camp"))
                 writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.camp);
-            if (message.roleInfo != null && message.hasOwnProperty("roleInfo"))
-                $root.ResponsePackage.RespRoleBaseInfo.encode(message.roleInfo, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.roleBaseInfo != null && message.hasOwnProperty("roleBaseInfo"))
+                $root.ResponsePackage.RespRoleBaseInfo.encode(message.roleBaseInfo, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             if (message.battleCk != null && message.hasOwnProperty("battleCk"))
                 $root.ResponsePackage.RespBattleCk.encode(message.battleCk, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             return writer;
@@ -1394,7 +796,7 @@ $root.ResponsePackage = (function() {
                     message.camp = reader.sint32();
                     break;
                 case 2:
-                    message.roleInfo = $root.ResponsePackage.RespRoleBaseInfo.decode(reader, reader.uint32());
+                    message.roleBaseInfo = $root.ResponsePackage.RespRoleBaseInfo.decode(reader, reader.uint32());
                     break;
                 case 3:
                     message.battleCk = $root.ResponsePackage.RespBattleCk.decode(reader, reader.uint32());
@@ -1437,10 +839,10 @@ $root.ResponsePackage = (function() {
             if (message.camp != null && message.hasOwnProperty("camp"))
                 if (!$util.isInteger(message.camp))
                     return "camp: integer expected";
-            if (message.roleInfo != null && message.hasOwnProperty("roleInfo")) {
-                var error = $root.ResponsePackage.RespRoleBaseInfo.verify(message.roleInfo);
+            if (message.roleBaseInfo != null && message.hasOwnProperty("roleBaseInfo")) {
+                var error = $root.ResponsePackage.RespRoleBaseInfo.verify(message.roleBaseInfo);
                 if (error)
-                    return "roleInfo." + error;
+                    return "roleBaseInfo." + error;
             }
             if (message.battleCk != null && message.hasOwnProperty("battleCk")) {
                 var error = $root.ResponsePackage.RespBattleCk.verify(message.battleCk);
@@ -1460,11 +862,10 @@ $root.ResponsePackage = (function() {
          * @memberof ResponsePackage
          * @interface IRespRoleBaseInfo
          * @property {string|null} [id] RespRoleBaseInfo id
-         * @property {string|null} [sid] RespRoleBaseInfo sid
          * @property {string|null} [name] RespRoleBaseInfo name
-         * @property {number|null} [img] RespRoleBaseInfo img
          * @property {number|null} [chain] RespRoleBaseInfo chain
          * @property {number|null} [division] RespRoleBaseInfo division
+         * @property {ResponsePackage.IRespCkCardInfo|null} [ckCardInfo] RespRoleBaseInfo ckCardInfo
          */
 
         /**
@@ -1491,28 +892,12 @@ $root.ResponsePackage = (function() {
         RespRoleBaseInfo.prototype.id = "";
 
         /**
-         * RespRoleBaseInfo sid.
-         * @member {string} sid
-         * @memberof ResponsePackage.RespRoleBaseInfo
-         * @instance
-         */
-        RespRoleBaseInfo.prototype.sid = "";
-
-        /**
          * RespRoleBaseInfo name.
          * @member {string} name
          * @memberof ResponsePackage.RespRoleBaseInfo
          * @instance
          */
         RespRoleBaseInfo.prototype.name = "";
-
-        /**
-         * RespRoleBaseInfo img.
-         * @member {number} img
-         * @memberof ResponsePackage.RespRoleBaseInfo
-         * @instance
-         */
-        RespRoleBaseInfo.prototype.img = 0;
 
         /**
          * RespRoleBaseInfo chain.
@@ -1529,6 +914,14 @@ $root.ResponsePackage = (function() {
          * @instance
          */
         RespRoleBaseInfo.prototype.division = 0;
+
+        /**
+         * RespRoleBaseInfo ckCardInfo.
+         * @member {ResponsePackage.IRespCkCardInfo|null|undefined} ckCardInfo
+         * @memberof ResponsePackage.RespRoleBaseInfo
+         * @instance
+         */
+        RespRoleBaseInfo.prototype.ckCardInfo = null;
 
         /**
          * Creates a new RespRoleBaseInfo instance using the specified properties.
@@ -1556,16 +949,14 @@ $root.ResponsePackage = (function() {
                 writer = $Writer.create();
             if (message.id != null && message.hasOwnProperty("id"))
                 writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
-            if (message.sid != null && message.hasOwnProperty("sid"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.sid);
             if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
-            if (message.img != null && message.hasOwnProperty("img"))
-                writer.uint32(/* id 4, wireType 0 =*/32).sint32(message.img);
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.name);
             if (message.chain != null && message.hasOwnProperty("chain"))
-                writer.uint32(/* id 5, wireType 0 =*/40).sint32(message.chain);
+                writer.uint32(/* id 3, wireType 0 =*/24).sint32(message.chain);
             if (message.division != null && message.hasOwnProperty("division"))
-                writer.uint32(/* id 6, wireType 0 =*/48).sint32(message.division);
+                writer.uint32(/* id 4, wireType 0 =*/32).sint32(message.division);
+            if (message.ckCardInfo != null && message.hasOwnProperty("ckCardInfo"))
+                $root.ResponsePackage.RespCkCardInfo.encode(message.ckCardInfo, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             return writer;
         };
 
@@ -1604,19 +995,16 @@ $root.ResponsePackage = (function() {
                     message.id = reader.string();
                     break;
                 case 2:
-                    message.sid = reader.string();
-                    break;
-                case 3:
                     message.name = reader.string();
                     break;
-                case 4:
-                    message.img = reader.sint32();
-                    break;
-                case 5:
+                case 3:
                     message.chain = reader.sint32();
                     break;
-                case 6:
+                case 4:
                     message.division = reader.sint32();
+                    break;
+                case 5:
+                    message.ckCardInfo = $root.ResponsePackage.RespCkCardInfo.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1656,25 +1044,264 @@ $root.ResponsePackage = (function() {
             if (message.id != null && message.hasOwnProperty("id"))
                 if (!$util.isString(message.id))
                     return "id: string expected";
-            if (message.sid != null && message.hasOwnProperty("sid"))
-                if (!$util.isString(message.sid))
-                    return "sid: string expected";
             if (message.name != null && message.hasOwnProperty("name"))
                 if (!$util.isString(message.name))
                     return "name: string expected";
-            if (message.img != null && message.hasOwnProperty("img"))
-                if (!$util.isInteger(message.img))
-                    return "img: integer expected";
             if (message.chain != null && message.hasOwnProperty("chain"))
                 if (!$util.isInteger(message.chain))
                     return "chain: integer expected";
             if (message.division != null && message.hasOwnProperty("division"))
                 if (!$util.isInteger(message.division))
                     return "division: integer expected";
+            if (message.ckCardInfo != null && message.hasOwnProperty("ckCardInfo")) {
+                var error = $root.ResponsePackage.RespCkCardInfo.verify(message.ckCardInfo);
+                if (error)
+                    return "ckCardInfo." + error;
+            }
             return null;
         };
 
         return RespRoleBaseInfo;
+    })();
+
+    ResponsePackage.RespCkCardInfo = (function() {
+
+        /**
+         * Properties of a RespCkCardInfo.
+         * @memberof ResponsePackage
+         * @interface IRespCkCardInfo
+         * @property {string|null} [rid] RespCkCardInfo rid
+         * @property {number|null} [seq] RespCkCardInfo seq
+         * @property {number|null} [lv] RespCkCardInfo lv
+         * @property {number|null} [quality] RespCkCardInfo quality
+         * @property {number|null} [lineage] RespCkCardInfo lineage
+         * @property {Array.<number>|null} [professionList] RespCkCardInfo professionList
+         */
+
+        /**
+         * Constructs a new RespCkCardInfo.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespCkCardInfo.
+         * @implements IRespCkCardInfo
+         * @constructor
+         * @param {ResponsePackage.IRespCkCardInfo=} [properties] Properties to set
+         */
+        function RespCkCardInfo(properties) {
+            this.professionList = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespCkCardInfo rid.
+         * @member {string} rid
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @instance
+         */
+        RespCkCardInfo.prototype.rid = "";
+
+        /**
+         * RespCkCardInfo seq.
+         * @member {number} seq
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @instance
+         */
+        RespCkCardInfo.prototype.seq = 0;
+
+        /**
+         * RespCkCardInfo lv.
+         * @member {number} lv
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @instance
+         */
+        RespCkCardInfo.prototype.lv = 0;
+
+        /**
+         * RespCkCardInfo quality.
+         * @member {number} quality
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @instance
+         */
+        RespCkCardInfo.prototype.quality = 0;
+
+        /**
+         * RespCkCardInfo lineage.
+         * @member {number} lineage
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @instance
+         */
+        RespCkCardInfo.prototype.lineage = 0;
+
+        /**
+         * RespCkCardInfo professionList.
+         * @member {Array.<number>} professionList
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @instance
+         */
+        RespCkCardInfo.prototype.professionList = $util.emptyArray;
+
+        /**
+         * Creates a new RespCkCardInfo instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @static
+         * @param {ResponsePackage.IRespCkCardInfo=} [properties] Properties to set
+         * @returns {ResponsePackage.RespCkCardInfo} RespCkCardInfo instance
+         */
+        RespCkCardInfo.create = function create(properties) {
+            return new RespCkCardInfo(properties);
+        };
+
+        /**
+         * Encodes the specified RespCkCardInfo message. Does not implicitly {@link ResponsePackage.RespCkCardInfo.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @static
+         * @param {ResponsePackage.IRespCkCardInfo} message RespCkCardInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespCkCardInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.rid != null && message.hasOwnProperty("rid"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.rid);
+            if (message.seq != null && message.hasOwnProperty("seq"))
+                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.seq);
+            if (message.lv != null && message.hasOwnProperty("lv"))
+                writer.uint32(/* id 3, wireType 0 =*/24).sint32(message.lv);
+            if (message.quality != null && message.hasOwnProperty("quality"))
+                writer.uint32(/* id 4, wireType 0 =*/32).sint32(message.quality);
+            if (message.lineage != null && message.hasOwnProperty("lineage"))
+                writer.uint32(/* id 5, wireType 0 =*/40).sint32(message.lineage);
+            if (message.professionList != null && message.professionList.length) {
+                writer.uint32(/* id 6, wireType 2 =*/50).fork();
+                for (var i = 0; i < message.professionList.length; ++i)
+                    writer.sint32(message.professionList[i]);
+                writer.ldelim();
+            }
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespCkCardInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespCkCardInfo.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @static
+         * @param {ResponsePackage.IRespCkCardInfo} message RespCkCardInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespCkCardInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespCkCardInfo message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespCkCardInfo} RespCkCardInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespCkCardInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespCkCardInfo();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.rid = reader.string();
+                    break;
+                case 2:
+                    message.seq = reader.sint32();
+                    break;
+                case 3:
+                    message.lv = reader.sint32();
+                    break;
+                case 4:
+                    message.quality = reader.sint32();
+                    break;
+                case 5:
+                    message.lineage = reader.sint32();
+                    break;
+                case 6:
+                    if (!(message.professionList && message.professionList.length))
+                        message.professionList = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.professionList.push(reader.sint32());
+                    } else
+                        message.professionList.push(reader.sint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespCkCardInfo message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespCkCardInfo} RespCkCardInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespCkCardInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespCkCardInfo message.
+         * @function verify
+         * @memberof ResponsePackage.RespCkCardInfo
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespCkCardInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.rid != null && message.hasOwnProperty("rid"))
+                if (!$util.isString(message.rid))
+                    return "rid: string expected";
+            if (message.seq != null && message.hasOwnProperty("seq"))
+                if (!$util.isInteger(message.seq))
+                    return "seq: integer expected";
+            if (message.lv != null && message.hasOwnProperty("lv"))
+                if (!$util.isInteger(message.lv))
+                    return "lv: integer expected";
+            if (message.quality != null && message.hasOwnProperty("quality"))
+                if (!$util.isInteger(message.quality))
+                    return "quality: integer expected";
+            if (message.lineage != null && message.hasOwnProperty("lineage"))
+                if (!$util.isInteger(message.lineage))
+                    return "lineage: integer expected";
+            if (message.professionList != null && message.hasOwnProperty("professionList")) {
+                if (!Array.isArray(message.professionList))
+                    return "professionList: array expected";
+                for (var i = 0; i < message.professionList.length; ++i)
+                    if (!$util.isInteger(message.professionList[i]))
+                        return "professionList: integer[] expected";
+            }
+            return null;
+        };
+
+        return RespCkCardInfo;
     })();
 
     ResponsePackage.RespBattleCk = (function() {
@@ -2120,6 +1747,172 @@ $root.ResponsePackage = (function() {
         return RespBattleCk;
     })();
 
+    ResponsePackage.RespFightClearing = (function() {
+
+        /**
+         * Properties of a RespFightClearing.
+         * @memberof ResponsePackage
+         * @interface IRespFightClearing
+         * @property {number|null} [winCamp] RespFightClearing winCamp
+         * @property {Array.<ResponsePackage.IRespRoleClearing>|null} [clearingList] RespFightClearing clearingList
+         */
+
+        /**
+         * Constructs a new RespFightClearing.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespFightClearing.
+         * @implements IRespFightClearing
+         * @constructor
+         * @param {ResponsePackage.IRespFightClearing=} [properties] Properties to set
+         */
+        function RespFightClearing(properties) {
+            this.clearingList = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespFightClearing winCamp.
+         * @member {number} winCamp
+         * @memberof ResponsePackage.RespFightClearing
+         * @instance
+         */
+        RespFightClearing.prototype.winCamp = 0;
+
+        /**
+         * RespFightClearing clearingList.
+         * @member {Array.<ResponsePackage.IRespRoleClearing>} clearingList
+         * @memberof ResponsePackage.RespFightClearing
+         * @instance
+         */
+        RespFightClearing.prototype.clearingList = $util.emptyArray;
+
+        /**
+         * Creates a new RespFightClearing instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespFightClearing
+         * @static
+         * @param {ResponsePackage.IRespFightClearing=} [properties] Properties to set
+         * @returns {ResponsePackage.RespFightClearing} RespFightClearing instance
+         */
+        RespFightClearing.create = function create(properties) {
+            return new RespFightClearing(properties);
+        };
+
+        /**
+         * Encodes the specified RespFightClearing message. Does not implicitly {@link ResponsePackage.RespFightClearing.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespFightClearing
+         * @static
+         * @param {ResponsePackage.IRespFightClearing} message RespFightClearing message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespFightClearing.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.winCamp != null && message.hasOwnProperty("winCamp"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.winCamp);
+            if (message.clearingList != null && message.clearingList.length)
+                for (var i = 0; i < message.clearingList.length; ++i)
+                    $root.ResponsePackage.RespRoleClearing.encode(message.clearingList[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespFightClearing message, length delimited. Does not implicitly {@link ResponsePackage.RespFightClearing.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespFightClearing
+         * @static
+         * @param {ResponsePackage.IRespFightClearing} message RespFightClearing message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespFightClearing.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespFightClearing message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespFightClearing
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespFightClearing} RespFightClearing
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespFightClearing.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespFightClearing();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.winCamp = reader.sint32();
+                    break;
+                case 2:
+                    if (!(message.clearingList && message.clearingList.length))
+                        message.clearingList = [];
+                    message.clearingList.push($root.ResponsePackage.RespRoleClearing.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespFightClearing message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespFightClearing
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespFightClearing} RespFightClearing
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespFightClearing.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespFightClearing message.
+         * @function verify
+         * @memberof ResponsePackage.RespFightClearing
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespFightClearing.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.winCamp != null && message.hasOwnProperty("winCamp"))
+                if (!$util.isInteger(message.winCamp))
+                    return "winCamp: integer expected";
+            if (message.clearingList != null && message.hasOwnProperty("clearingList")) {
+                if (!Array.isArray(message.clearingList))
+                    return "clearingList: array expected";
+                for (var i = 0; i < message.clearingList.length; ++i) {
+                    var error = $root.ResponsePackage.RespRoleClearing.verify(message.clearingList[i]);
+                    if (error)
+                        return "clearingList." + error;
+                }
+            }
+            return null;
+        };
+
+        return RespFightClearing;
+    })();
+
     ResponsePackage.RespRoleClearing = (function() {
 
         /**
@@ -2127,10 +1920,10 @@ $root.ResponsePackage = (function() {
          * @memberof ResponsePackage
          * @interface IRespRoleClearing
          * @property {string|null} [rid] RespRoleClearing rid
-         * @property {number|null} [rank] RespRoleClearing rank
-         * @property {boolean|null} [win] RespRoleClearing win
+         * @property {number|null} [camp] RespRoleClearing camp
          * @property {number|null} [gcke] RespRoleClearing gcke
          * @property {number|null} [integral] RespRoleClearing integral
+         * @property {number|null} [rank] RespRoleClearing rank
          */
 
         /**
@@ -2157,20 +1950,12 @@ $root.ResponsePackage = (function() {
         RespRoleClearing.prototype.rid = "";
 
         /**
-         * RespRoleClearing rank.
-         * @member {number} rank
+         * RespRoleClearing camp.
+         * @member {number} camp
          * @memberof ResponsePackage.RespRoleClearing
          * @instance
          */
-        RespRoleClearing.prototype.rank = 0;
-
-        /**
-         * RespRoleClearing win.
-         * @member {boolean} win
-         * @memberof ResponsePackage.RespRoleClearing
-         * @instance
-         */
-        RespRoleClearing.prototype.win = false;
+        RespRoleClearing.prototype.camp = 0;
 
         /**
          * RespRoleClearing gcke.
@@ -2187,6 +1972,14 @@ $root.ResponsePackage = (function() {
          * @instance
          */
         RespRoleClearing.prototype.integral = 0;
+
+        /**
+         * RespRoleClearing rank.
+         * @member {number} rank
+         * @memberof ResponsePackage.RespRoleClearing
+         * @instance
+         */
+        RespRoleClearing.prototype.rank = 0;
 
         /**
          * Creates a new RespRoleClearing instance using the specified properties.
@@ -2214,14 +2007,14 @@ $root.ResponsePackage = (function() {
                 writer = $Writer.create();
             if (message.rid != null && message.hasOwnProperty("rid"))
                 writer.uint32(/* id 1, wireType 2 =*/10).string(message.rid);
-            if (message.rank != null && message.hasOwnProperty("rank"))
-                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.rank);
-            if (message.win != null && message.hasOwnProperty("win"))
-                writer.uint32(/* id 3, wireType 0 =*/24).bool(message.win);
+            if (message.camp != null && message.hasOwnProperty("camp"))
+                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.camp);
             if (message.gcke != null && message.hasOwnProperty("gcke"))
-                writer.uint32(/* id 4, wireType 0 =*/32).sint32(message.gcke);
+                writer.uint32(/* id 3, wireType 0 =*/24).sint32(message.gcke);
             if (message.integral != null && message.hasOwnProperty("integral"))
-                writer.uint32(/* id 5, wireType 0 =*/40).sint32(message.integral);
+                writer.uint32(/* id 4, wireType 0 =*/32).sint32(message.integral);
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                writer.uint32(/* id 5, wireType 0 =*/40).sint32(message.rank);
             return writer;
         };
 
@@ -2260,16 +2053,16 @@ $root.ResponsePackage = (function() {
                     message.rid = reader.string();
                     break;
                 case 2:
-                    message.rank = reader.sint32();
+                    message.camp = reader.sint32();
                     break;
                 case 3:
-                    message.win = reader.bool();
-                    break;
-                case 4:
                     message.gcke = reader.sint32();
                     break;
-                case 5:
+                case 4:
                     message.integral = reader.sint32();
+                    break;
+                case 5:
+                    message.rank = reader.sint32();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -2309,18 +2102,18 @@ $root.ResponsePackage = (function() {
             if (message.rid != null && message.hasOwnProperty("rid"))
                 if (!$util.isString(message.rid))
                     return "rid: string expected";
-            if (message.rank != null && message.hasOwnProperty("rank"))
-                if (!$util.isInteger(message.rank))
-                    return "rank: integer expected";
-            if (message.win != null && message.hasOwnProperty("win"))
-                if (typeof message.win !== "boolean")
-                    return "win: boolean expected";
+            if (message.camp != null && message.hasOwnProperty("camp"))
+                if (!$util.isInteger(message.camp))
+                    return "camp: integer expected";
             if (message.gcke != null && message.hasOwnProperty("gcke"))
                 if (!$util.isInteger(message.gcke))
                     return "gcke: integer expected";
             if (message.integral != null && message.hasOwnProperty("integral"))
                 if (!$util.isInteger(message.integral))
                     return "integral: integer expected";
+            if (message.rank != null && message.hasOwnProperty("rank"))
+                if (!$util.isInteger(message.rank))
+                    return "rank: integer expected";
             return null;
         };
 
@@ -2526,6 +2319,7 @@ $root.ResponsePackage = (function() {
          * Properties of a RespOtherEntityFrameInfo.
          * @memberof ResponsePackage
          * @interface IRespOtherEntityFrameInfo
+         * @property {number|Long|null} [id] RespOtherEntityFrameInfo id
          * @property {number|null} [type] RespOtherEntityFrameInfo type
          * @property {ResponsePackage.IRespXY|null} [posXY] RespOtherEntityFrameInfo posXY
          * @property {ResponsePackage.IRespXY|null} [faceXY] RespOtherEntityFrameInfo faceXY
@@ -2547,6 +2341,14 @@ $root.ResponsePackage = (function() {
                     if (properties[keys[i]] != null)
                         this[keys[i]] = properties[keys[i]];
         }
+
+        /**
+         * RespOtherEntityFrameInfo id.
+         * @member {number|Long} id
+         * @memberof ResponsePackage.RespOtherEntityFrameInfo
+         * @instance
+         */
+        RespOtherEntityFrameInfo.prototype.id = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
 
         /**
          * RespOtherEntityFrameInfo type.
@@ -2612,16 +2414,18 @@ $root.ResponsePackage = (function() {
         RespOtherEntityFrameInfo.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint64(message.id);
             if (message.type != null && message.hasOwnProperty("type"))
-                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.type);
+                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.type);
             if (message.posXY != null && message.hasOwnProperty("posXY"))
-                $root.ResponsePackage.RespXY.encode(message.posXY, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+                $root.ResponsePackage.RespXY.encode(message.posXY, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
             if (message.faceXY != null && message.hasOwnProperty("faceXY"))
-                $root.ResponsePackage.RespXY.encode(message.faceXY, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                $root.ResponsePackage.RespXY.encode(message.faceXY, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             if (message.isCreate != null && message.hasOwnProperty("isCreate"))
-                writer.uint32(/* id 4, wireType 0 =*/32).bool(message.isCreate);
+                writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isCreate);
             if (message.isDestroy != null && message.hasOwnProperty("isDestroy"))
-                writer.uint32(/* id 5, wireType 0 =*/40).bool(message.isDestroy);
+                writer.uint32(/* id 6, wireType 0 =*/48).bool(message.isDestroy);
             return writer;
         };
 
@@ -2657,18 +2461,21 @@ $root.ResponsePackage = (function() {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.type = reader.sint32();
+                    message.id = reader.sint64();
                     break;
                 case 2:
-                    message.posXY = $root.ResponsePackage.RespXY.decode(reader, reader.uint32());
+                    message.type = reader.sint32();
                     break;
                 case 3:
-                    message.faceXY = $root.ResponsePackage.RespXY.decode(reader, reader.uint32());
+                    message.posXY = $root.ResponsePackage.RespXY.decode(reader, reader.uint32());
                     break;
                 case 4:
-                    message.isCreate = reader.bool();
+                    message.faceXY = $root.ResponsePackage.RespXY.decode(reader, reader.uint32());
                     break;
                 case 5:
+                    message.isCreate = reader.bool();
+                    break;
+                case 6:
                     message.isDestroy = reader.bool();
                     break;
                 default:
@@ -2706,6 +2513,9 @@ $root.ResponsePackage = (function() {
         RespOtherEntityFrameInfo.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isInteger(message.id) && !(message.id && $util.isInteger(message.id.low) && $util.isInteger(message.id.high)))
+                    return "id: integer|Long expected";
             if (message.type != null && message.hasOwnProperty("type"))
                 if (!$util.isInteger(message.type))
                     return "type: integer expected";
@@ -3324,27 +3134,32 @@ $root.ResponsePackage = (function() {
         return RespHit;
     })();
 
-    ResponsePackage.RespRole = (function() {
+    ResponsePackage.RespDepot = (function() {
 
         /**
-         * Properties of a RespRole.
+         * Properties of a RespDepot.
          * @memberof ResponsePackage
-         * @interface IRespRole
-         * @property {ResponsePackage.IRespRoleInfo|null} [roleInfo] RespRole roleInfo
-         * @property {ResponsePackage.IRespRoleBaseInfo|null} [roleBaseInfo] RespRole roleBaseInfo
-         * @property {ResponsePackage.IRespRoleOp|null} [roleOp] RespRole roleOp
-         * @property {ResponsePackage.IRespBoolean|null} [createRole] RespRole createRole
+         * @interface IRespDepot
+         * @property {Array.<ResponsePackage.IRespIntKeyLongVal>|null} [currencyInfo] RespDepot currencyInfo
+         * @property {Array.<ResponsePackage.IRespIntKeyIntVal>|null} [countItemInfo] RespDepot countItemInfo
+         * @property {Array.<ResponsePackage.IRespIntKeyLongVal>|null} [currencyOp] RespDepot currencyOp
+         * @property {Array.<ResponsePackage.IRespIntKeyIntVal>|null} [countItemOp] RespDepot countItemOp
+         * @property {ResponsePackage.IRespPrize|null} [respPrize] RespDepot respPrize
          */
 
         /**
-         * Constructs a new RespRole.
+         * Constructs a new RespDepot.
          * @memberof ResponsePackage
-         * @classdesc Represents a RespRole.
-         * @implements IRespRole
+         * @classdesc Represents a RespDepot.
+         * @implements IRespDepot
          * @constructor
-         * @param {ResponsePackage.IRespRole=} [properties] Properties to set
+         * @param {ResponsePackage.IRespDepot=} [properties] Properties to set
          */
-        function RespRole(properties) {
+        function RespDepot(properties) {
+            this.currencyInfo = [];
+            this.countItemInfo = [];
+            this.currencyOp = [];
+            this.countItemOp = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -3352,410 +3167,139 @@ $root.ResponsePackage = (function() {
         }
 
         /**
-         * RespRole roleInfo.
-         * @member {ResponsePackage.IRespRoleInfo|null|undefined} roleInfo
-         * @memberof ResponsePackage.RespRole
+         * RespDepot currencyInfo.
+         * @member {Array.<ResponsePackage.IRespIntKeyLongVal>} currencyInfo
+         * @memberof ResponsePackage.RespDepot
          * @instance
          */
-        RespRole.prototype.roleInfo = null;
+        RespDepot.prototype.currencyInfo = $util.emptyArray;
 
         /**
-         * RespRole roleBaseInfo.
-         * @member {ResponsePackage.IRespRoleBaseInfo|null|undefined} roleBaseInfo
-         * @memberof ResponsePackage.RespRole
+         * RespDepot countItemInfo.
+         * @member {Array.<ResponsePackage.IRespIntKeyIntVal>} countItemInfo
+         * @memberof ResponsePackage.RespDepot
          * @instance
          */
-        RespRole.prototype.roleBaseInfo = null;
+        RespDepot.prototype.countItemInfo = $util.emptyArray;
 
         /**
-         * RespRole roleOp.
-         * @member {ResponsePackage.IRespRoleOp|null|undefined} roleOp
-         * @memberof ResponsePackage.RespRole
+         * RespDepot currencyOp.
+         * @member {Array.<ResponsePackage.IRespIntKeyLongVal>} currencyOp
+         * @memberof ResponsePackage.RespDepot
          * @instance
          */
-        RespRole.prototype.roleOp = null;
+        RespDepot.prototype.currencyOp = $util.emptyArray;
 
         /**
-         * RespRole createRole.
-         * @member {ResponsePackage.IRespBoolean|null|undefined} createRole
-         * @memberof ResponsePackage.RespRole
+         * RespDepot countItemOp.
+         * @member {Array.<ResponsePackage.IRespIntKeyIntVal>} countItemOp
+         * @memberof ResponsePackage.RespDepot
          * @instance
          */
-        RespRole.prototype.createRole = null;
+        RespDepot.prototype.countItemOp = $util.emptyArray;
 
         /**
-         * Creates a new RespRole instance using the specified properties.
+         * RespDepot respPrize.
+         * @member {ResponsePackage.IRespPrize|null|undefined} respPrize
+         * @memberof ResponsePackage.RespDepot
+         * @instance
+         */
+        RespDepot.prototype.respPrize = null;
+
+        /**
+         * Creates a new RespDepot instance using the specified properties.
          * @function create
-         * @memberof ResponsePackage.RespRole
+         * @memberof ResponsePackage.RespDepot
          * @static
-         * @param {ResponsePackage.IRespRole=} [properties] Properties to set
-         * @returns {ResponsePackage.RespRole} RespRole instance
+         * @param {ResponsePackage.IRespDepot=} [properties] Properties to set
+         * @returns {ResponsePackage.RespDepot} RespDepot instance
          */
-        RespRole.create = function create(properties) {
-            return new RespRole(properties);
+        RespDepot.create = function create(properties) {
+            return new RespDepot(properties);
         };
 
         /**
-         * Encodes the specified RespRole message. Does not implicitly {@link ResponsePackage.RespRole.verify|verify} messages.
+         * Encodes the specified RespDepot message. Does not implicitly {@link ResponsePackage.RespDepot.verify|verify} messages.
          * @function encode
-         * @memberof ResponsePackage.RespRole
+         * @memberof ResponsePackage.RespDepot
          * @static
-         * @param {ResponsePackage.IRespRole} message RespRole message or plain object to encode
+         * @param {ResponsePackage.IRespDepot} message RespDepot message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespRole.encode = function encode(message, writer) {
+        RespDepot.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.roleInfo != null && message.hasOwnProperty("roleInfo"))
-                $root.ResponsePackage.RespRoleInfo.encode(message.roleInfo, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.roleBaseInfo != null && message.hasOwnProperty("roleBaseInfo"))
-                $root.ResponsePackage.RespRoleBaseInfo.encode(message.roleBaseInfo, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-            if (message.roleOp != null && message.hasOwnProperty("roleOp"))
-                $root.ResponsePackage.RespRoleOp.encode(message.roleOp, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            if (message.createRole != null && message.hasOwnProperty("createRole"))
-                $root.ResponsePackage.RespBoolean.encode(message.createRole, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            if (message.currencyInfo != null && message.currencyInfo.length)
+                for (var i = 0; i < message.currencyInfo.length; ++i)
+                    $root.ResponsePackage.RespIntKeyLongVal.encode(message.currencyInfo[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.countItemInfo != null && message.countItemInfo.length)
+                for (var i = 0; i < message.countItemInfo.length; ++i)
+                    $root.ResponsePackage.RespIntKeyIntVal.encode(message.countItemInfo[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.currencyOp != null && message.currencyOp.length)
+                for (var i = 0; i < message.currencyOp.length; ++i)
+                    $root.ResponsePackage.RespIntKeyLongVal.encode(message.currencyOp[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            if (message.countItemOp != null && message.countItemOp.length)
+                for (var i = 0; i < message.countItemOp.length; ++i)
+                    $root.ResponsePackage.RespIntKeyIntVal.encode(message.countItemOp[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+            if (message.respPrize != null && message.hasOwnProperty("respPrize"))
+                $root.ResponsePackage.RespPrize.encode(message.respPrize, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
             return writer;
         };
 
         /**
-         * Encodes the specified RespRole message, length delimited. Does not implicitly {@link ResponsePackage.RespRole.verify|verify} messages.
+         * Encodes the specified RespDepot message, length delimited. Does not implicitly {@link ResponsePackage.RespDepot.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof ResponsePackage.RespRole
+         * @memberof ResponsePackage.RespDepot
          * @static
-         * @param {ResponsePackage.IRespRole} message RespRole message or plain object to encode
+         * @param {ResponsePackage.IRespDepot} message RespDepot message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespRole.encodeDelimited = function encodeDelimited(message, writer) {
+        RespDepot.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a RespRole message from the specified reader or buffer.
+         * Decodes a RespDepot message from the specified reader or buffer.
          * @function decode
-         * @memberof ResponsePackage.RespRole
+         * @memberof ResponsePackage.RespDepot
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespRole} RespRole
+         * @returns {ResponsePackage.RespDepot} RespDepot
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespRole.decode = function decode(reader, length) {
+        RespDepot.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespRole();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespDepot();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.roleInfo = $root.ResponsePackage.RespRoleInfo.decode(reader, reader.uint32());
+                    if (!(message.currencyInfo && message.currencyInfo.length))
+                        message.currencyInfo = [];
+                    message.currencyInfo.push($root.ResponsePackage.RespIntKeyLongVal.decode(reader, reader.uint32()));
                     break;
                 case 2:
-                    message.roleBaseInfo = $root.ResponsePackage.RespRoleBaseInfo.decode(reader, reader.uint32());
+                    if (!(message.countItemInfo && message.countItemInfo.length))
+                        message.countItemInfo = [];
+                    message.countItemInfo.push($root.ResponsePackage.RespIntKeyIntVal.decode(reader, reader.uint32()));
                     break;
                 case 3:
-                    message.roleOp = $root.ResponsePackage.RespRoleOp.decode(reader, reader.uint32());
+                    if (!(message.currencyOp && message.currencyOp.length))
+                        message.currencyOp = [];
+                    message.currencyOp.push($root.ResponsePackage.RespIntKeyLongVal.decode(reader, reader.uint32()));
                     break;
                 case 4:
-                    message.createRole = $root.ResponsePackage.RespBoolean.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a RespRole message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof ResponsePackage.RespRole
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespRole} RespRole
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespRole.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a RespRole message.
-         * @function verify
-         * @memberof ResponsePackage.RespRole
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        RespRole.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.roleInfo != null && message.hasOwnProperty("roleInfo")) {
-                var error = $root.ResponsePackage.RespRoleInfo.verify(message.roleInfo);
-                if (error)
-                    return "roleInfo." + error;
-            }
-            if (message.roleBaseInfo != null && message.hasOwnProperty("roleBaseInfo")) {
-                var error = $root.ResponsePackage.RespRoleBaseInfo.verify(message.roleBaseInfo);
-                if (error)
-                    return "roleBaseInfo." + error;
-            }
-            if (message.roleOp != null && message.hasOwnProperty("roleOp")) {
-                var error = $root.ResponsePackage.RespRoleOp.verify(message.roleOp);
-                if (error)
-                    return "roleOp." + error;
-            }
-            if (message.createRole != null && message.hasOwnProperty("createRole")) {
-                var error = $root.ResponsePackage.RespBoolean.verify(message.createRole);
-                if (error)
-                    return "createRole." + error;
-            }
-            return null;
-        };
-
-        return RespRole;
-    })();
-
-    ResponsePackage.RespRoleInfo = (function() {
-
-        /**
-         * Properties of a RespRoleInfo.
-         * @memberof ResponsePackage
-         * @interface IRespRoleInfo
-         * @property {string|null} [id] RespRoleInfo id
-         * @property {string|null} [sid] RespRoleInfo sid
-         * @property {string|null} [name] RespRoleInfo name
-         * @property {number|null} [img] RespRoleInfo img
-         * @property {string|null} [email] RespRoleInfo email
-         * @property {number|null} [division] RespRoleInfo division
-         * @property {number|null} [integral] RespRoleInfo integral
-         * @property {number|Long|null} [serverTime] RespRoleInfo serverTime
-         * @property {number|null} [gcke] RespRoleInfo gcke
-         * @property {number|null} [cke] RespRoleInfo cke
-         * @property {number|null} [ckt] RespRoleInfo ckt
-         */
-
-        /**
-         * Constructs a new RespRoleInfo.
-         * @memberof ResponsePackage
-         * @classdesc Represents a RespRoleInfo.
-         * @implements IRespRoleInfo
-         * @constructor
-         * @param {ResponsePackage.IRespRoleInfo=} [properties] Properties to set
-         */
-        function RespRoleInfo(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * RespRoleInfo id.
-         * @member {string} id
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.id = "";
-
-        /**
-         * RespRoleInfo sid.
-         * @member {string} sid
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.sid = "";
-
-        /**
-         * RespRoleInfo name.
-         * @member {string} name
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.name = "";
-
-        /**
-         * RespRoleInfo img.
-         * @member {number} img
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.img = 0;
-
-        /**
-         * RespRoleInfo email.
-         * @member {string} email
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.email = "";
-
-        /**
-         * RespRoleInfo division.
-         * @member {number} division
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.division = 0;
-
-        /**
-         * RespRoleInfo integral.
-         * @member {number} integral
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.integral = 0;
-
-        /**
-         * RespRoleInfo serverTime.
-         * @member {number|Long} serverTime
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.serverTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
-         * RespRoleInfo gcke.
-         * @member {number} gcke
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.gcke = 0;
-
-        /**
-         * RespRoleInfo cke.
-         * @member {number} cke
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.cke = 0;
-
-        /**
-         * RespRoleInfo ckt.
-         * @member {number} ckt
-         * @memberof ResponsePackage.RespRoleInfo
-         * @instance
-         */
-        RespRoleInfo.prototype.ckt = 0;
-
-        /**
-         * Creates a new RespRoleInfo instance using the specified properties.
-         * @function create
-         * @memberof ResponsePackage.RespRoleInfo
-         * @static
-         * @param {ResponsePackage.IRespRoleInfo=} [properties] Properties to set
-         * @returns {ResponsePackage.RespRoleInfo} RespRoleInfo instance
-         */
-        RespRoleInfo.create = function create(properties) {
-            return new RespRoleInfo(properties);
-        };
-
-        /**
-         * Encodes the specified RespRoleInfo message. Does not implicitly {@link ResponsePackage.RespRoleInfo.verify|verify} messages.
-         * @function encode
-         * @memberof ResponsePackage.RespRoleInfo
-         * @static
-         * @param {ResponsePackage.IRespRoleInfo} message RespRoleInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespRoleInfo.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.id != null && message.hasOwnProperty("id"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
-            if (message.sid != null && message.hasOwnProperty("sid"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.sid);
-            if (message.name != null && message.hasOwnProperty("name"))
-                writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
-            if (message.img != null && message.hasOwnProperty("img"))
-                writer.uint32(/* id 4, wireType 0 =*/32).sint32(message.img);
-            if (message.email != null && message.hasOwnProperty("email"))
-                writer.uint32(/* id 5, wireType 2 =*/42).string(message.email);
-            if (message.division != null && message.hasOwnProperty("division"))
-                writer.uint32(/* id 6, wireType 0 =*/48).sint32(message.division);
-            if (message.integral != null && message.hasOwnProperty("integral"))
-                writer.uint32(/* id 7, wireType 0 =*/56).sint32(message.integral);
-            if (message.serverTime != null && message.hasOwnProperty("serverTime"))
-                writer.uint32(/* id 8, wireType 0 =*/64).sint64(message.serverTime);
-            if (message.gcke != null && message.hasOwnProperty("gcke"))
-                writer.uint32(/* id 9, wireType 0 =*/72).sint32(message.gcke);
-            if (message.cke != null && message.hasOwnProperty("cke"))
-                writer.uint32(/* id 10, wireType 0 =*/80).sint32(message.cke);
-            if (message.ckt != null && message.hasOwnProperty("ckt"))
-                writer.uint32(/* id 11, wireType 0 =*/88).sint32(message.ckt);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified RespRoleInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespRoleInfo.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof ResponsePackage.RespRoleInfo
-         * @static
-         * @param {ResponsePackage.IRespRoleInfo} message RespRoleInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespRoleInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a RespRoleInfo message from the specified reader or buffer.
-         * @function decode
-         * @memberof ResponsePackage.RespRoleInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespRoleInfo} RespRoleInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespRoleInfo.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespRoleInfo();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.id = reader.string();
-                    break;
-                case 2:
-                    message.sid = reader.string();
-                    break;
-                case 3:
-                    message.name = reader.string();
-                    break;
-                case 4:
-                    message.img = reader.sint32();
+                    if (!(message.countItemOp && message.countItemOp.length))
+                        message.countItemOp = [];
+                    message.countItemOp.push($root.ResponsePackage.RespIntKeyIntVal.decode(reader, reader.uint32()));
                     break;
                 case 5:
-                    message.email = reader.string();
-                    break;
-                case 6:
-                    message.division = reader.sint32();
-                    break;
-                case 7:
-                    message.integral = reader.sint32();
-                    break;
-                case 8:
-                    message.serverTime = reader.sint64();
-                    break;
-                case 9:
-                    message.gcke = reader.sint32();
-                    break;
-                case 10:
-                    message.cke = reader.sint32();
-                    break;
-                case 11:
-                    message.ckt = reader.sint32();
+                    message.respPrize = $root.ResponsePackage.RespPrize.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -3766,90 +3310,100 @@ $root.ResponsePackage = (function() {
         };
 
         /**
-         * Decodes a RespRoleInfo message from the specified reader or buffer, length delimited.
+         * Decodes a RespDepot message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof ResponsePackage.RespRoleInfo
+         * @memberof ResponsePackage.RespDepot
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespRoleInfo} RespRoleInfo
+         * @returns {ResponsePackage.RespDepot} RespDepot
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespRoleInfo.decodeDelimited = function decodeDelimited(reader) {
+        RespDepot.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a RespRoleInfo message.
+         * Verifies a RespDepot message.
          * @function verify
-         * @memberof ResponsePackage.RespRoleInfo
+         * @memberof ResponsePackage.RespDepot
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        RespRoleInfo.verify = function verify(message) {
+        RespDepot.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isString(message.id))
-                    return "id: string expected";
-            if (message.sid != null && message.hasOwnProperty("sid"))
-                if (!$util.isString(message.sid))
-                    return "sid: string expected";
-            if (message.name != null && message.hasOwnProperty("name"))
-                if (!$util.isString(message.name))
-                    return "name: string expected";
-            if (message.img != null && message.hasOwnProperty("img"))
-                if (!$util.isInteger(message.img))
-                    return "img: integer expected";
-            if (message.email != null && message.hasOwnProperty("email"))
-                if (!$util.isString(message.email))
-                    return "email: string expected";
-            if (message.division != null && message.hasOwnProperty("division"))
-                if (!$util.isInteger(message.division))
-                    return "division: integer expected";
-            if (message.integral != null && message.hasOwnProperty("integral"))
-                if (!$util.isInteger(message.integral))
-                    return "integral: integer expected";
-            if (message.serverTime != null && message.hasOwnProperty("serverTime"))
-                if (!$util.isInteger(message.serverTime) && !(message.serverTime && $util.isInteger(message.serverTime.low) && $util.isInteger(message.serverTime.high)))
-                    return "serverTime: integer|Long expected";
-            if (message.gcke != null && message.hasOwnProperty("gcke"))
-                if (!$util.isInteger(message.gcke))
-                    return "gcke: integer expected";
-            if (message.cke != null && message.hasOwnProperty("cke"))
-                if (!$util.isInteger(message.cke))
-                    return "cke: integer expected";
-            if (message.ckt != null && message.hasOwnProperty("ckt"))
-                if (!$util.isInteger(message.ckt))
-                    return "ckt: integer expected";
+            if (message.currencyInfo != null && message.hasOwnProperty("currencyInfo")) {
+                if (!Array.isArray(message.currencyInfo))
+                    return "currencyInfo: array expected";
+                for (var i = 0; i < message.currencyInfo.length; ++i) {
+                    var error = $root.ResponsePackage.RespIntKeyLongVal.verify(message.currencyInfo[i]);
+                    if (error)
+                        return "currencyInfo." + error;
+                }
+            }
+            if (message.countItemInfo != null && message.hasOwnProperty("countItemInfo")) {
+                if (!Array.isArray(message.countItemInfo))
+                    return "countItemInfo: array expected";
+                for (var i = 0; i < message.countItemInfo.length; ++i) {
+                    var error = $root.ResponsePackage.RespIntKeyIntVal.verify(message.countItemInfo[i]);
+                    if (error)
+                        return "countItemInfo." + error;
+                }
+            }
+            if (message.currencyOp != null && message.hasOwnProperty("currencyOp")) {
+                if (!Array.isArray(message.currencyOp))
+                    return "currencyOp: array expected";
+                for (var i = 0; i < message.currencyOp.length; ++i) {
+                    var error = $root.ResponsePackage.RespIntKeyLongVal.verify(message.currencyOp[i]);
+                    if (error)
+                        return "currencyOp." + error;
+                }
+            }
+            if (message.countItemOp != null && message.hasOwnProperty("countItemOp")) {
+                if (!Array.isArray(message.countItemOp))
+                    return "countItemOp: array expected";
+                for (var i = 0; i < message.countItemOp.length; ++i) {
+                    var error = $root.ResponsePackage.RespIntKeyIntVal.verify(message.countItemOp[i]);
+                    if (error)
+                        return "countItemOp." + error;
+                }
+            }
+            if (message.respPrize != null && message.hasOwnProperty("respPrize")) {
+                var error = $root.ResponsePackage.RespPrize.verify(message.respPrize);
+                if (error)
+                    return "respPrize." + error;
+            }
             return null;
         };
 
-        return RespRoleInfo;
+        return RespDepot;
     })();
 
-    ResponsePackage.RespRoleOp = (function() {
+    ResponsePackage.RespPrize = (function() {
 
         /**
-         * Properties of a RespRoleOp.
+         * Properties of a RespPrize.
          * @memberof ResponsePackage
-         * @interface IRespRoleOp
-         * @property {ResponsePackage.IRespInt|null} [ckeOp] RespRoleOp ckeOp
-         * @property {ResponsePackage.IRespInt|null} [cktOp] RespRoleOp cktOp
+         * @interface IRespPrize
+         * @property {Array.<ResponsePackage.IRespIntKeyLongVal>|null} [currencyPrize] RespPrize currencyPrize
+         * @property {Array.<ResponsePackage.IRespIntKeyIntVal>|null} [countItemPrize] RespPrize countItemPrize
          */
 
         /**
-         * Constructs a new RespRoleOp.
+         * Constructs a new RespPrize.
          * @memberof ResponsePackage
-         * @classdesc Represents a RespRoleOp.
-         * @implements IRespRoleOp
+         * @classdesc Represents a RespPrize.
+         * @implements IRespPrize
          * @constructor
-         * @param {ResponsePackage.IRespRoleOp=} [properties] Properties to set
+         * @param {ResponsePackage.IRespPrize=} [properties] Properties to set
          */
-        function RespRoleOp(properties) {
+        function RespPrize(properties) {
+            this.currencyPrize = [];
+            this.countItemPrize = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -3857,88 +3411,94 @@ $root.ResponsePackage = (function() {
         }
 
         /**
-         * RespRoleOp ckeOp.
-         * @member {ResponsePackage.IRespInt|null|undefined} ckeOp
-         * @memberof ResponsePackage.RespRoleOp
+         * RespPrize currencyPrize.
+         * @member {Array.<ResponsePackage.IRespIntKeyLongVal>} currencyPrize
+         * @memberof ResponsePackage.RespPrize
          * @instance
          */
-        RespRoleOp.prototype.ckeOp = null;
+        RespPrize.prototype.currencyPrize = $util.emptyArray;
 
         /**
-         * RespRoleOp cktOp.
-         * @member {ResponsePackage.IRespInt|null|undefined} cktOp
-         * @memberof ResponsePackage.RespRoleOp
+         * RespPrize countItemPrize.
+         * @member {Array.<ResponsePackage.IRespIntKeyIntVal>} countItemPrize
+         * @memberof ResponsePackage.RespPrize
          * @instance
          */
-        RespRoleOp.prototype.cktOp = null;
+        RespPrize.prototype.countItemPrize = $util.emptyArray;
 
         /**
-         * Creates a new RespRoleOp instance using the specified properties.
+         * Creates a new RespPrize instance using the specified properties.
          * @function create
-         * @memberof ResponsePackage.RespRoleOp
+         * @memberof ResponsePackage.RespPrize
          * @static
-         * @param {ResponsePackage.IRespRoleOp=} [properties] Properties to set
-         * @returns {ResponsePackage.RespRoleOp} RespRoleOp instance
+         * @param {ResponsePackage.IRespPrize=} [properties] Properties to set
+         * @returns {ResponsePackage.RespPrize} RespPrize instance
          */
-        RespRoleOp.create = function create(properties) {
-            return new RespRoleOp(properties);
+        RespPrize.create = function create(properties) {
+            return new RespPrize(properties);
         };
 
         /**
-         * Encodes the specified RespRoleOp message. Does not implicitly {@link ResponsePackage.RespRoleOp.verify|verify} messages.
+         * Encodes the specified RespPrize message. Does not implicitly {@link ResponsePackage.RespPrize.verify|verify} messages.
          * @function encode
-         * @memberof ResponsePackage.RespRoleOp
+         * @memberof ResponsePackage.RespPrize
          * @static
-         * @param {ResponsePackage.IRespRoleOp} message RespRoleOp message or plain object to encode
+         * @param {ResponsePackage.IRespPrize} message RespPrize message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespRoleOp.encode = function encode(message, writer) {
+        RespPrize.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.ckeOp != null && message.hasOwnProperty("ckeOp"))
-                $root.ResponsePackage.RespInt.encode(message.ckeOp, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.cktOp != null && message.hasOwnProperty("cktOp"))
-                $root.ResponsePackage.RespInt.encode(message.cktOp, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.currencyPrize != null && message.currencyPrize.length)
+                for (var i = 0; i < message.currencyPrize.length; ++i)
+                    $root.ResponsePackage.RespIntKeyLongVal.encode(message.currencyPrize[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.countItemPrize != null && message.countItemPrize.length)
+                for (var i = 0; i < message.countItemPrize.length; ++i)
+                    $root.ResponsePackage.RespIntKeyIntVal.encode(message.countItemPrize[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             return writer;
         };
 
         /**
-         * Encodes the specified RespRoleOp message, length delimited. Does not implicitly {@link ResponsePackage.RespRoleOp.verify|verify} messages.
+         * Encodes the specified RespPrize message, length delimited. Does not implicitly {@link ResponsePackage.RespPrize.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof ResponsePackage.RespRoleOp
+         * @memberof ResponsePackage.RespPrize
          * @static
-         * @param {ResponsePackage.IRespRoleOp} message RespRoleOp message or plain object to encode
+         * @param {ResponsePackage.IRespPrize} message RespPrize message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespRoleOp.encodeDelimited = function encodeDelimited(message, writer) {
+        RespPrize.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a RespRoleOp message from the specified reader or buffer.
+         * Decodes a RespPrize message from the specified reader or buffer.
          * @function decode
-         * @memberof ResponsePackage.RespRoleOp
+         * @memberof ResponsePackage.RespPrize
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespRoleOp} RespRoleOp
+         * @returns {ResponsePackage.RespPrize} RespPrize
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespRoleOp.decode = function decode(reader, length) {
+        RespPrize.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespRoleOp();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespPrize();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.ckeOp = $root.ResponsePackage.RespInt.decode(reader, reader.uint32());
+                    if (!(message.currencyPrize && message.currencyPrize.length))
+                        message.currencyPrize = [];
+                    message.currencyPrize.push($root.ResponsePackage.RespIntKeyLongVal.decode(reader, reader.uint32()));
                     break;
                 case 2:
-                    message.cktOp = $root.ResponsePackage.RespInt.decode(reader, reader.uint32());
+                    if (!(message.countItemPrize && message.countItemPrize.length))
+                        message.countItemPrize = [];
+                    message.countItemPrize.push($root.ResponsePackage.RespIntKeyIntVal.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -3949,66 +3509,75 @@ $root.ResponsePackage = (function() {
         };
 
         /**
-         * Decodes a RespRoleOp message from the specified reader or buffer, length delimited.
+         * Decodes a RespPrize message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof ResponsePackage.RespRoleOp
+         * @memberof ResponsePackage.RespPrize
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespRoleOp} RespRoleOp
+         * @returns {ResponsePackage.RespPrize} RespPrize
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespRoleOp.decodeDelimited = function decodeDelimited(reader) {
+        RespPrize.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a RespRoleOp message.
+         * Verifies a RespPrize message.
          * @function verify
-         * @memberof ResponsePackage.RespRoleOp
+         * @memberof ResponsePackage.RespPrize
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        RespRoleOp.verify = function verify(message) {
+        RespPrize.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.ckeOp != null && message.hasOwnProperty("ckeOp")) {
-                var error = $root.ResponsePackage.RespInt.verify(message.ckeOp);
-                if (error)
-                    return "ckeOp." + error;
+            if (message.currencyPrize != null && message.hasOwnProperty("currencyPrize")) {
+                if (!Array.isArray(message.currencyPrize))
+                    return "currencyPrize: array expected";
+                for (var i = 0; i < message.currencyPrize.length; ++i) {
+                    var error = $root.ResponsePackage.RespIntKeyLongVal.verify(message.currencyPrize[i]);
+                    if (error)
+                        return "currencyPrize." + error;
+                }
             }
-            if (message.cktOp != null && message.hasOwnProperty("cktOp")) {
-                var error = $root.ResponsePackage.RespInt.verify(message.cktOp);
-                if (error)
-                    return "cktOp." + error;
+            if (message.countItemPrize != null && message.hasOwnProperty("countItemPrize")) {
+                if (!Array.isArray(message.countItemPrize))
+                    return "countItemPrize: array expected";
+                for (var i = 0; i < message.countItemPrize.length; ++i) {
+                    var error = $root.ResponsePackage.RespIntKeyIntVal.verify(message.countItemPrize[i]);
+                    if (error)
+                        return "countItemPrize." + error;
+                }
             }
             return null;
         };
 
-        return RespRoleOp;
+        return RespPrize;
     })();
 
-    ResponsePackage.RespInt = (function() {
+    ResponsePackage.RespIntKeyIntVal = (function() {
 
         /**
-         * Properties of a RespInt.
+         * Properties of a RespIntKeyIntVal.
          * @memberof ResponsePackage
-         * @interface IRespInt
-         * @property {number|null} [value] RespInt value
+         * @interface IRespIntKeyIntVal
+         * @property {number|null} [key] RespIntKeyIntVal key
+         * @property {number|null} [value] RespIntKeyIntVal value
          */
 
         /**
-         * Constructs a new RespInt.
+         * Constructs a new RespIntKeyIntVal.
          * @memberof ResponsePackage
-         * @classdesc Represents a RespInt.
-         * @implements IRespInt
+         * @classdesc Represents a RespIntKeyIntVal.
+         * @implements IRespIntKeyIntVal
          * @constructor
-         * @param {ResponsePackage.IRespInt=} [properties] Properties to set
+         * @param {ResponsePackage.IRespIntKeyIntVal=} [properties] Properties to set
          */
-        function RespInt(properties) {
+        function RespIntKeyIntVal(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -4016,74 +3585,87 @@ $root.ResponsePackage = (function() {
         }
 
         /**
-         * RespInt value.
-         * @member {number} value
-         * @memberof ResponsePackage.RespInt
+         * RespIntKeyIntVal key.
+         * @member {number} key
+         * @memberof ResponsePackage.RespIntKeyIntVal
          * @instance
          */
-        RespInt.prototype.value = 0;
+        RespIntKeyIntVal.prototype.key = 0;
 
         /**
-         * Creates a new RespInt instance using the specified properties.
-         * @function create
-         * @memberof ResponsePackage.RespInt
-         * @static
-         * @param {ResponsePackage.IRespInt=} [properties] Properties to set
-         * @returns {ResponsePackage.RespInt} RespInt instance
+         * RespIntKeyIntVal value.
+         * @member {number} value
+         * @memberof ResponsePackage.RespIntKeyIntVal
+         * @instance
          */
-        RespInt.create = function create(properties) {
-            return new RespInt(properties);
+        RespIntKeyIntVal.prototype.value = 0;
+
+        /**
+         * Creates a new RespIntKeyIntVal instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespIntKeyIntVal
+         * @static
+         * @param {ResponsePackage.IRespIntKeyIntVal=} [properties] Properties to set
+         * @returns {ResponsePackage.RespIntKeyIntVal} RespIntKeyIntVal instance
+         */
+        RespIntKeyIntVal.create = function create(properties) {
+            return new RespIntKeyIntVal(properties);
         };
 
         /**
-         * Encodes the specified RespInt message. Does not implicitly {@link ResponsePackage.RespInt.verify|verify} messages.
+         * Encodes the specified RespIntKeyIntVal message. Does not implicitly {@link ResponsePackage.RespIntKeyIntVal.verify|verify} messages.
          * @function encode
-         * @memberof ResponsePackage.RespInt
+         * @memberof ResponsePackage.RespIntKeyIntVal
          * @static
-         * @param {ResponsePackage.IRespInt} message RespInt message or plain object to encode
+         * @param {ResponsePackage.IRespIntKeyIntVal} message RespIntKeyIntVal message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespInt.encode = function encode(message, writer) {
+        RespIntKeyIntVal.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
+            if (message.key != null && message.hasOwnProperty("key"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.key);
             if (message.value != null && message.hasOwnProperty("value"))
-                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.value);
+                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.value);
             return writer;
         };
 
         /**
-         * Encodes the specified RespInt message, length delimited. Does not implicitly {@link ResponsePackage.RespInt.verify|verify} messages.
+         * Encodes the specified RespIntKeyIntVal message, length delimited. Does not implicitly {@link ResponsePackage.RespIntKeyIntVal.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof ResponsePackage.RespInt
+         * @memberof ResponsePackage.RespIntKeyIntVal
          * @static
-         * @param {ResponsePackage.IRespInt} message RespInt message or plain object to encode
+         * @param {ResponsePackage.IRespIntKeyIntVal} message RespIntKeyIntVal message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespInt.encodeDelimited = function encodeDelimited(message, writer) {
+        RespIntKeyIntVal.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a RespInt message from the specified reader or buffer.
+         * Decodes a RespIntKeyIntVal message from the specified reader or buffer.
          * @function decode
-         * @memberof ResponsePackage.RespInt
+         * @memberof ResponsePackage.RespIntKeyIntVal
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespInt} RespInt
+         * @returns {ResponsePackage.RespIntKeyIntVal} RespIntKeyIntVal
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespInt.decode = function decode(reader, length) {
+        RespIntKeyIntVal.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespInt();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespIntKeyIntVal();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
+                    message.key = reader.sint32();
+                    break;
+                case 2:
                     message.value = reader.sint32();
                     break;
                 default:
@@ -4095,59 +3677,63 @@ $root.ResponsePackage = (function() {
         };
 
         /**
-         * Decodes a RespInt message from the specified reader or buffer, length delimited.
+         * Decodes a RespIntKeyIntVal message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof ResponsePackage.RespInt
+         * @memberof ResponsePackage.RespIntKeyIntVal
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespInt} RespInt
+         * @returns {ResponsePackage.RespIntKeyIntVal} RespIntKeyIntVal
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespInt.decodeDelimited = function decodeDelimited(reader) {
+        RespIntKeyIntVal.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a RespInt message.
+         * Verifies a RespIntKeyIntVal message.
          * @function verify
-         * @memberof ResponsePackage.RespInt
+         * @memberof ResponsePackage.RespIntKeyIntVal
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        RespInt.verify = function verify(message) {
+        RespIntKeyIntVal.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
+            if (message.key != null && message.hasOwnProperty("key"))
+                if (!$util.isInteger(message.key))
+                    return "key: integer expected";
             if (message.value != null && message.hasOwnProperty("value"))
                 if (!$util.isInteger(message.value))
                     return "value: integer expected";
             return null;
         };
 
-        return RespInt;
+        return RespIntKeyIntVal;
     })();
 
-    ResponsePackage.RespBoolean = (function() {
+    ResponsePackage.RespIntKeyLongVal = (function() {
 
         /**
-         * Properties of a RespBoolean.
+         * Properties of a RespIntKeyLongVal.
          * @memberof ResponsePackage
-         * @interface IRespBoolean
-         * @property {boolean|null} [value] RespBoolean value
+         * @interface IRespIntKeyLongVal
+         * @property {number|null} [key] RespIntKeyLongVal key
+         * @property {number|Long|null} [value] RespIntKeyLongVal value
          */
 
         /**
-         * Constructs a new RespBoolean.
+         * Constructs a new RespIntKeyLongVal.
          * @memberof ResponsePackage
-         * @classdesc Represents a RespBoolean.
-         * @implements IRespBoolean
+         * @classdesc Represents a RespIntKeyLongVal.
+         * @implements IRespIntKeyLongVal
          * @constructor
-         * @param {ResponsePackage.IRespBoolean=} [properties] Properties to set
+         * @param {ResponsePackage.IRespIntKeyLongVal=} [properties] Properties to set
          */
-        function RespBoolean(properties) {
+        function RespIntKeyLongVal(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -4155,236 +3741,88 @@ $root.ResponsePackage = (function() {
         }
 
         /**
-         * RespBoolean value.
-         * @member {boolean} value
-         * @memberof ResponsePackage.RespBoolean
+         * RespIntKeyLongVal key.
+         * @member {number} key
+         * @memberof ResponsePackage.RespIntKeyLongVal
          * @instance
          */
-        RespBoolean.prototype.value = false;
+        RespIntKeyLongVal.prototype.key = 0;
 
         /**
-         * Creates a new RespBoolean instance using the specified properties.
-         * @function create
-         * @memberof ResponsePackage.RespBoolean
-         * @static
-         * @param {ResponsePackage.IRespBoolean=} [properties] Properties to set
-         * @returns {ResponsePackage.RespBoolean} RespBoolean instance
+         * RespIntKeyLongVal value.
+         * @member {number|Long} value
+         * @memberof ResponsePackage.RespIntKeyLongVal
+         * @instance
          */
-        RespBoolean.create = function create(properties) {
-            return new RespBoolean(properties);
+        RespIntKeyLongVal.prototype.value = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new RespIntKeyLongVal instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespIntKeyLongVal
+         * @static
+         * @param {ResponsePackage.IRespIntKeyLongVal=} [properties] Properties to set
+         * @returns {ResponsePackage.RespIntKeyLongVal} RespIntKeyLongVal instance
+         */
+        RespIntKeyLongVal.create = function create(properties) {
+            return new RespIntKeyLongVal(properties);
         };
 
         /**
-         * Encodes the specified RespBoolean message. Does not implicitly {@link ResponsePackage.RespBoolean.verify|verify} messages.
+         * Encodes the specified RespIntKeyLongVal message. Does not implicitly {@link ResponsePackage.RespIntKeyLongVal.verify|verify} messages.
          * @function encode
-         * @memberof ResponsePackage.RespBoolean
+         * @memberof ResponsePackage.RespIntKeyLongVal
          * @static
-         * @param {ResponsePackage.IRespBoolean} message RespBoolean message or plain object to encode
+         * @param {ResponsePackage.IRespIntKeyLongVal} message RespIntKeyLongVal message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespBoolean.encode = function encode(message, writer) {
+        RespIntKeyLongVal.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
+            if (message.key != null && message.hasOwnProperty("key"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.key);
             if (message.value != null && message.hasOwnProperty("value"))
-                writer.uint32(/* id 1, wireType 0 =*/8).bool(message.value);
+                writer.uint32(/* id 2, wireType 0 =*/16).sint64(message.value);
             return writer;
         };
 
         /**
-         * Encodes the specified RespBoolean message, length delimited. Does not implicitly {@link ResponsePackage.RespBoolean.verify|verify} messages.
+         * Encodes the specified RespIntKeyLongVal message, length delimited. Does not implicitly {@link ResponsePackage.RespIntKeyLongVal.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof ResponsePackage.RespBoolean
+         * @memberof ResponsePackage.RespIntKeyLongVal
          * @static
-         * @param {ResponsePackage.IRespBoolean} message RespBoolean message or plain object to encode
+         * @param {ResponsePackage.IRespIntKeyLongVal} message RespIntKeyLongVal message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespBoolean.encodeDelimited = function encodeDelimited(message, writer) {
+        RespIntKeyLongVal.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a RespBoolean message from the specified reader or buffer.
+         * Decodes a RespIntKeyLongVal message from the specified reader or buffer.
          * @function decode
-         * @memberof ResponsePackage.RespBoolean
+         * @memberof ResponsePackage.RespIntKeyLongVal
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespBoolean} RespBoolean
+         * @returns {ResponsePackage.RespIntKeyLongVal} RespIntKeyLongVal
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespBoolean.decode = function decode(reader, length) {
+        RespIntKeyLongVal.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespBoolean();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespIntKeyLongVal();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.value = reader.bool();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a RespBoolean message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof ResponsePackage.RespBoolean
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespBoolean} RespBoolean
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespBoolean.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a RespBoolean message.
-         * @function verify
-         * @memberof ResponsePackage.RespBoolean
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        RespBoolean.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.value != null && message.hasOwnProperty("value"))
-                if (typeof message.value !== "boolean")
-                    return "value: boolean expected";
-            return null;
-        };
-
-        return RespBoolean;
-    })();
-
-    ResponsePackage.RespTeam = (function() {
-
-        /**
-         * Properties of a RespTeam.
-         * @memberof ResponsePackage
-         * @interface IRespTeam
-         * @property {Array.<ResponsePackage.IRespTeamInfo>|null} [teamList] RespTeam teamList
-         * @property {Array.<ResponsePackage.IRespTeamInfo>|null} [teamOp] RespTeam teamOp
-         */
-
-        /**
-         * Constructs a new RespTeam.
-         * @memberof ResponsePackage
-         * @classdesc Represents a RespTeam.
-         * @implements IRespTeam
-         * @constructor
-         * @param {ResponsePackage.IRespTeam=} [properties] Properties to set
-         */
-        function RespTeam(properties) {
-            this.teamList = [];
-            this.teamOp = [];
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * RespTeam teamList.
-         * @member {Array.<ResponsePackage.IRespTeamInfo>} teamList
-         * @memberof ResponsePackage.RespTeam
-         * @instance
-         */
-        RespTeam.prototype.teamList = $util.emptyArray;
-
-        /**
-         * RespTeam teamOp.
-         * @member {Array.<ResponsePackage.IRespTeamInfo>} teamOp
-         * @memberof ResponsePackage.RespTeam
-         * @instance
-         */
-        RespTeam.prototype.teamOp = $util.emptyArray;
-
-        /**
-         * Creates a new RespTeam instance using the specified properties.
-         * @function create
-         * @memberof ResponsePackage.RespTeam
-         * @static
-         * @param {ResponsePackage.IRespTeam=} [properties] Properties to set
-         * @returns {ResponsePackage.RespTeam} RespTeam instance
-         */
-        RespTeam.create = function create(properties) {
-            return new RespTeam(properties);
-        };
-
-        /**
-         * Encodes the specified RespTeam message. Does not implicitly {@link ResponsePackage.RespTeam.verify|verify} messages.
-         * @function encode
-         * @memberof ResponsePackage.RespTeam
-         * @static
-         * @param {ResponsePackage.IRespTeam} message RespTeam message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespTeam.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.teamList != null && message.teamList.length)
-                for (var i = 0; i < message.teamList.length; ++i)
-                    $root.ResponsePackage.RespTeamInfo.encode(message.teamList[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.teamOp != null && message.teamOp.length)
-                for (var i = 0; i < message.teamOp.length; ++i)
-                    $root.ResponsePackage.RespTeamInfo.encode(message.teamOp[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-            return writer;
-        };
-
-        /**
-         * Encodes the specified RespTeam message, length delimited. Does not implicitly {@link ResponsePackage.RespTeam.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof ResponsePackage.RespTeam
-         * @static
-         * @param {ResponsePackage.IRespTeam} message RespTeam message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespTeam.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a RespTeam message from the specified reader or buffer.
-         * @function decode
-         * @memberof ResponsePackage.RespTeam
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespTeam} RespTeam
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespTeam.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespTeam();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    if (!(message.teamList && message.teamList.length))
-                        message.teamList = [];
-                    message.teamList.push($root.ResponsePackage.RespTeamInfo.decode(reader, reader.uint32()));
+                    message.key = reader.sint32();
                     break;
                 case 2:
-                    if (!(message.teamOp && message.teamOp.length))
-                        message.teamOp = [];
-                    message.teamOp.push($root.ResponsePackage.RespTeamInfo.decode(reader, reader.uint32()));
+                    message.value = reader.sint64();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -4395,227 +3833,42 @@ $root.ResponsePackage = (function() {
         };
 
         /**
-         * Decodes a RespTeam message from the specified reader or buffer, length delimited.
+         * Decodes a RespIntKeyLongVal message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof ResponsePackage.RespTeam
+         * @memberof ResponsePackage.RespIntKeyLongVal
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespTeam} RespTeam
+         * @returns {ResponsePackage.RespIntKeyLongVal} RespIntKeyLongVal
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespTeam.decodeDelimited = function decodeDelimited(reader) {
+        RespIntKeyLongVal.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a RespTeam message.
+         * Verifies a RespIntKeyLongVal message.
          * @function verify
-         * @memberof ResponsePackage.RespTeam
+         * @memberof ResponsePackage.RespIntKeyLongVal
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        RespTeam.verify = function verify(message) {
+        RespIntKeyLongVal.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.teamList != null && message.hasOwnProperty("teamList")) {
-                if (!Array.isArray(message.teamList))
-                    return "teamList: array expected";
-                for (var i = 0; i < message.teamList.length; ++i) {
-                    var error = $root.ResponsePackage.RespTeamInfo.verify(message.teamList[i]);
-                    if (error)
-                        return "teamList." + error;
-                }
-            }
-            if (message.teamOp != null && message.hasOwnProperty("teamOp")) {
-                if (!Array.isArray(message.teamOp))
-                    return "teamOp: array expected";
-                for (var i = 0; i < message.teamOp.length; ++i) {
-                    var error = $root.ResponsePackage.RespTeamInfo.verify(message.teamOp[i]);
-                    if (error)
-                        return "teamOp." + error;
-                }
-            }
+            if (message.key != null && message.hasOwnProperty("key"))
+                if (!$util.isInteger(message.key))
+                    return "key: integer expected";
+            if (message.value != null && message.hasOwnProperty("value"))
+                if (!$util.isInteger(message.value) && !(message.value && $util.isInteger(message.value.low) && $util.isInteger(message.value.high)))
+                    return "value: integer|Long expected";
             return null;
         };
 
-        return RespTeam;
-    })();
-
-    ResponsePackage.RespTeamInfo = (function() {
-
-        /**
-         * Properties of a RespTeamInfo.
-         * @memberof ResponsePackage
-         * @interface IRespTeamInfo
-         * @property {number|null} [id] RespTeamInfo id
-         * @property {number|null} [type] RespTeamInfo type
-         * @property {number|null} [ckId] RespTeamInfo ckId
-         */
-
-        /**
-         * Constructs a new RespTeamInfo.
-         * @memberof ResponsePackage
-         * @classdesc Represents a RespTeamInfo.
-         * @implements IRespTeamInfo
-         * @constructor
-         * @param {ResponsePackage.IRespTeamInfo=} [properties] Properties to set
-         */
-        function RespTeamInfo(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * RespTeamInfo id.
-         * @member {number} id
-         * @memberof ResponsePackage.RespTeamInfo
-         * @instance
-         */
-        RespTeamInfo.prototype.id = 0;
-
-        /**
-         * RespTeamInfo type.
-         * @member {number} type
-         * @memberof ResponsePackage.RespTeamInfo
-         * @instance
-         */
-        RespTeamInfo.prototype.type = 0;
-
-        /**
-         * RespTeamInfo ckId.
-         * @member {number} ckId
-         * @memberof ResponsePackage.RespTeamInfo
-         * @instance
-         */
-        RespTeamInfo.prototype.ckId = 0;
-
-        /**
-         * Creates a new RespTeamInfo instance using the specified properties.
-         * @function create
-         * @memberof ResponsePackage.RespTeamInfo
-         * @static
-         * @param {ResponsePackage.IRespTeamInfo=} [properties] Properties to set
-         * @returns {ResponsePackage.RespTeamInfo} RespTeamInfo instance
-         */
-        RespTeamInfo.create = function create(properties) {
-            return new RespTeamInfo(properties);
-        };
-
-        /**
-         * Encodes the specified RespTeamInfo message. Does not implicitly {@link ResponsePackage.RespTeamInfo.verify|verify} messages.
-         * @function encode
-         * @memberof ResponsePackage.RespTeamInfo
-         * @static
-         * @param {ResponsePackage.IRespTeamInfo} message RespTeamInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespTeamInfo.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.id != null && message.hasOwnProperty("id"))
-                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.id);
-            if (message.type != null && message.hasOwnProperty("type"))
-                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.type);
-            if (message.ckId != null && message.hasOwnProperty("ckId"))
-                writer.uint32(/* id 3, wireType 0 =*/24).sint32(message.ckId);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified RespTeamInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespTeamInfo.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof ResponsePackage.RespTeamInfo
-         * @static
-         * @param {ResponsePackage.IRespTeamInfo} message RespTeamInfo message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        RespTeamInfo.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a RespTeamInfo message from the specified reader or buffer.
-         * @function decode
-         * @memberof ResponsePackage.RespTeamInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespTeamInfo} RespTeamInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespTeamInfo.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespTeamInfo();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1:
-                    message.id = reader.sint32();
-                    break;
-                case 2:
-                    message.type = reader.sint32();
-                    break;
-                case 3:
-                    message.ckId = reader.sint32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a RespTeamInfo message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof ResponsePackage.RespTeamInfo
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespTeamInfo} RespTeamInfo
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        RespTeamInfo.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a RespTeamInfo message.
-         * @function verify
-         * @memberof ResponsePackage.RespTeamInfo
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        RespTeamInfo.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.id != null && message.hasOwnProperty("id"))
-                if (!$util.isInteger(message.id))
-                    return "id: integer expected";
-            if (message.type != null && message.hasOwnProperty("type"))
-                if (!$util.isInteger(message.type))
-                    return "type: integer expected";
-            if (message.ckId != null && message.hasOwnProperty("ckId"))
-                if (!$util.isInteger(message.ckId))
-                    return "ckId: integer expected";
-            return null;
-        };
-
-        return RespTeamInfo;
+        return RespIntKeyLongVal;
     })();
 
     ResponsePackage.RespMail = (function() {
@@ -5476,24 +4729,27 @@ $root.ResponsePackage = (function() {
         return RespFunc;
     })();
 
-    ResponsePackage.RespLong = (function() {
+    ResponsePackage.RespRole = (function() {
 
         /**
-         * Properties of a RespLong.
+         * Properties of a RespRole.
          * @memberof ResponsePackage
-         * @interface IRespLong
-         * @property {number|Long|null} [value] RespLong value
+         * @interface IRespRole
+         * @property {ResponsePackage.IRespRoleInfo|null} [roleInfo] RespRole roleInfo
+         * @property {ResponsePackage.IRespRoleBaseInfo|null} [roleBaseInfo] RespRole roleBaseInfo
+         * @property {ResponsePackage.IRespRoleOp|null} [roleOp] RespRole roleOp
+         * @property {ResponsePackage.IRespBoolean|null} [createRole] RespRole createRole
          */
 
         /**
-         * Constructs a new RespLong.
+         * Constructs a new RespRole.
          * @memberof ResponsePackage
-         * @classdesc Represents a RespLong.
-         * @implements IRespLong
+         * @classdesc Represents a RespRole.
+         * @implements IRespRole
          * @constructor
-         * @param {ResponsePackage.IRespLong=} [properties] Properties to set
+         * @param {ResponsePackage.IRespRole=} [properties] Properties to set
          */
-        function RespLong(properties) {
+        function RespRole(properties) {
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -5501,75 +4757,114 @@ $root.ResponsePackage = (function() {
         }
 
         /**
-         * RespLong value.
-         * @member {number|Long} value
-         * @memberof ResponsePackage.RespLong
+         * RespRole roleInfo.
+         * @member {ResponsePackage.IRespRoleInfo|null|undefined} roleInfo
+         * @memberof ResponsePackage.RespRole
          * @instance
          */
-        RespLong.prototype.value = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        RespRole.prototype.roleInfo = null;
 
         /**
-         * Creates a new RespLong instance using the specified properties.
-         * @function create
-         * @memberof ResponsePackage.RespLong
-         * @static
-         * @param {ResponsePackage.IRespLong=} [properties] Properties to set
-         * @returns {ResponsePackage.RespLong} RespLong instance
+         * RespRole roleBaseInfo.
+         * @member {ResponsePackage.IRespRoleBaseInfo|null|undefined} roleBaseInfo
+         * @memberof ResponsePackage.RespRole
+         * @instance
          */
-        RespLong.create = function create(properties) {
-            return new RespLong(properties);
+        RespRole.prototype.roleBaseInfo = null;
+
+        /**
+         * RespRole roleOp.
+         * @member {ResponsePackage.IRespRoleOp|null|undefined} roleOp
+         * @memberof ResponsePackage.RespRole
+         * @instance
+         */
+        RespRole.prototype.roleOp = null;
+
+        /**
+         * RespRole createRole.
+         * @member {ResponsePackage.IRespBoolean|null|undefined} createRole
+         * @memberof ResponsePackage.RespRole
+         * @instance
+         */
+        RespRole.prototype.createRole = null;
+
+        /**
+         * Creates a new RespRole instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespRole
+         * @static
+         * @param {ResponsePackage.IRespRole=} [properties] Properties to set
+         * @returns {ResponsePackage.RespRole} RespRole instance
+         */
+        RespRole.create = function create(properties) {
+            return new RespRole(properties);
         };
 
         /**
-         * Encodes the specified RespLong message. Does not implicitly {@link ResponsePackage.RespLong.verify|verify} messages.
+         * Encodes the specified RespRole message. Does not implicitly {@link ResponsePackage.RespRole.verify|verify} messages.
          * @function encode
-         * @memberof ResponsePackage.RespLong
+         * @memberof ResponsePackage.RespRole
          * @static
-         * @param {ResponsePackage.IRespLong} message RespLong message or plain object to encode
+         * @param {ResponsePackage.IRespRole} message RespRole message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespLong.encode = function encode(message, writer) {
+        RespRole.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.value != null && message.hasOwnProperty("value"))
-                writer.uint32(/* id 1, wireType 0 =*/8).sint64(message.value);
+            if (message.roleInfo != null && message.hasOwnProperty("roleInfo"))
+                $root.ResponsePackage.RespRoleInfo.encode(message.roleInfo, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.roleBaseInfo != null && message.hasOwnProperty("roleBaseInfo"))
+                $root.ResponsePackage.RespRoleBaseInfo.encode(message.roleBaseInfo, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            if (message.roleOp != null && message.hasOwnProperty("roleOp"))
+                $root.ResponsePackage.RespRoleOp.encode(message.roleOp, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+            if (message.createRole != null && message.hasOwnProperty("createRole"))
+                $root.ResponsePackage.RespBoolean.encode(message.createRole, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
             return writer;
         };
 
         /**
-         * Encodes the specified RespLong message, length delimited. Does not implicitly {@link ResponsePackage.RespLong.verify|verify} messages.
+         * Encodes the specified RespRole message, length delimited. Does not implicitly {@link ResponsePackage.RespRole.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof ResponsePackage.RespLong
+         * @memberof ResponsePackage.RespRole
          * @static
-         * @param {ResponsePackage.IRespLong} message RespLong message or plain object to encode
+         * @param {ResponsePackage.IRespRole} message RespRole message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespLong.encodeDelimited = function encodeDelimited(message, writer) {
+        RespRole.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a RespLong message from the specified reader or buffer.
+         * Decodes a RespRole message from the specified reader or buffer.
          * @function decode
-         * @memberof ResponsePackage.RespLong
+         * @memberof ResponsePackage.RespRole
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespLong} RespLong
+         * @returns {ResponsePackage.RespRole} RespRole
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespLong.decode = function decode(reader, length) {
+        RespRole.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespLong();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespRole();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.value = reader.sint64();
+                    message.roleInfo = $root.ResponsePackage.RespRoleInfo.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.roleBaseInfo = $root.ResponsePackage.RespRoleBaseInfo.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.roleOp = $root.ResponsePackage.RespRoleOp.decode(reader, reader.uint32());
+                    break;
+                case 4:
+                    message.createRole = $root.ResponsePackage.RespBoolean.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -5580,39 +4875,784 @@ $root.ResponsePackage = (function() {
         };
 
         /**
-         * Decodes a RespLong message from the specified reader or buffer, length delimited.
+         * Decodes a RespRole message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof ResponsePackage.RespLong
+         * @memberof ResponsePackage.RespRole
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespLong} RespLong
+         * @returns {ResponsePackage.RespRole} RespRole
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespLong.decodeDelimited = function decodeDelimited(reader) {
+        RespRole.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a RespLong message.
+         * Verifies a RespRole message.
          * @function verify
-         * @memberof ResponsePackage.RespLong
+         * @memberof ResponsePackage.RespRole
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        RespLong.verify = function verify(message) {
+        RespRole.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.value != null && message.hasOwnProperty("value"))
-                if (!$util.isInteger(message.value) && !(message.value && $util.isInteger(message.value.low) && $util.isInteger(message.value.high)))
-                    return "value: integer|Long expected";
+            if (message.roleInfo != null && message.hasOwnProperty("roleInfo")) {
+                var error = $root.ResponsePackage.RespRoleInfo.verify(message.roleInfo);
+                if (error)
+                    return "roleInfo." + error;
+            }
+            if (message.roleBaseInfo != null && message.hasOwnProperty("roleBaseInfo")) {
+                var error = $root.ResponsePackage.RespRoleBaseInfo.verify(message.roleBaseInfo);
+                if (error)
+                    return "roleBaseInfo." + error;
+            }
+            if (message.roleOp != null && message.hasOwnProperty("roleOp")) {
+                var error = $root.ResponsePackage.RespRoleOp.verify(message.roleOp);
+                if (error)
+                    return "roleOp." + error;
+            }
+            if (message.createRole != null && message.hasOwnProperty("createRole")) {
+                var error = $root.ResponsePackage.RespBoolean.verify(message.createRole);
+                if (error)
+                    return "createRole." + error;
+            }
             return null;
         };
 
-        return RespLong;
+        return RespRole;
+    })();
+
+    ResponsePackage.RespRoleInfo = (function() {
+
+        /**
+         * Properties of a RespRoleInfo.
+         * @memberof ResponsePackage
+         * @interface IRespRoleInfo
+         * @property {string|null} [id] RespRoleInfo id
+         * @property {string|null} [sid] RespRoleInfo sid
+         * @property {string|null} [name] RespRoleInfo name
+         * @property {number|null} [img] RespRoleInfo img
+         * @property {string|null} [email] RespRoleInfo email
+         * @property {number|null} [division] RespRoleInfo division
+         * @property {number|null} [integral] RespRoleInfo integral
+         * @property {number|Long|null} [serverTime] RespRoleInfo serverTime
+         * @property {number|null} [gcke] RespRoleInfo gcke
+         * @property {number|null} [cke] RespRoleInfo cke
+         * @property {number|null} [ckt] RespRoleInfo ckt
+         */
+
+        /**
+         * Constructs a new RespRoleInfo.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespRoleInfo.
+         * @implements IRespRoleInfo
+         * @constructor
+         * @param {ResponsePackage.IRespRoleInfo=} [properties] Properties to set
+         */
+        function RespRoleInfo(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespRoleInfo id.
+         * @member {string} id
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.id = "";
+
+        /**
+         * RespRoleInfo sid.
+         * @member {string} sid
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.sid = "";
+
+        /**
+         * RespRoleInfo name.
+         * @member {string} name
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.name = "";
+
+        /**
+         * RespRoleInfo img.
+         * @member {number} img
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.img = 0;
+
+        /**
+         * RespRoleInfo email.
+         * @member {string} email
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.email = "";
+
+        /**
+         * RespRoleInfo division.
+         * @member {number} division
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.division = 0;
+
+        /**
+         * RespRoleInfo integral.
+         * @member {number} integral
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.integral = 0;
+
+        /**
+         * RespRoleInfo serverTime.
+         * @member {number|Long} serverTime
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.serverTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * RespRoleInfo gcke.
+         * @member {number} gcke
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.gcke = 0;
+
+        /**
+         * RespRoleInfo cke.
+         * @member {number} cke
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.cke = 0;
+
+        /**
+         * RespRoleInfo ckt.
+         * @member {number} ckt
+         * @memberof ResponsePackage.RespRoleInfo
+         * @instance
+         */
+        RespRoleInfo.prototype.ckt = 0;
+
+        /**
+         * Creates a new RespRoleInfo instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespRoleInfo
+         * @static
+         * @param {ResponsePackage.IRespRoleInfo=} [properties] Properties to set
+         * @returns {ResponsePackage.RespRoleInfo} RespRoleInfo instance
+         */
+        RespRoleInfo.create = function create(properties) {
+            return new RespRoleInfo(properties);
+        };
+
+        /**
+         * Encodes the specified RespRoleInfo message. Does not implicitly {@link ResponsePackage.RespRoleInfo.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespRoleInfo
+         * @static
+         * @param {ResponsePackage.IRespRoleInfo} message RespRoleInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespRoleInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.id);
+            if (message.sid != null && message.hasOwnProperty("sid"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.sid);
+            if (message.name != null && message.hasOwnProperty("name"))
+                writer.uint32(/* id 3, wireType 2 =*/26).string(message.name);
+            if (message.img != null && message.hasOwnProperty("img"))
+                writer.uint32(/* id 4, wireType 0 =*/32).sint32(message.img);
+            if (message.email != null && message.hasOwnProperty("email"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.email);
+            if (message.division != null && message.hasOwnProperty("division"))
+                writer.uint32(/* id 6, wireType 0 =*/48).sint32(message.division);
+            if (message.integral != null && message.hasOwnProperty("integral"))
+                writer.uint32(/* id 7, wireType 0 =*/56).sint32(message.integral);
+            if (message.serverTime != null && message.hasOwnProperty("serverTime"))
+                writer.uint32(/* id 8, wireType 0 =*/64).sint64(message.serverTime);
+            if (message.gcke != null && message.hasOwnProperty("gcke"))
+                writer.uint32(/* id 9, wireType 0 =*/72).sint32(message.gcke);
+            if (message.cke != null && message.hasOwnProperty("cke"))
+                writer.uint32(/* id 10, wireType 0 =*/80).sint32(message.cke);
+            if (message.ckt != null && message.hasOwnProperty("ckt"))
+                writer.uint32(/* id 11, wireType 0 =*/88).sint32(message.ckt);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespRoleInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespRoleInfo.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespRoleInfo
+         * @static
+         * @param {ResponsePackage.IRespRoleInfo} message RespRoleInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespRoleInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespRoleInfo message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespRoleInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespRoleInfo} RespRoleInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespRoleInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespRoleInfo();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.sid = reader.string();
+                    break;
+                case 3:
+                    message.name = reader.string();
+                    break;
+                case 4:
+                    message.img = reader.sint32();
+                    break;
+                case 5:
+                    message.email = reader.string();
+                    break;
+                case 6:
+                    message.division = reader.sint32();
+                    break;
+                case 7:
+                    message.integral = reader.sint32();
+                    break;
+                case 8:
+                    message.serverTime = reader.sint64();
+                    break;
+                case 9:
+                    message.gcke = reader.sint32();
+                    break;
+                case 10:
+                    message.cke = reader.sint32();
+                    break;
+                case 11:
+                    message.ckt = reader.sint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespRoleInfo message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespRoleInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespRoleInfo} RespRoleInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespRoleInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespRoleInfo message.
+         * @function verify
+         * @memberof ResponsePackage.RespRoleInfo
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespRoleInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isString(message.id))
+                    return "id: string expected";
+            if (message.sid != null && message.hasOwnProperty("sid"))
+                if (!$util.isString(message.sid))
+                    return "sid: string expected";
+            if (message.name != null && message.hasOwnProperty("name"))
+                if (!$util.isString(message.name))
+                    return "name: string expected";
+            if (message.img != null && message.hasOwnProperty("img"))
+                if (!$util.isInteger(message.img))
+                    return "img: integer expected";
+            if (message.email != null && message.hasOwnProperty("email"))
+                if (!$util.isString(message.email))
+                    return "email: string expected";
+            if (message.division != null && message.hasOwnProperty("division"))
+                if (!$util.isInteger(message.division))
+                    return "division: integer expected";
+            if (message.integral != null && message.hasOwnProperty("integral"))
+                if (!$util.isInteger(message.integral))
+                    return "integral: integer expected";
+            if (message.serverTime != null && message.hasOwnProperty("serverTime"))
+                if (!$util.isInteger(message.serverTime) && !(message.serverTime && $util.isInteger(message.serverTime.low) && $util.isInteger(message.serverTime.high)))
+                    return "serverTime: integer|Long expected";
+            if (message.gcke != null && message.hasOwnProperty("gcke"))
+                if (!$util.isInteger(message.gcke))
+                    return "gcke: integer expected";
+            if (message.cke != null && message.hasOwnProperty("cke"))
+                if (!$util.isInteger(message.cke))
+                    return "cke: integer expected";
+            if (message.ckt != null && message.hasOwnProperty("ckt"))
+                if (!$util.isInteger(message.ckt))
+                    return "ckt: integer expected";
+            return null;
+        };
+
+        return RespRoleInfo;
+    })();
+
+    ResponsePackage.RespBoolean = (function() {
+
+        /**
+         * Properties of a RespBoolean.
+         * @memberof ResponsePackage
+         * @interface IRespBoolean
+         * @property {boolean|null} [value] RespBoolean value
+         */
+
+        /**
+         * Constructs a new RespBoolean.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespBoolean.
+         * @implements IRespBoolean
+         * @constructor
+         * @param {ResponsePackage.IRespBoolean=} [properties] Properties to set
+         */
+        function RespBoolean(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespBoolean value.
+         * @member {boolean} value
+         * @memberof ResponsePackage.RespBoolean
+         * @instance
+         */
+        RespBoolean.prototype.value = false;
+
+        /**
+         * Creates a new RespBoolean instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespBoolean
+         * @static
+         * @param {ResponsePackage.IRespBoolean=} [properties] Properties to set
+         * @returns {ResponsePackage.RespBoolean} RespBoolean instance
+         */
+        RespBoolean.create = function create(properties) {
+            return new RespBoolean(properties);
+        };
+
+        /**
+         * Encodes the specified RespBoolean message. Does not implicitly {@link ResponsePackage.RespBoolean.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespBoolean
+         * @static
+         * @param {ResponsePackage.IRespBoolean} message RespBoolean message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespBoolean.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.value != null && message.hasOwnProperty("value"))
+                writer.uint32(/* id 1, wireType 0 =*/8).bool(message.value);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespBoolean message, length delimited. Does not implicitly {@link ResponsePackage.RespBoolean.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespBoolean
+         * @static
+         * @param {ResponsePackage.IRespBoolean} message RespBoolean message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespBoolean.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespBoolean message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespBoolean
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespBoolean} RespBoolean
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespBoolean.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespBoolean();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.value = reader.bool();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespBoolean message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespBoolean
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespBoolean} RespBoolean
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespBoolean.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespBoolean message.
+         * @function verify
+         * @memberof ResponsePackage.RespBoolean
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespBoolean.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.value != null && message.hasOwnProperty("value"))
+                if (typeof message.value !== "boolean")
+                    return "value: boolean expected";
+            return null;
+        };
+
+        return RespBoolean;
+    })();
+
+    ResponsePackage.RespRoleOp = (function() {
+
+        /**
+         * Properties of a RespRoleOp.
+         * @memberof ResponsePackage
+         * @interface IRespRoleOp
+         * @property {ResponsePackage.IRespInt|null} [gckeOp] RespRoleOp gckeOp
+         */
+
+        /**
+         * Constructs a new RespRoleOp.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespRoleOp.
+         * @implements IRespRoleOp
+         * @constructor
+         * @param {ResponsePackage.IRespRoleOp=} [properties] Properties to set
+         */
+        function RespRoleOp(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespRoleOp gckeOp.
+         * @member {ResponsePackage.IRespInt|null|undefined} gckeOp
+         * @memberof ResponsePackage.RespRoleOp
+         * @instance
+         */
+        RespRoleOp.prototype.gckeOp = null;
+
+        /**
+         * Creates a new RespRoleOp instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespRoleOp
+         * @static
+         * @param {ResponsePackage.IRespRoleOp=} [properties] Properties to set
+         * @returns {ResponsePackage.RespRoleOp} RespRoleOp instance
+         */
+        RespRoleOp.create = function create(properties) {
+            return new RespRoleOp(properties);
+        };
+
+        /**
+         * Encodes the specified RespRoleOp message. Does not implicitly {@link ResponsePackage.RespRoleOp.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespRoleOp
+         * @static
+         * @param {ResponsePackage.IRespRoleOp} message RespRoleOp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespRoleOp.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.gckeOp != null && message.hasOwnProperty("gckeOp"))
+                $root.ResponsePackage.RespInt.encode(message.gckeOp, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespRoleOp message, length delimited. Does not implicitly {@link ResponsePackage.RespRoleOp.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespRoleOp
+         * @static
+         * @param {ResponsePackage.IRespRoleOp} message RespRoleOp message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespRoleOp.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespRoleOp message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespRoleOp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespRoleOp} RespRoleOp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespRoleOp.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespRoleOp();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.gckeOp = $root.ResponsePackage.RespInt.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespRoleOp message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespRoleOp
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespRoleOp} RespRoleOp
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespRoleOp.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespRoleOp message.
+         * @function verify
+         * @memberof ResponsePackage.RespRoleOp
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespRoleOp.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.gckeOp != null && message.hasOwnProperty("gckeOp")) {
+                var error = $root.ResponsePackage.RespInt.verify(message.gckeOp);
+                if (error)
+                    return "gckeOp." + error;
+            }
+            return null;
+        };
+
+        return RespRoleOp;
+    })();
+
+    ResponsePackage.RespInt = (function() {
+
+        /**
+         * Properties of a RespInt.
+         * @memberof ResponsePackage
+         * @interface IRespInt
+         * @property {number|null} [value] RespInt value
+         */
+
+        /**
+         * Constructs a new RespInt.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespInt.
+         * @implements IRespInt
+         * @constructor
+         * @param {ResponsePackage.IRespInt=} [properties] Properties to set
+         */
+        function RespInt(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespInt value.
+         * @member {number} value
+         * @memberof ResponsePackage.RespInt
+         * @instance
+         */
+        RespInt.prototype.value = 0;
+
+        /**
+         * Creates a new RespInt instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespInt
+         * @static
+         * @param {ResponsePackage.IRespInt=} [properties] Properties to set
+         * @returns {ResponsePackage.RespInt} RespInt instance
+         */
+        RespInt.create = function create(properties) {
+            return new RespInt(properties);
+        };
+
+        /**
+         * Encodes the specified RespInt message. Does not implicitly {@link ResponsePackage.RespInt.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespInt
+         * @static
+         * @param {ResponsePackage.IRespInt} message RespInt message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespInt.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.value != null && message.hasOwnProperty("value"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.value);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespInt message, length delimited. Does not implicitly {@link ResponsePackage.RespInt.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespInt
+         * @static
+         * @param {ResponsePackage.IRespInt} message RespInt message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespInt.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespInt message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespInt
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespInt} RespInt
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespInt.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespInt();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.value = reader.sint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespInt message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespInt
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespInt} RespInt
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespInt.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespInt message.
+         * @function verify
+         * @memberof ResponsePackage.RespInt
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespInt.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.value != null && message.hasOwnProperty("value"))
+                if (!$util.isInteger(message.value))
+                    return "value: integer expected";
+            return null;
+        };
+
+        return RespInt;
     })();
 
     ResponsePackage.RespMatch = (function() {
@@ -5979,6 +6019,196 @@ $root.ResponsePackage = (function() {
         return RespRoomRole;
     })();
 
+    ResponsePackage.RespChampionship = (function() {
+
+        /**
+         * Properties of a RespChampionship.
+         * @memberof ResponsePackage
+         * @interface IRespChampionship
+         * @property {number|null} [cid] RespChampionship cid
+         * @property {boolean|null} [teamEnd] RespChampionship teamEnd
+         * @property {boolean|null} [survivalEnd] RespChampionship survivalEnd
+         * @property {number|Long|null} [startTime] RespChampionship startTime
+         */
+
+        /**
+         * Constructs a new RespChampionship.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespChampionship.
+         * @implements IRespChampionship
+         * @constructor
+         * @param {ResponsePackage.IRespChampionship=} [properties] Properties to set
+         */
+        function RespChampionship(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespChampionship cid.
+         * @member {number} cid
+         * @memberof ResponsePackage.RespChampionship
+         * @instance
+         */
+        RespChampionship.prototype.cid = 0;
+
+        /**
+         * RespChampionship teamEnd.
+         * @member {boolean} teamEnd
+         * @memberof ResponsePackage.RespChampionship
+         * @instance
+         */
+        RespChampionship.prototype.teamEnd = false;
+
+        /**
+         * RespChampionship survivalEnd.
+         * @member {boolean} survivalEnd
+         * @memberof ResponsePackage.RespChampionship
+         * @instance
+         */
+        RespChampionship.prototype.survivalEnd = false;
+
+        /**
+         * RespChampionship startTime.
+         * @member {number|Long} startTime
+         * @memberof ResponsePackage.RespChampionship
+         * @instance
+         */
+        RespChampionship.prototype.startTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new RespChampionship instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespChampionship
+         * @static
+         * @param {ResponsePackage.IRespChampionship=} [properties] Properties to set
+         * @returns {ResponsePackage.RespChampionship} RespChampionship instance
+         */
+        RespChampionship.create = function create(properties) {
+            return new RespChampionship(properties);
+        };
+
+        /**
+         * Encodes the specified RespChampionship message. Does not implicitly {@link ResponsePackage.RespChampionship.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespChampionship
+         * @static
+         * @param {ResponsePackage.IRespChampionship} message RespChampionship message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespChampionship.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.cid != null && message.hasOwnProperty("cid"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.cid);
+            if (message.teamEnd != null && message.hasOwnProperty("teamEnd"))
+                writer.uint32(/* id 2, wireType 0 =*/16).bool(message.teamEnd);
+            if (message.survivalEnd != null && message.hasOwnProperty("survivalEnd"))
+                writer.uint32(/* id 3, wireType 0 =*/24).bool(message.survivalEnd);
+            if (message.startTime != null && message.hasOwnProperty("startTime"))
+                writer.uint32(/* id 4, wireType 0 =*/32).sint64(message.startTime);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespChampionship message, length delimited. Does not implicitly {@link ResponsePackage.RespChampionship.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespChampionship
+         * @static
+         * @param {ResponsePackage.IRespChampionship} message RespChampionship message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespChampionship.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespChampionship message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespChampionship
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespChampionship} RespChampionship
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespChampionship.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespChampionship();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.cid = reader.sint32();
+                    break;
+                case 2:
+                    message.teamEnd = reader.bool();
+                    break;
+                case 3:
+                    message.survivalEnd = reader.bool();
+                    break;
+                case 4:
+                    message.startTime = reader.sint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespChampionship message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespChampionship
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespChampionship} RespChampionship
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespChampionship.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespChampionship message.
+         * @function verify
+         * @memberof ResponsePackage.RespChampionship
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespChampionship.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.cid != null && message.hasOwnProperty("cid"))
+                if (!$util.isInteger(message.cid))
+                    return "cid: integer expected";
+            if (message.teamEnd != null && message.hasOwnProperty("teamEnd"))
+                if (typeof message.teamEnd !== "boolean")
+                    return "teamEnd: boolean expected";
+            if (message.survivalEnd != null && message.hasOwnProperty("survivalEnd"))
+                if (typeof message.survivalEnd !== "boolean")
+                    return "survivalEnd: boolean expected";
+            if (message.startTime != null && message.hasOwnProperty("startTime"))
+                if (!$util.isInteger(message.startTime) && !(message.startTime && $util.isInteger(message.startTime.low) && $util.isInteger(message.startTime.high)))
+                    return "startTime: integer|Long expected";
+            return null;
+        };
+
+        return RespChampionship;
+    })();
+
     ResponsePackage.RespRoleMatchInfo = (function() {
 
         /**
@@ -6201,27 +6431,27 @@ $root.ResponsePackage = (function() {
         return RespRoleMatchInfo;
     })();
 
-    ResponsePackage.RespChampionship = (function() {
+    ResponsePackage.RespCk = (function() {
 
         /**
-         * Properties of a RespChampionship.
+         * Properties of a RespCk.
          * @memberof ResponsePackage
-         * @interface IRespChampionship
-         * @property {number|null} [cid] RespChampionship cid
-         * @property {boolean|null} [teamEnd] RespChampionship teamEnd
-         * @property {boolean|null} [survivalEnd] RespChampionship survivalEnd
-         * @property {number|Long|null} [startTime] RespChampionship startTime
+         * @interface IRespCk
+         * @property {Array.<ResponsePackage.IRespCkInfo>|null} [roleCks] RespCk roleCks
+         * @property {Array.<ResponsePackage.IRespCkInfo>|null} [opList] RespCk opList
          */
 
         /**
-         * Constructs a new RespChampionship.
+         * Constructs a new RespCk.
          * @memberof ResponsePackage
-         * @classdesc Represents a RespChampionship.
-         * @implements IRespChampionship
+         * @classdesc Represents a RespCk.
+         * @implements IRespCk
          * @constructor
-         * @param {ResponsePackage.IRespChampionship=} [properties] Properties to set
+         * @param {ResponsePackage.IRespCk=} [properties] Properties to set
          */
-        function RespChampionship(properties) {
+        function RespCk(properties) {
+            this.roleCks = [];
+            this.opList = [];
             if (properties)
                 for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                     if (properties[keys[i]] != null)
@@ -6229,114 +6459,94 @@ $root.ResponsePackage = (function() {
         }
 
         /**
-         * RespChampionship cid.
-         * @member {number} cid
-         * @memberof ResponsePackage.RespChampionship
+         * RespCk roleCks.
+         * @member {Array.<ResponsePackage.IRespCkInfo>} roleCks
+         * @memberof ResponsePackage.RespCk
          * @instance
          */
-        RespChampionship.prototype.cid = 0;
+        RespCk.prototype.roleCks = $util.emptyArray;
 
         /**
-         * RespChampionship teamEnd.
-         * @member {boolean} teamEnd
-         * @memberof ResponsePackage.RespChampionship
+         * RespCk opList.
+         * @member {Array.<ResponsePackage.IRespCkInfo>} opList
+         * @memberof ResponsePackage.RespCk
          * @instance
          */
-        RespChampionship.prototype.teamEnd = false;
+        RespCk.prototype.opList = $util.emptyArray;
 
         /**
-         * RespChampionship survivalEnd.
-         * @member {boolean} survivalEnd
-         * @memberof ResponsePackage.RespChampionship
-         * @instance
-         */
-        RespChampionship.prototype.survivalEnd = false;
-
-        /**
-         * RespChampionship startTime.
-         * @member {number|Long} startTime
-         * @memberof ResponsePackage.RespChampionship
-         * @instance
-         */
-        RespChampionship.prototype.startTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
-
-        /**
-         * Creates a new RespChampionship instance using the specified properties.
+         * Creates a new RespCk instance using the specified properties.
          * @function create
-         * @memberof ResponsePackage.RespChampionship
+         * @memberof ResponsePackage.RespCk
          * @static
-         * @param {ResponsePackage.IRespChampionship=} [properties] Properties to set
-         * @returns {ResponsePackage.RespChampionship} RespChampionship instance
+         * @param {ResponsePackage.IRespCk=} [properties] Properties to set
+         * @returns {ResponsePackage.RespCk} RespCk instance
          */
-        RespChampionship.create = function create(properties) {
-            return new RespChampionship(properties);
+        RespCk.create = function create(properties) {
+            return new RespCk(properties);
         };
 
         /**
-         * Encodes the specified RespChampionship message. Does not implicitly {@link ResponsePackage.RespChampionship.verify|verify} messages.
+         * Encodes the specified RespCk message. Does not implicitly {@link ResponsePackage.RespCk.verify|verify} messages.
          * @function encode
-         * @memberof ResponsePackage.RespChampionship
+         * @memberof ResponsePackage.RespCk
          * @static
-         * @param {ResponsePackage.IRespChampionship} message RespChampionship message or plain object to encode
+         * @param {ResponsePackage.IRespCk} message RespCk message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespChampionship.encode = function encode(message, writer) {
+        RespCk.encode = function encode(message, writer) {
             if (!writer)
                 writer = $Writer.create();
-            if (message.cid != null && message.hasOwnProperty("cid"))
-                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.cid);
-            if (message.teamEnd != null && message.hasOwnProperty("teamEnd"))
-                writer.uint32(/* id 2, wireType 0 =*/16).bool(message.teamEnd);
-            if (message.survivalEnd != null && message.hasOwnProperty("survivalEnd"))
-                writer.uint32(/* id 3, wireType 0 =*/24).bool(message.survivalEnd);
-            if (message.startTime != null && message.hasOwnProperty("startTime"))
-                writer.uint32(/* id 4, wireType 0 =*/32).sint64(message.startTime);
+            if (message.roleCks != null && message.roleCks.length)
+                for (var i = 0; i < message.roleCks.length; ++i)
+                    $root.ResponsePackage.RespCkInfo.encode(message.roleCks[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.opList != null && message.opList.length)
+                for (var i = 0; i < message.opList.length; ++i)
+                    $root.ResponsePackage.RespCkInfo.encode(message.opList[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
             return writer;
         };
 
         /**
-         * Encodes the specified RespChampionship message, length delimited. Does not implicitly {@link ResponsePackage.RespChampionship.verify|verify} messages.
+         * Encodes the specified RespCk message, length delimited. Does not implicitly {@link ResponsePackage.RespCk.verify|verify} messages.
          * @function encodeDelimited
-         * @memberof ResponsePackage.RespChampionship
+         * @memberof ResponsePackage.RespCk
          * @static
-         * @param {ResponsePackage.IRespChampionship} message RespChampionship message or plain object to encode
+         * @param {ResponsePackage.IRespCk} message RespCk message or plain object to encode
          * @param {$protobuf.Writer} [writer] Writer to encode to
          * @returns {$protobuf.Writer} Writer
          */
-        RespChampionship.encodeDelimited = function encodeDelimited(message, writer) {
+        RespCk.encodeDelimited = function encodeDelimited(message, writer) {
             return this.encode(message, writer).ldelim();
         };
 
         /**
-         * Decodes a RespChampionship message from the specified reader or buffer.
+         * Decodes a RespCk message from the specified reader or buffer.
          * @function decode
-         * @memberof ResponsePackage.RespChampionship
+         * @memberof ResponsePackage.RespCk
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
          * @param {number} [length] Message length if known beforehand
-         * @returns {ResponsePackage.RespChampionship} RespChampionship
+         * @returns {ResponsePackage.RespCk} RespCk
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespChampionship.decode = function decode(reader, length) {
+        RespCk.decode = function decode(reader, length) {
             if (!(reader instanceof $Reader))
                 reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespChampionship();
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespCk();
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
                 case 1:
-                    message.cid = reader.sint32();
+                    if (!(message.roleCks && message.roleCks.length))
+                        message.roleCks = [];
+                    message.roleCks.push($root.ResponsePackage.RespCkInfo.decode(reader, reader.uint32()));
                     break;
                 case 2:
-                    message.teamEnd = reader.bool();
-                    break;
-                case 3:
-                    message.survivalEnd = reader.bool();
-                    break;
-                case 4:
-                    message.startTime = reader.sint64();
+                    if (!(message.opList && message.opList.length))
+                        message.opList = [];
+                    message.opList.push($root.ResponsePackage.RespCkInfo.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -6347,48 +6557,614 @@ $root.ResponsePackage = (function() {
         };
 
         /**
-         * Decodes a RespChampionship message from the specified reader or buffer, length delimited.
+         * Decodes a RespCk message from the specified reader or buffer, length delimited.
          * @function decodeDelimited
-         * @memberof ResponsePackage.RespChampionship
+         * @memberof ResponsePackage.RespCk
          * @static
          * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {ResponsePackage.RespChampionship} RespChampionship
+         * @returns {ResponsePackage.RespCk} RespCk
          * @throws {Error} If the payload is not a reader or valid buffer
          * @throws {$protobuf.util.ProtocolError} If required fields are missing
          */
-        RespChampionship.decodeDelimited = function decodeDelimited(reader) {
+        RespCk.decodeDelimited = function decodeDelimited(reader) {
             if (!(reader instanceof $Reader))
                 reader = new $Reader(reader);
             return this.decode(reader, reader.uint32());
         };
 
         /**
-         * Verifies a RespChampionship message.
+         * Verifies a RespCk message.
          * @function verify
-         * @memberof ResponsePackage.RespChampionship
+         * @memberof ResponsePackage.RespCk
          * @static
          * @param {Object.<string,*>} message Plain object to verify
          * @returns {string|null} `null` if valid, otherwise the reason why it is not
          */
-        RespChampionship.verify = function verify(message) {
+        RespCk.verify = function verify(message) {
             if (typeof message !== "object" || message === null)
                 return "object expected";
-            if (message.cid != null && message.hasOwnProperty("cid"))
-                if (!$util.isInteger(message.cid))
-                    return "cid: integer expected";
-            if (message.teamEnd != null && message.hasOwnProperty("teamEnd"))
-                if (typeof message.teamEnd !== "boolean")
-                    return "teamEnd: boolean expected";
-            if (message.survivalEnd != null && message.hasOwnProperty("survivalEnd"))
-                if (typeof message.survivalEnd !== "boolean")
-                    return "survivalEnd: boolean expected";
-            if (message.startTime != null && message.hasOwnProperty("startTime"))
-                if (!$util.isInteger(message.startTime) && !(message.startTime && $util.isInteger(message.startTime.low) && $util.isInteger(message.startTime.high)))
-                    return "startTime: integer|Long expected";
+            if (message.roleCks != null && message.hasOwnProperty("roleCks")) {
+                if (!Array.isArray(message.roleCks))
+                    return "roleCks: array expected";
+                for (var i = 0; i < message.roleCks.length; ++i) {
+                    var error = $root.ResponsePackage.RespCkInfo.verify(message.roleCks[i]);
+                    if (error)
+                        return "roleCks." + error;
+                }
+            }
+            if (message.opList != null && message.hasOwnProperty("opList")) {
+                if (!Array.isArray(message.opList))
+                    return "opList: array expected";
+                for (var i = 0; i < message.opList.length; ++i) {
+                    var error = $root.ResponsePackage.RespCkInfo.verify(message.opList[i]);
+                    if (error)
+                        return "opList." + error;
+                }
+            }
             return null;
         };
 
-        return RespChampionship;
+        return RespCk;
+    })();
+
+    ResponsePackage.RespCkInfo = (function() {
+
+        /**
+         * Properties of a RespCkInfo.
+         * @memberof ResponsePackage
+         * @interface IRespCkInfo
+         * @property {number|null} [id] RespCkInfo id
+         * @property {number|null} [seq] RespCkInfo seq
+         * @property {boolean|null} [lock] RespCkInfo lock
+         * @property {number|Long|null} [birthTime] RespCkInfo birthTime
+         * @property {string|null} [launch] RespCkInfo launch
+         * @property {number|null} [level] RespCkInfo level
+         * @property {number|null} [life] RespCkInfo life
+         * @property {number|null} [maxLife] RespCkInfo maxLife
+         * @property {number|null} [quality] RespCkInfo quality
+         * @property {number|null} [lineage] RespCkInfo lineage
+         * @property {number|null} [strength] RespCkInfo strength
+         * @property {number|null} [wisdom] RespCkInfo wisdom
+         * @property {number|null} [agile] RespCkInfo agile
+         * @property {number|null} [health] RespCkInfo health
+         * @property {number|null} [spirit] RespCkInfo spirit
+         * @property {number|null} [luck] RespCkInfo luck
+         * @property {number|null} [levelLimit] RespCkInfo levelLimit
+         * @property {number|null} [propertyNum] RespCkInfo propertyNum
+         * @property {Array.<number>|null} [professionList] RespCkInfo professionList
+         * @property {Array.<number>|null} [dnaSpecialtyList] RespCkInfo dnaSpecialtyList
+         * @property {Array.<number>|null} [specialtyList] RespCkInfo specialtyList
+         * @property {Array.<number>|null} [chooseSpecialtyList] RespCkInfo chooseSpecialtyList
+         */
+
+        /**
+         * Constructs a new RespCkInfo.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespCkInfo.
+         * @implements IRespCkInfo
+         * @constructor
+         * @param {ResponsePackage.IRespCkInfo=} [properties] Properties to set
+         */
+        function RespCkInfo(properties) {
+            this.professionList = [];
+            this.dnaSpecialtyList = [];
+            this.specialtyList = [];
+            this.chooseSpecialtyList = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespCkInfo id.
+         * @member {number} id
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.id = 0;
+
+        /**
+         * RespCkInfo seq.
+         * @member {number} seq
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.seq = 0;
+
+        /**
+         * RespCkInfo lock.
+         * @member {boolean} lock
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.lock = false;
+
+        /**
+         * RespCkInfo birthTime.
+         * @member {number|Long} birthTime
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.birthTime = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * RespCkInfo launch.
+         * @member {string} launch
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.launch = "";
+
+        /**
+         * RespCkInfo level.
+         * @member {number} level
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.level = 0;
+
+        /**
+         * RespCkInfo life.
+         * @member {number} life
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.life = 0;
+
+        /**
+         * RespCkInfo maxLife.
+         * @member {number} maxLife
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.maxLife = 0;
+
+        /**
+         * RespCkInfo quality.
+         * @member {number} quality
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.quality = 0;
+
+        /**
+         * RespCkInfo lineage.
+         * @member {number} lineage
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.lineage = 0;
+
+        /**
+         * RespCkInfo strength.
+         * @member {number} strength
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.strength = 0;
+
+        /**
+         * RespCkInfo wisdom.
+         * @member {number} wisdom
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.wisdom = 0;
+
+        /**
+         * RespCkInfo agile.
+         * @member {number} agile
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.agile = 0;
+
+        /**
+         * RespCkInfo health.
+         * @member {number} health
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.health = 0;
+
+        /**
+         * RespCkInfo spirit.
+         * @member {number} spirit
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.spirit = 0;
+
+        /**
+         * RespCkInfo luck.
+         * @member {number} luck
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.luck = 0;
+
+        /**
+         * RespCkInfo levelLimit.
+         * @member {number} levelLimit
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.levelLimit = 0;
+
+        /**
+         * RespCkInfo propertyNum.
+         * @member {number} propertyNum
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.propertyNum = 0;
+
+        /**
+         * RespCkInfo professionList.
+         * @member {Array.<number>} professionList
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.professionList = $util.emptyArray;
+
+        /**
+         * RespCkInfo dnaSpecialtyList.
+         * @member {Array.<number>} dnaSpecialtyList
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.dnaSpecialtyList = $util.emptyArray;
+
+        /**
+         * RespCkInfo specialtyList.
+         * @member {Array.<number>} specialtyList
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.specialtyList = $util.emptyArray;
+
+        /**
+         * RespCkInfo chooseSpecialtyList.
+         * @member {Array.<number>} chooseSpecialtyList
+         * @memberof ResponsePackage.RespCkInfo
+         * @instance
+         */
+        RespCkInfo.prototype.chooseSpecialtyList = $util.emptyArray;
+
+        /**
+         * Creates a new RespCkInfo instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespCkInfo
+         * @static
+         * @param {ResponsePackage.IRespCkInfo=} [properties] Properties to set
+         * @returns {ResponsePackage.RespCkInfo} RespCkInfo instance
+         */
+        RespCkInfo.create = function create(properties) {
+            return new RespCkInfo(properties);
+        };
+
+        /**
+         * Encodes the specified RespCkInfo message. Does not implicitly {@link ResponsePackage.RespCkInfo.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespCkInfo
+         * @static
+         * @param {ResponsePackage.IRespCkInfo} message RespCkInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespCkInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.id);
+            if (message.seq != null && message.hasOwnProperty("seq"))
+                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.seq);
+            if (message.lock != null && message.hasOwnProperty("lock"))
+                writer.uint32(/* id 3, wireType 0 =*/24).bool(message.lock);
+            if (message.birthTime != null && message.hasOwnProperty("birthTime"))
+                writer.uint32(/* id 4, wireType 0 =*/32).sint64(message.birthTime);
+            if (message.launch != null && message.hasOwnProperty("launch"))
+                writer.uint32(/* id 5, wireType 2 =*/42).string(message.launch);
+            if (message.level != null && message.hasOwnProperty("level"))
+                writer.uint32(/* id 6, wireType 0 =*/48).sint32(message.level);
+            if (message.life != null && message.hasOwnProperty("life"))
+                writer.uint32(/* id 7, wireType 0 =*/56).sint32(message.life);
+            if (message.maxLife != null && message.hasOwnProperty("maxLife"))
+                writer.uint32(/* id 8, wireType 0 =*/64).sint32(message.maxLife);
+            if (message.quality != null && message.hasOwnProperty("quality"))
+                writer.uint32(/* id 9, wireType 0 =*/72).sint32(message.quality);
+            if (message.lineage != null && message.hasOwnProperty("lineage"))
+                writer.uint32(/* id 10, wireType 0 =*/80).sint32(message.lineage);
+            if (message.strength != null && message.hasOwnProperty("strength"))
+                writer.uint32(/* id 11, wireType 0 =*/88).sint32(message.strength);
+            if (message.wisdom != null && message.hasOwnProperty("wisdom"))
+                writer.uint32(/* id 12, wireType 0 =*/96).sint32(message.wisdom);
+            if (message.agile != null && message.hasOwnProperty("agile"))
+                writer.uint32(/* id 13, wireType 0 =*/104).sint32(message.agile);
+            if (message.health != null && message.hasOwnProperty("health"))
+                writer.uint32(/* id 14, wireType 0 =*/112).sint32(message.health);
+            if (message.spirit != null && message.hasOwnProperty("spirit"))
+                writer.uint32(/* id 15, wireType 0 =*/120).sint32(message.spirit);
+            if (message.luck != null && message.hasOwnProperty("luck"))
+                writer.uint32(/* id 16, wireType 0 =*/128).sint32(message.luck);
+            if (message.levelLimit != null && message.hasOwnProperty("levelLimit"))
+                writer.uint32(/* id 17, wireType 0 =*/136).sint32(message.levelLimit);
+            if (message.propertyNum != null && message.hasOwnProperty("propertyNum"))
+                writer.uint32(/* id 18, wireType 0 =*/144).sint32(message.propertyNum);
+            if (message.professionList != null && message.professionList.length) {
+                writer.uint32(/* id 19, wireType 2 =*/154).fork();
+                for (var i = 0; i < message.professionList.length; ++i)
+                    writer.sint32(message.professionList[i]);
+                writer.ldelim();
+            }
+            if (message.dnaSpecialtyList != null && message.dnaSpecialtyList.length) {
+                writer.uint32(/* id 20, wireType 2 =*/162).fork();
+                for (var i = 0; i < message.dnaSpecialtyList.length; ++i)
+                    writer.sint32(message.dnaSpecialtyList[i]);
+                writer.ldelim();
+            }
+            if (message.specialtyList != null && message.specialtyList.length) {
+                writer.uint32(/* id 21, wireType 2 =*/170).fork();
+                for (var i = 0; i < message.specialtyList.length; ++i)
+                    writer.sint32(message.specialtyList[i]);
+                writer.ldelim();
+            }
+            if (message.chooseSpecialtyList != null && message.chooseSpecialtyList.length) {
+                writer.uint32(/* id 22, wireType 2 =*/178).fork();
+                for (var i = 0; i < message.chooseSpecialtyList.length; ++i)
+                    writer.sint32(message.chooseSpecialtyList[i]);
+                writer.ldelim();
+            }
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespCkInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespCkInfo.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespCkInfo
+         * @static
+         * @param {ResponsePackage.IRespCkInfo} message RespCkInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespCkInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespCkInfo message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespCkInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespCkInfo} RespCkInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespCkInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespCkInfo();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.sint32();
+                    break;
+                case 2:
+                    message.seq = reader.sint32();
+                    break;
+                case 3:
+                    message.lock = reader.bool();
+                    break;
+                case 4:
+                    message.birthTime = reader.sint64();
+                    break;
+                case 5:
+                    message.launch = reader.string();
+                    break;
+                case 6:
+                    message.level = reader.sint32();
+                    break;
+                case 7:
+                    message.life = reader.sint32();
+                    break;
+                case 8:
+                    message.maxLife = reader.sint32();
+                    break;
+                case 9:
+                    message.quality = reader.sint32();
+                    break;
+                case 10:
+                    message.lineage = reader.sint32();
+                    break;
+                case 11:
+                    message.strength = reader.sint32();
+                    break;
+                case 12:
+                    message.wisdom = reader.sint32();
+                    break;
+                case 13:
+                    message.agile = reader.sint32();
+                    break;
+                case 14:
+                    message.health = reader.sint32();
+                    break;
+                case 15:
+                    message.spirit = reader.sint32();
+                    break;
+                case 16:
+                    message.luck = reader.sint32();
+                    break;
+                case 17:
+                    message.levelLimit = reader.sint32();
+                    break;
+                case 18:
+                    message.propertyNum = reader.sint32();
+                    break;
+                case 19:
+                    if (!(message.professionList && message.professionList.length))
+                        message.professionList = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.professionList.push(reader.sint32());
+                    } else
+                        message.professionList.push(reader.sint32());
+                    break;
+                case 20:
+                    if (!(message.dnaSpecialtyList && message.dnaSpecialtyList.length))
+                        message.dnaSpecialtyList = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.dnaSpecialtyList.push(reader.sint32());
+                    } else
+                        message.dnaSpecialtyList.push(reader.sint32());
+                    break;
+                case 21:
+                    if (!(message.specialtyList && message.specialtyList.length))
+                        message.specialtyList = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.specialtyList.push(reader.sint32());
+                    } else
+                        message.specialtyList.push(reader.sint32());
+                    break;
+                case 22:
+                    if (!(message.chooseSpecialtyList && message.chooseSpecialtyList.length))
+                        message.chooseSpecialtyList = [];
+                    if ((tag & 7) === 2) {
+                        var end2 = reader.uint32() + reader.pos;
+                        while (reader.pos < end2)
+                            message.chooseSpecialtyList.push(reader.sint32());
+                    } else
+                        message.chooseSpecialtyList.push(reader.sint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespCkInfo message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespCkInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespCkInfo} RespCkInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespCkInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespCkInfo message.
+         * @function verify
+         * @memberof ResponsePackage.RespCkInfo
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespCkInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isInteger(message.id))
+                    return "id: integer expected";
+            if (message.seq != null && message.hasOwnProperty("seq"))
+                if (!$util.isInteger(message.seq))
+                    return "seq: integer expected";
+            if (message.lock != null && message.hasOwnProperty("lock"))
+                if (typeof message.lock !== "boolean")
+                    return "lock: boolean expected";
+            if (message.birthTime != null && message.hasOwnProperty("birthTime"))
+                if (!$util.isInteger(message.birthTime) && !(message.birthTime && $util.isInteger(message.birthTime.low) && $util.isInteger(message.birthTime.high)))
+                    return "birthTime: integer|Long expected";
+            if (message.launch != null && message.hasOwnProperty("launch"))
+                if (!$util.isString(message.launch))
+                    return "launch: string expected";
+            if (message.level != null && message.hasOwnProperty("level"))
+                if (!$util.isInteger(message.level))
+                    return "level: integer expected";
+            if (message.life != null && message.hasOwnProperty("life"))
+                if (!$util.isInteger(message.life))
+                    return "life: integer expected";
+            if (message.maxLife != null && message.hasOwnProperty("maxLife"))
+                if (!$util.isInteger(message.maxLife))
+                    return "maxLife: integer expected";
+            if (message.quality != null && message.hasOwnProperty("quality"))
+                if (!$util.isInteger(message.quality))
+                    return "quality: integer expected";
+            if (message.lineage != null && message.hasOwnProperty("lineage"))
+                if (!$util.isInteger(message.lineage))
+                    return "lineage: integer expected";
+            if (message.strength != null && message.hasOwnProperty("strength"))
+                if (!$util.isInteger(message.strength))
+                    return "strength: integer expected";
+            if (message.wisdom != null && message.hasOwnProperty("wisdom"))
+                if (!$util.isInteger(message.wisdom))
+                    return "wisdom: integer expected";
+            if (message.agile != null && message.hasOwnProperty("agile"))
+                if (!$util.isInteger(message.agile))
+                    return "agile: integer expected";
+            if (message.health != null && message.hasOwnProperty("health"))
+                if (!$util.isInteger(message.health))
+                    return "health: integer expected";
+            if (message.spirit != null && message.hasOwnProperty("spirit"))
+                if (!$util.isInteger(message.spirit))
+                    return "spirit: integer expected";
+            if (message.luck != null && message.hasOwnProperty("luck"))
+                if (!$util.isInteger(message.luck))
+                    return "luck: integer expected";
+            if (message.levelLimit != null && message.hasOwnProperty("levelLimit"))
+                if (!$util.isInteger(message.levelLimit))
+                    return "levelLimit: integer expected";
+            if (message.propertyNum != null && message.hasOwnProperty("propertyNum"))
+                if (!$util.isInteger(message.propertyNum))
+                    return "propertyNum: integer expected";
+            if (message.professionList != null && message.hasOwnProperty("professionList")) {
+                if (!Array.isArray(message.professionList))
+                    return "professionList: array expected";
+                for (var i = 0; i < message.professionList.length; ++i)
+                    if (!$util.isInteger(message.professionList[i]))
+                        return "professionList: integer[] expected";
+            }
+            if (message.dnaSpecialtyList != null && message.hasOwnProperty("dnaSpecialtyList")) {
+                if (!Array.isArray(message.dnaSpecialtyList))
+                    return "dnaSpecialtyList: array expected";
+                for (var i = 0; i < message.dnaSpecialtyList.length; ++i)
+                    if (!$util.isInteger(message.dnaSpecialtyList[i]))
+                        return "dnaSpecialtyList: integer[] expected";
+            }
+            if (message.specialtyList != null && message.hasOwnProperty("specialtyList")) {
+                if (!Array.isArray(message.specialtyList))
+                    return "specialtyList: array expected";
+                for (var i = 0; i < message.specialtyList.length; ++i)
+                    if (!$util.isInteger(message.specialtyList[i]))
+                        return "specialtyList: integer[] expected";
+            }
+            if (message.chooseSpecialtyList != null && message.hasOwnProperty("chooseSpecialtyList")) {
+                if (!Array.isArray(message.chooseSpecialtyList))
+                    return "chooseSpecialtyList: array expected";
+                for (var i = 0; i < message.chooseSpecialtyList.length; ++i)
+                    if (!$util.isInteger(message.chooseSpecialtyList[i]))
+                        return "chooseSpecialtyList: integer[] expected";
+            }
+            return null;
+        };
+
+        return RespCkInfo;
     })();
 
     ResponsePackage.RespChat = (function() {
@@ -6776,6 +7552,494 @@ $root.ResponsePackage = (function() {
         return RespChatMsg;
     })();
 
+    ResponsePackage.RespTeam = (function() {
+
+        /**
+         * Properties of a RespTeam.
+         * @memberof ResponsePackage
+         * @interface IRespTeam
+         * @property {Array.<ResponsePackage.IRespTeamInfo>|null} [teamList] RespTeam teamList
+         * @property {Array.<ResponsePackage.IRespTeamInfo>|null} [teamOp] RespTeam teamOp
+         */
+
+        /**
+         * Constructs a new RespTeam.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespTeam.
+         * @implements IRespTeam
+         * @constructor
+         * @param {ResponsePackage.IRespTeam=} [properties] Properties to set
+         */
+        function RespTeam(properties) {
+            this.teamList = [];
+            this.teamOp = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespTeam teamList.
+         * @member {Array.<ResponsePackage.IRespTeamInfo>} teamList
+         * @memberof ResponsePackage.RespTeam
+         * @instance
+         */
+        RespTeam.prototype.teamList = $util.emptyArray;
+
+        /**
+         * RespTeam teamOp.
+         * @member {Array.<ResponsePackage.IRespTeamInfo>} teamOp
+         * @memberof ResponsePackage.RespTeam
+         * @instance
+         */
+        RespTeam.prototype.teamOp = $util.emptyArray;
+
+        /**
+         * Creates a new RespTeam instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespTeam
+         * @static
+         * @param {ResponsePackage.IRespTeam=} [properties] Properties to set
+         * @returns {ResponsePackage.RespTeam} RespTeam instance
+         */
+        RespTeam.create = function create(properties) {
+            return new RespTeam(properties);
+        };
+
+        /**
+         * Encodes the specified RespTeam message. Does not implicitly {@link ResponsePackage.RespTeam.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespTeam
+         * @static
+         * @param {ResponsePackage.IRespTeam} message RespTeam message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespTeam.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.teamList != null && message.teamList.length)
+                for (var i = 0; i < message.teamList.length; ++i)
+                    $root.ResponsePackage.RespTeamInfo.encode(message.teamList[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.teamOp != null && message.teamOp.length)
+                for (var i = 0; i < message.teamOp.length; ++i)
+                    $root.ResponsePackage.RespTeamInfo.encode(message.teamOp[i], writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespTeam message, length delimited. Does not implicitly {@link ResponsePackage.RespTeam.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespTeam
+         * @static
+         * @param {ResponsePackage.IRespTeam} message RespTeam message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespTeam.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespTeam message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespTeam
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespTeam} RespTeam
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespTeam.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespTeam();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.teamList && message.teamList.length))
+                        message.teamList = [];
+                    message.teamList.push($root.ResponsePackage.RespTeamInfo.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    if (!(message.teamOp && message.teamOp.length))
+                        message.teamOp = [];
+                    message.teamOp.push($root.ResponsePackage.RespTeamInfo.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespTeam message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespTeam
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespTeam} RespTeam
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespTeam.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespTeam message.
+         * @function verify
+         * @memberof ResponsePackage.RespTeam
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespTeam.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.teamList != null && message.hasOwnProperty("teamList")) {
+                if (!Array.isArray(message.teamList))
+                    return "teamList: array expected";
+                for (var i = 0; i < message.teamList.length; ++i) {
+                    var error = $root.ResponsePackage.RespTeamInfo.verify(message.teamList[i]);
+                    if (error)
+                        return "teamList." + error;
+                }
+            }
+            if (message.teamOp != null && message.hasOwnProperty("teamOp")) {
+                if (!Array.isArray(message.teamOp))
+                    return "teamOp: array expected";
+                for (var i = 0; i < message.teamOp.length; ++i) {
+                    var error = $root.ResponsePackage.RespTeamInfo.verify(message.teamOp[i]);
+                    if (error)
+                        return "teamOp." + error;
+                }
+            }
+            return null;
+        };
+
+        return RespTeam;
+    })();
+
+    ResponsePackage.RespTeamInfo = (function() {
+
+        /**
+         * Properties of a RespTeamInfo.
+         * @memberof ResponsePackage
+         * @interface IRespTeamInfo
+         * @property {number|null} [id] RespTeamInfo id
+         * @property {number|null} [type] RespTeamInfo type
+         * @property {number|null} [ckId] RespTeamInfo ckId
+         */
+
+        /**
+         * Constructs a new RespTeamInfo.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespTeamInfo.
+         * @implements IRespTeamInfo
+         * @constructor
+         * @param {ResponsePackage.IRespTeamInfo=} [properties] Properties to set
+         */
+        function RespTeamInfo(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespTeamInfo id.
+         * @member {number} id
+         * @memberof ResponsePackage.RespTeamInfo
+         * @instance
+         */
+        RespTeamInfo.prototype.id = 0;
+
+        /**
+         * RespTeamInfo type.
+         * @member {number} type
+         * @memberof ResponsePackage.RespTeamInfo
+         * @instance
+         */
+        RespTeamInfo.prototype.type = 0;
+
+        /**
+         * RespTeamInfo ckId.
+         * @member {number} ckId
+         * @memberof ResponsePackage.RespTeamInfo
+         * @instance
+         */
+        RespTeamInfo.prototype.ckId = 0;
+
+        /**
+         * Creates a new RespTeamInfo instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespTeamInfo
+         * @static
+         * @param {ResponsePackage.IRespTeamInfo=} [properties] Properties to set
+         * @returns {ResponsePackage.RespTeamInfo} RespTeamInfo instance
+         */
+        RespTeamInfo.create = function create(properties) {
+            return new RespTeamInfo(properties);
+        };
+
+        /**
+         * Encodes the specified RespTeamInfo message. Does not implicitly {@link ResponsePackage.RespTeamInfo.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespTeamInfo
+         * @static
+         * @param {ResponsePackage.IRespTeamInfo} message RespTeamInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespTeamInfo.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.id != null && message.hasOwnProperty("id"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.id);
+            if (message.type != null && message.hasOwnProperty("type"))
+                writer.uint32(/* id 2, wireType 0 =*/16).sint32(message.type);
+            if (message.ckId != null && message.hasOwnProperty("ckId"))
+                writer.uint32(/* id 3, wireType 0 =*/24).sint32(message.ckId);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespTeamInfo message, length delimited. Does not implicitly {@link ResponsePackage.RespTeamInfo.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespTeamInfo
+         * @static
+         * @param {ResponsePackage.IRespTeamInfo} message RespTeamInfo message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespTeamInfo.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespTeamInfo message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespTeamInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespTeamInfo} RespTeamInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespTeamInfo.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespTeamInfo();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.id = reader.sint32();
+                    break;
+                case 2:
+                    message.type = reader.sint32();
+                    break;
+                case 3:
+                    message.ckId = reader.sint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespTeamInfo message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespTeamInfo
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespTeamInfo} RespTeamInfo
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespTeamInfo.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespTeamInfo message.
+         * @function verify
+         * @memberof ResponsePackage.RespTeamInfo
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespTeamInfo.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.id != null && message.hasOwnProperty("id"))
+                if (!$util.isInteger(message.id))
+                    return "id: integer expected";
+            if (message.type != null && message.hasOwnProperty("type"))
+                if (!$util.isInteger(message.type))
+                    return "type: integer expected";
+            if (message.ckId != null && message.hasOwnProperty("ckId"))
+                if (!$util.isInteger(message.ckId))
+                    return "ckId: integer expected";
+            return null;
+        };
+
+        return RespTeamInfo;
+    })();
+
+    ResponsePackage.RespLong = (function() {
+
+        /**
+         * Properties of a RespLong.
+         * @memberof ResponsePackage
+         * @interface IRespLong
+         * @property {number|Long|null} [value] RespLong value
+         */
+
+        /**
+         * Constructs a new RespLong.
+         * @memberof ResponsePackage
+         * @classdesc Represents a RespLong.
+         * @implements IRespLong
+         * @constructor
+         * @param {ResponsePackage.IRespLong=} [properties] Properties to set
+         */
+        function RespLong(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RespLong value.
+         * @member {number|Long} value
+         * @memberof ResponsePackage.RespLong
+         * @instance
+         */
+        RespLong.prototype.value = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+
+        /**
+         * Creates a new RespLong instance using the specified properties.
+         * @function create
+         * @memberof ResponsePackage.RespLong
+         * @static
+         * @param {ResponsePackage.IRespLong=} [properties] Properties to set
+         * @returns {ResponsePackage.RespLong} RespLong instance
+         */
+        RespLong.create = function create(properties) {
+            return new RespLong(properties);
+        };
+
+        /**
+         * Encodes the specified RespLong message. Does not implicitly {@link ResponsePackage.RespLong.verify|verify} messages.
+         * @function encode
+         * @memberof ResponsePackage.RespLong
+         * @static
+         * @param {ResponsePackage.IRespLong} message RespLong message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespLong.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.value != null && message.hasOwnProperty("value"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint64(message.value);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RespLong message, length delimited. Does not implicitly {@link ResponsePackage.RespLong.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ResponsePackage.RespLong
+         * @static
+         * @param {ResponsePackage.IRespLong} message RespLong message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RespLong.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RespLong message from the specified reader or buffer.
+         * @function decode
+         * @memberof ResponsePackage.RespLong
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ResponsePackage.RespLong} RespLong
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespLong.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.ResponsePackage.RespLong();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.value = reader.sint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RespLong message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ResponsePackage.RespLong
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ResponsePackage.RespLong} RespLong
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RespLong.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RespLong message.
+         * @function verify
+         * @memberof ResponsePackage.RespLong
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RespLong.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.value != null && message.hasOwnProperty("value"))
+                if (!$util.isInteger(message.value) && !(message.value && $util.isInteger(message.value.low) && $util.isInteger(message.value.high)))
+                    return "value: integer|Long expected";
+            return null;
+        };
+
+        return RespLong;
+    })();
+
     return ResponsePackage;
 })();
 
@@ -6787,6 +8051,177 @@ $root.RequestPackage = (function() {
      * @namespace
      */
     var RequestPackage = {};
+
+    RequestPackage.RqstAllotProperty = (function() {
+
+        /**
+         * Properties of a RqstAllotProperty.
+         * @memberof RequestPackage
+         * @interface IRqstAllotProperty
+         * @property {number|null} [ckId] RqstAllotProperty ckId
+         * @property {Object.<string,number>|null} [allotMap] RqstAllotProperty allotMap
+         */
+
+        /**
+         * Constructs a new RqstAllotProperty.
+         * @memberof RequestPackage
+         * @classdesc Represents a RqstAllotProperty.
+         * @implements IRqstAllotProperty
+         * @constructor
+         * @param {RequestPackage.IRqstAllotProperty=} [properties] Properties to set
+         */
+        function RqstAllotProperty(properties) {
+            this.allotMap = {};
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * RqstAllotProperty ckId.
+         * @member {number} ckId
+         * @memberof RequestPackage.RqstAllotProperty
+         * @instance
+         */
+        RqstAllotProperty.prototype.ckId = 0;
+
+        /**
+         * RqstAllotProperty allotMap.
+         * @member {Object.<string,number>} allotMap
+         * @memberof RequestPackage.RqstAllotProperty
+         * @instance
+         */
+        RqstAllotProperty.prototype.allotMap = $util.emptyObject;
+
+        /**
+         * Creates a new RqstAllotProperty instance using the specified properties.
+         * @function create
+         * @memberof RequestPackage.RqstAllotProperty
+         * @static
+         * @param {RequestPackage.IRqstAllotProperty=} [properties] Properties to set
+         * @returns {RequestPackage.RqstAllotProperty} RqstAllotProperty instance
+         */
+        RqstAllotProperty.create = function create(properties) {
+            return new RqstAllotProperty(properties);
+        };
+
+        /**
+         * Encodes the specified RqstAllotProperty message. Does not implicitly {@link RequestPackage.RqstAllotProperty.verify|verify} messages.
+         * @function encode
+         * @memberof RequestPackage.RqstAllotProperty
+         * @static
+         * @param {RequestPackage.IRqstAllotProperty} message RqstAllotProperty message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RqstAllotProperty.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.ckId != null && message.hasOwnProperty("ckId"))
+                writer.uint32(/* id 1, wireType 0 =*/8).sint32(message.ckId);
+            if (message.allotMap != null && message.hasOwnProperty("allotMap"))
+                for (var keys = Object.keys(message.allotMap), i = 0; i < keys.length; ++i)
+                    writer.uint32(/* id 2, wireType 2 =*/18).fork().uint32(/* id 1, wireType 0 =*/8).int32(keys[i]).uint32(/* id 2, wireType 0 =*/16).int32(message.allotMap[keys[i]]).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified RqstAllotProperty message, length delimited. Does not implicitly {@link RequestPackage.RqstAllotProperty.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof RequestPackage.RqstAllotProperty
+         * @static
+         * @param {RequestPackage.IRqstAllotProperty} message RqstAllotProperty message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        RqstAllotProperty.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a RqstAllotProperty message from the specified reader or buffer.
+         * @function decode
+         * @memberof RequestPackage.RqstAllotProperty
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {RequestPackage.RqstAllotProperty} RqstAllotProperty
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RqstAllotProperty.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.RequestPackage.RqstAllotProperty(), key;
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.ckId = reader.sint32();
+                    break;
+                case 2:
+                    reader.skip().pos++;
+                    if (message.allotMap === $util.emptyObject)
+                        message.allotMap = {};
+                    key = reader.int32();
+                    reader.pos++;
+                    message.allotMap[key] = reader.int32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a RqstAllotProperty message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof RequestPackage.RqstAllotProperty
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {RequestPackage.RqstAllotProperty} RqstAllotProperty
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        RqstAllotProperty.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a RqstAllotProperty message.
+         * @function verify
+         * @memberof RequestPackage.RqstAllotProperty
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        RqstAllotProperty.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.ckId != null && message.hasOwnProperty("ckId"))
+                if (!$util.isInteger(message.ckId))
+                    return "ckId: integer expected";
+            if (message.allotMap != null && message.hasOwnProperty("allotMap")) {
+                if (!$util.isObject(message.allotMap))
+                    return "allotMap: object expected";
+                var key = Object.keys(message.allotMap);
+                for (var i = 0; i < key.length; ++i) {
+                    if (!$util.key32Re.test(key[i]))
+                        return "allotMap: integer key{k:int32} expected";
+                    if (!$util.isInteger(message.allotMap[key[i]]))
+                        return "allotMap: integer{k:int32} expected";
+                }
+            }
+            return null;
+        };
+
+        return RqstAllotProperty;
+    })();
 
     RequestPackage.RqstInt = (function() {
 

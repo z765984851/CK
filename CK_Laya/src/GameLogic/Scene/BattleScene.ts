@@ -1,10 +1,14 @@
 
+
+
+import { BattleEntity, BattleEntityFactory, BattleEntityType } from "../Battle/BattleEntityFactory";
+import { BattleTools } from "../Battle/BattleTools";
+import { BattleType, MatchType } from "../Common/BattleType";
 import { CK_UIType } from "../FGUI/CK_FGUIConfig";
 import { FGUI_BattlePanel } from "../FGUI/Panel/FGUI_BattlePanel";
-import { MainPanelType } from "../FGUI/Panel/FGUI_MainPanel";
 import { DataManager } from "../Manager/DataManager";
 import { FGUIManager } from "../Manager/FGUIManager";
-import { SceneManager, SceneType } from "../Manager/SceneManager";
+import {  SceneType } from "../Manager/SceneManager";
 import { BattleBall } from "../Model/BattleBall";
 import { CameraComponent } from "../Model/CameraComponent";
 import { SceneBase } from "./SceneBase";
@@ -15,9 +19,11 @@ export class BattleScene implements SceneBase {
     Camera: Laya.Camera;
     Light: Laya.DirectionLight;
     SceneType: SceneType =SceneType.BattleScene;
+    CameraFollow:BattleBall;
 
     private balls:BattleBall[]=new Array();
-    private mainUser:BattleBall;
+    public MainUser:BattleBall;
+    
     private currentBattleData:ResponsePackage.RespFightResult;
     private currentFrameId=0;
     private cameraComp:CameraComponent;
@@ -31,9 +37,15 @@ export class BattleScene implements SceneBase {
     private battleFrames:ResponsePackage.IRespFrame[];
     private frameTime=10;
     private endFrameId=0;
+    private matchType:MatchType;
+    private battleType:BattleType;
+
 
     private battlePanel:FGUI_BattlePanel;
+    
 
+    public BallLayer:Laya.Sprite3D;
+    public UILayer:Laya.Sprite3D;
 
     constructor(scene) {
         this.Scene =scene;
@@ -48,11 +60,13 @@ export class BattleScene implements SceneBase {
 
         this.Camera=this.Scene.getChildByName("Main Camera") as Laya.Camera;
         this.Light=this.Scene.getChildByName("Directional Light") as Laya.DirectionLight;
-       
+        this.BallLayer=this.Scene.getChildByName("BallLayer") as Laya.Sprite3D;
+        this.UILayer=this.Scene.getChildByName("UILayer") as Laya.Sprite3D;
+
         this.OpenShadow();
         this.BindEvent();
         this.CameraInit();
-       
+        
         
         
     }
@@ -63,10 +77,6 @@ export class BattleScene implements SceneBase {
 
     }
 
-    
-
-
-   
 
     private CameraInit(){
         this.cameraComp=new CameraComponent(this.Camera);
@@ -82,10 +92,12 @@ export class BattleScene implements SceneBase {
     private DataHandle()
     {
         this.battleFrames=this.currentBattleData.frameList;
+        this.matchType=this.currentBattleData.matchType;
+        this.battleType=this.currentBattleData.battleType;
         let battlerList=this.currentBattleData.battlerList;
         for (let index = 0; index < battlerList.length; index++) {
             const battler = battlerList[index];
-            let roleInfo=battler.roleInfo as ResponsePackage.RespRoleBaseInfo;
+            let roleInfo=battler.roleBaseInfo as ResponsePackage.RespRoleBaseInfo;
             let ckInfo=battler.battleCk as ResponsePackage.RespBattleCk;
 
 
@@ -96,55 +108,197 @@ export class BattleScene implements SceneBase {
             this.ckMap.set(ckInfo.id,battleBall);
             if (roleInfo.id== DataManager.GetInstance().PlayerData.ID )
             {
-               this.mainUser=battleBall;
-               this.cameraComp.StartFollow(battleBall.GetBallGameObject());
+               this.MainUser=battleBall;
+               
             }
             
         }
-        
+        this.ChangeCameraFollow(this.MainUser.CkId);
+        // this.cameraComp.StartFollow(battleBall.GetBallGameObject());
     }
 
 
 
     GameStart()
     {
-        FGUIManager.GetInstance().OpenPanel(CK_UIType.BattlePanel,()=>{},true,this.currentBattleData);
-        this.battlePanel=FGUIManager.GetInstance().GetPanel(CK_UIType.BattlePanel) as FGUI_BattlePanel;
-        this.endFrameId=this.battleFrames.length;
-        this.FrameLogic();
+        FGUIManager.GetInstance().OpenPanel(CK_UIType.BattlePanel,()=>{
+            this.battlePanel=FGUIManager.GetInstance().GetPanel(CK_UIType.BattlePanel) as FGUI_BattlePanel;
+            this.endFrameId=this.battleFrames.length;
+            for (let index = 0; index < this.balls.length; index++) {
+                let ball:BattleBall = this.balls[index];
+                ball.CreateUI();
+            }
+            this.FrameLogic();
+        },true,this.currentBattleData);
+       
         
        
     }
 
+    
     private FrameLogic()
     {
         let frameData=this.battleFrames[this.currentFrameId];
+        // handle other entity 
+        let entityFrameInfos:ResponsePackage.IRespOtherEntityFrameInfo[]=frameData.otherEntityFrameList;
+       
+        // //entity create
+        for (let index = 0; index < entityFrameInfos.length; index++) 
+        {
+            
+            const frameInfo:ResponsePackage.IRespOtherEntityFrameInfo = entityFrameInfos[index];
 
-   
-        //TODO handle other entity 
+            if (frameInfo.isCreate) {
+               
+               
+                this.CreateFlyProp(frameInfo.id,frameInfo.type);
 
-        //handle ck
-        let ckframeInfos:ResponsePackage.IRespCkFrameInfo[]=frameData.ckFrameInfoList;
-        for (let index = 0; index < ckframeInfos.length; index++) {
-            const ckInfo = ckframeInfos[index];
-            //find ball by id
-            let battleBall:BattleBall= this.ckMap.get(ckInfo.id);
-            // //changeHp
-            battleBall.ChangeHp(ckInfo.hp);
-            //check if dead
-            if (ckInfo.isDead==true) 
-            {
+                let prop:BattleEntity=this.flyProps.get(frameInfo.id);
+                let pos=new Laya.Vector3(frameInfo.posXY.x/1000,0,frameInfo.posXY.y/1000);
+                let face=new Laya.Vector3(frameInfo.faceXY.x/1000,0,frameInfo.faceXY.y/1000);
+                let dir=new Laya.Vector3();
+                Laya.Vector3.subtract(face,pos,dir);
+                let angle=BattleTools.CalculateRotateWithFace(dir,new Laya.Vector3(0,0,1));
+                prop.SetRotate(angle);
+
+            }
+           
+        }
+        //entity move
+        for (let index = 0; index < entityFrameInfos.length; index++) {
+            const frameInfo:ResponsePackage.IRespOtherEntityFrameInfo = entityFrameInfos[index];
+            let pos=new Laya.Vector3(frameInfo.posXY.x/1000,3,frameInfo.posXY.y/1000);
+            
+            let prop:BattleEntity=this.flyProps.get(frameInfo.id);
+            prop.SetPos(pos);
+            
+
+        }
+
+        //entity destroy
+        for (let index = 0; index < entityFrameInfos.length; index++) {
+            const frameInfo:ResponsePackage.IRespOtherEntityFrameInfo = entityFrameInfos[index];
+            if (frameInfo.isDestroy) {
                 
+                let prop:BattleEntity=this.flyProps.get(frameInfo.id);
+                BattleEntityFactory.GetInstance().Recover(prop.ID);
+            }
+        }
+
+
+
+        //handle ck info
+        let ckframeInfos:ResponsePackage.IRespCkFrameInfo[]=frameData.ckFrameInfoList;
+
+        //handle ck hit display
+        for (let index = 0; index < ckframeInfos.length; index++) {
+            const frameInfo = ckframeInfos[index];
+            //find ball by id
+            let battleBall:BattleBall= this.ckMap.get(frameInfo.id);
+            if (frameInfo.hit!=null) {
+                battleBall.GetHurt(frameInfo.hit);
+            }
+        }
+
+        //handle ck hpchange 
+        for (let index = 0; index < ckframeInfos.length; index++) {
+            const frameInfo = ckframeInfos[index];
+            //find ball by id
+            let battleBall:BattleBall= this.ckMap.get(frameInfo.id);
+            //changeHp
+            battleBall.ChangeHp(frameInfo.hp);
+        }
+
+        //handle ck died
+        let isMainUserDied=false;
+        for (let index = 0; index < ckframeInfos.length; index++) {
+            const frameInfo = ckframeInfos[index];
+            //find ball by id
+            let battleBall:BattleBall= this.ckMap.get(frameInfo.id);
+            //check if dead
+            if (frameInfo.isDead==true) 
+            {
+                //TeamMode Change Camera Follow
+                if (this.battleType==BattleType.TeamBattle_3) 
+                {
+                    let onDeadAnimFinish=()=>{
+                        // console.log("ck died event");
+                        let cameraTarget:BattleBall=null;
+                        //find other user in team
+                        for (let index = 0; index < this.balls.length; index++) {
+                            let element:BattleBall = this.balls[index];
+                            if (element.Camp==this.MainUser.Camp) {
+                                
+                                if (element.IsDied==false) {
+                                    cameraTarget=element;
+                                    break;
+                                }
+                              
+                            }
+                        }
+                        if (cameraTarget!=null) 
+                        {
+                            this.ChangeCameraFollow(cameraTarget.CkId);
+                                       
+                        }
+                        
+
+                    }
+                    if (this.CameraFollow!=null) {
+                        if (battleBall.CkId==this.CameraFollow.CkId) {
+                            
+                            this.CameraFollow.SetOnDeadAnimFinish(onDeadAnimFinish);
+                            this.CameraFollow=null;
+                        }
+                    }
+                    
+                }
+                
+                this.battlePanel.UserDied(battleBall.CkId);
                 battleBall.Died();
-                if (ckInfo.id==this.mainUser.CkId) {
-                    //game end because of user die
-                    this.GameOver();
-                    return;
+                if (frameInfo.id==this.MainUser.CkId) {
+                    isMainUserDied=true;
                 }
             }
-            //move
-            battleBall.Move(ckInfo.posXY.x/1000,ckInfo.posXY.y/1000);
             
+        }
+
+        //handle mainUser Died 
+        if (isMainUserDied) 
+        {
+             //if is survivo model game will end because of user die
+             if (this.battleType== BattleType.SingleBattle_6) 
+             {
+                 this.GameOver();
+                 return;
+             }
+        }
+
+      
+       
+        //handle ck Move
+
+        for (let index = 0; index < ckframeInfos.length; index++) {
+            const frameInfo = ckframeInfos[index];
+            //find ball by id
+            let battleBall:BattleBall= this.ckMap.get(frameInfo.id);
+            battleBall.Move(frameInfo.posXY.x/1000,frameInfo.posXY.y/1000);
+            battleBall.FaceHandle(frameInfo.faceXY.x/1000,frameInfo.faceXY.y/1000);
+        }
+
+        //handle camera follow
+        if (this.CameraFollow!=null) {
+            this.cameraComp.Follow();
+        }
+
+        //handle ck attack
+        for (let index = 0; index < ckframeInfos.length; index++) {
+            const frameInfo = ckframeInfos[index];
+            //find ball by id
+            let battleBall:BattleBall= this.ckMap.get(frameInfo.id);
+            if (frameInfo.isAtk) {
+                battleBall.Atk();
+            }
         }
 
         this.currentFrameId++;
@@ -160,60 +314,74 @@ export class BattleScene implements SceneBase {
         
     }
 
-    private GameOver(){
-        console.log("[BattleScene] Game Over");
+    public ChangeCameraFollow(ckId)
+    {
+        let battleBall:BattleBall= this.ckMap.get(ckId);
+        this.CameraFollow=battleBall;
+        this.cameraComp.SetFollowTarget(battleBall.GetBallGameObject());
 
-        //open result panel TODO
+    }
+
+    
+
+    private GameOver(){
+        // console.log("[BattleScene] Game Over");
         
-        this.EnterLobby();
+        this.ShowResultPanel();
         
 
     }
 
-    private EnterLobby()
+    private ShowResultPanel()
     {
-        this.cameraComp.StopFollow();
+        
         for (let index = 0; index < this.balls.length; index++) {
             const ball:BattleBall = this.balls[index];
             ball.Destroy();
         }
-        FGUIManager.GetInstance().CloseAllPanel();
-        FGUIManager.GetInstance().CloseAllWindow();
-        SceneManager.GetInstance().DestroyCurrentScene();
-        SceneManager.GetInstance().LoadScene3D(SceneType.LobbyScene,Laya.Handler.create(this,()=>{
-             SceneManager.GetInstance().ChangeScene3D(SceneType.LobbyScene);
-             FGUIManager.GetInstance().OpenPanel(CK_UIType.MainPanel,()=>{},true,MainPanelType.Lobby);
-             FGUIManager.GetInstance().OpenPanel(CK_UIType.TopBarPanel,()=>{},false);
-        }))
+        
+        FGUIManager.GetInstance().OpenPanel(CK_UIType.BattleResultPanel,()=>{},false,this.currentBattleData)
+      
     }
 
     private BindEvent()
     {
-        let focusBall=0;
-        Laya.stage.on(Laya.Event.KEY_DOWN,this,(e)=>{
-            let keyCode=e.keyCode
-            console.log(keyCode);
-            if (keyCode=65) 
-            {
-               
-                let ball=this.balls[focusBall];
-                this.cameraComp.StartFollow(ball.GetBallGameObject());
-                focusBall++;
-                if (focusBall==this.balls.length) {
-                    focusBall=0;
-                }
-            }
-            
-
-        })
-        // Laya.timer.frameLoop(1,this,()=>{
-           
-        //     this.Camera.transform.position=new Laya.Vector3(this.ball.transform.position.x,4,this.ball.transform.position.z);
-        // })
+        
+       
         
     }
 
-   
+    public CreateDeathEffect(pos,onAnimFinish:Laya.Handler)
+    {
+        let effect=BattleEntityFactory.GetInstance().Create(BattleEntityType.DeathEffect,this.UILayer);
+        effect.SetActive(true);
+        effect.SetPos(pos);
+        Laya.timer.once(490,this,()=>{
+            BattleEntityFactory.GetInstance().Recover(effect.ID);
+            this.CreateAfterDeathEffect(pos);
+            onAnimFinish?.run();
+        });
+
+    }
+
+    public CreateAfterDeathEffect(pos)
+    {
+        let effect=BattleEntityFactory.GetInstance().Create(BattleEntityType.AfterDeath,this.UILayer);
+        effect.SetActive(true);
+        let tempPos=new Laya.Vector3(pos.x,0,pos.z);
+        effect.SetPos(tempPos);
+
+    }
+
+    private flyProps=new Map();
+    public CreateFlyProp(id,propType)
+    {
+
+        let prop=BattleEntityFactory.GetInstance().Create(propType,this.UILayer);
+        prop.SetActive(true);
+        this.flyProps.set(id,prop);
+
+    }
    
    
 

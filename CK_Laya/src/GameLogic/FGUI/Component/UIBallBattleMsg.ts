@@ -1,9 +1,10 @@
+import { BallType } from "../../Common/BallType";
 import { CareerType } from "../../Common/CareerType";
 import { CkQuality, CkQualityConfig } from "../../Generate/Config/CkQuality";
 import { CkWeapon, CkWeaponConfig } from "../../Generate/Config/CkWeapon";
 
 export class UIBallBattleMsg {
-    private root:Laya.Sprite3D;
+    private content:fgui.GComponent;
     private camera:Laya.Camera;
     private component:fgui.GComponent;
     private currentPos:Laya.Vector4=new Laya.Vector4(0,0,0,0);
@@ -13,11 +14,18 @@ export class UIBallBattleMsg {
     private hatLoader:fgui.GLoader;
     private weaponLoader:fgui.GLoader;
     private beltLoader:fgui.GLoader;
+    private weaponRotateComp:fgui.GComponent;
+    private meleeAnim:fgui.Transition;
+    private arrowAnim:fgui.Transition;
 
     private battlerData:ResponsePackage.RespBattler;
+    private followTarget:Laya.Sprite3D;
 
-    constructor(root,camera) {
-        this.root=root;
+    private careerType:CareerType;
+    private ballType:BallType;
+
+    constructor(content,camera) {
+        this.content=content;
         this.camera=camera;
        
     }
@@ -26,9 +34,10 @@ export class UIBallBattleMsg {
     public Show(data){
         this.battlerData=data;
         this.component=fgui.UIPackage.createObject("battle_package","battle_ck3d_comp").asCom;
-        fgui.GRoot.inst.addChild(this.component);
+        this.content.addChild(this.component);
         this.InitComp();
         this.InitData();
+        
     }
     
 
@@ -36,24 +45,31 @@ export class UIBallBattleMsg {
         this.idText=this.component.getChild("battle_playerid_txt").asTextField;
         this.hpSlider=this.component.getChild("battle_ckhp_bar").asSlider;
         this.hatLoader=this.component.getChild("battle_class_comp").asCom.getChild("lobby_function_icon") as fgui.GLoader;
-        this.weaponLoader=this.component.getChild("battle_ckweapon_comp").asCom.getChild("lobby_ckweapon_icon") as fgui.GLoader;
+        
+        this.weaponRotateComp=this.component.getChild("battle_ckweapon_comp").asCom;
+        this.weaponLoader=this.weaponRotateComp.getChild("weapon_comp").asCom.getChild("lobby_ckweapon_icon") as fgui.GLoader;
         this.beltLoader=this.component.getChild("battle_ckquality_comp").asCom.getChild("lobby_ckquality_icon") as fgui.GLoader;
 
+        this.meleeAnim=this.weaponRotateComp.getTransition("weapon_melee_atk_anim");
+        this.arrowAnim=this.weaponRotateComp.getTransition("weapon_arrow_atk_anim");
     }
 
 
     private InitData()
     {
-        this.idText.text=this.battlerData.roleInfo.id;
+        this.careerType=this.battlerData.battleCk.professionList[0];
+        this.ballType=this.battlerData.battleCk.lineage;
+        this.idText.text=this.battlerData.roleBaseInfo.name;
         this.hpSlider.max=this.battlerData.battleCk.maxHp;
         this.ChangeHp(this.battlerData.battleCk.maxHp);
-        this.ChangeCareer(this.battlerData.battleCk.professionList[0]);
+        this.ChangeCareer(this.careerType);
         this.ChangeBelt(this.battlerData.battleCk.quality);
 
     }
 
-    public StartFollow()
+    public StartFollow(followTarget)
     {
+        this.followTarget=followTarget;
         Laya.timer.loop(20,this,this.Follow);
 
     }
@@ -63,7 +79,7 @@ export class UIBallBattleMsg {
    
     private Follow(){
 
-       this.camera.viewport.project(this.root.transform.position,this.camera.projectionViewMatrix,this.currentPos)
+       this.camera.viewport.project(this.followTarget.transform.position,this.camera.projectionViewMatrix,this.currentPos)
        this.component.displayObject.pos(this.currentPos.x,this.currentPos.y);
     }
 
@@ -86,11 +102,43 @@ export class UIBallBattleMsg {
 
     public ChangeHp(value)
     {
-        // console.log("[UIBallBattleMsg]",this.battlerData.battleCk.id,this.battlerData.battleCk.maxHp,value);
-        
         this.hpSlider.value=value;
 
     }
+
+    public RotateWeapon(angle:number){
+        // this.weaponRotateComp.displayObject.rotation=angle;
+        this.weaponRotateComp.rotation=angle;
+
+    }
+
+
+    public PlayAtkAnim()
+    {
+        switch (this.careerType) {
+            case CareerType.Axe:
+                this.meleeAnim.play();
+                break;
+            case CareerType.Bow:
+                this.arrowAnim.play();
+                break;
+            case CareerType.Staff:
+                this.meleeAnim.play();
+                break;
+            case CareerType.Sword:
+                this.meleeAnim.play();
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    public HurtAnim()
+    {
+
+    }
+
 
 
     public Destroy()

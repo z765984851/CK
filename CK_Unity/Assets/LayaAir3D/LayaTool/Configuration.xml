@@ -2,7 +2,7 @@
 <LayaExportSetting>
   <config>1</config>
   <config1>
-    <FirstlevelMenu>0</FirstlevelMenu>
+    <FirstlevelMenu>1</FirstlevelMenu>
     <Scenes>False</Scenes>
     <ScenesDir>
     </ScenesDir>
@@ -216,7 +216,7 @@
     <ScrollPositionY>0</ScrollPositionY>
   </config5>
   <language>1</language>
-  <time>1650939070</time>
+  <time>1652264149</time>
   <saveAcount>
   </saveAcount>
   <savePassWorld>

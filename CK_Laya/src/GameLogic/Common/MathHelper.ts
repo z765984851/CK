@@ -27,4 +27,9 @@ export class MathHelper {
         value=Number.parseFloat(value.toFixed(exact));
         return value;
     }
+
+    //add 0 before the number til the length
+    public PrefixInteger(num, length) {
+        return (Array(length).join('0') + num).slice(-length);
+    }
 }

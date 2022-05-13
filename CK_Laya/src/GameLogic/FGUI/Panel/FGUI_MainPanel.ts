@@ -1,6 +1,7 @@
 import { CK_EventCode } from "../../Common/CK_EventCode";
 import { UILobby } from "../Component/UILobby";
 import { UIMatch } from "../Component/UIMatch";
+import { UIBred } from "../Component/UIBred";
 import { CK_FGUIConfig, CK_UIConfig, CK_UIType } from "../CK_FGUIConfig";
 
 export class FGUI_MainPanel implements FGUIBase{
@@ -17,11 +18,13 @@ export class FGUI_MainPanel implements FGUIBase{
 
     private lobbyPanel:UILobby=null;
     private matchPanel:UIMatch=null;
+    private bredPanel:UIBred=null;
     private panelMap=new Map();
 
     private panelController:fgui.Controller;
     private matchComp:fgui.GComponent;
     private lobbyComp:fgui.GComponent;
+    private bredComp:fgui.GComponent;
 
     Init() {
         if (this.IsInitFinish==false) {
@@ -66,16 +69,19 @@ export class FGUI_MainPanel implements FGUIBase{
        
         this.matchComp=this.Content.getChild("match_comp").asCom;
         this.lobbyComp=this.Content.getChild("lobby_comp").asCom;
+        this.bredComp=this.Content.getChild("bred_comp").asCom;
         this.panelController=this.Content.getController("main_ctrl");
 
     }
 
     private InitMap()
     {
-       this.lobbyPanel=new UILobby(this.lobbyComp)
-       this.matchPanel=new UIMatch(this.matchComp)
-       this.panelMap.set(MainPanelType.Lobby, this.lobbyPanel)
-       this.panelMap.set(MainPanelType.Match,this.matchPanel)
+       this.lobbyPanel=new UILobby(this.lobbyComp);
+       this.matchPanel=new UIMatch(this.matchComp);
+       this.bredPanel=new UIBred(this.bredComp);
+       this.panelMap.set(MainPanelType.Lobby, this.lobbyPanel);
+       this.panelMap.set(MainPanelType.Match,this.matchPanel);
+       this.panelMap.set(MainPanelType.Bred,this.bredPanel);
     }
 
     public ChangePanel(panelType:MainPanelType,args?:any)
@@ -96,4 +102,5 @@ export class FGUI_MainPanel implements FGUIBase{
 export enum MainPanelType {
     Lobby=0,
     Match=1,
+    Bred=2,
 }

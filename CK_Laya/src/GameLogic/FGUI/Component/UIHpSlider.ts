@@ -1,10 +1,10 @@
 export class UIHpSlider {
 
-    private root:Laya.Sprite3D;
+    private content:Laya.Sprite3D;
     private camera:Laya.Camera;
     private component:fgui.GComponent;
-    constructor(root,camera) {
-        this.root=root;
+    constructor(content,camera) {
+        this.content=content;
         this.camera=camera;
     }
 
@@ -21,7 +21,7 @@ export class UIHpSlider {
 
     //    this.camera.worldToViewportPoint(this.root.transform.position,this.currentPos);
     //    console.log(this.currentPos);
-       this.camera.viewport.project(this.root.transform.position,this.camera.projectionViewMatrix,this.currentPos)
+       this.camera.viewport.project(this.content.transform.position,this.camera.projectionViewMatrix,this.currentPos)
        this.component.displayObject.pos(this.currentPos.x,this.currentPos.y);
     }
 

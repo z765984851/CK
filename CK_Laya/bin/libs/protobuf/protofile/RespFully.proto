@@ -17,48 +17,8 @@ message RespFully {
  RespTeam respTeam=7;
 // 比赛模块
  RespMatch respMatch=8;
-}
-message RespCk {  
-// ck列表
-repeated RespCkInfo roleCks=1;
-}
-message RespCkInfo {  
-// id
- sint32 id=1;
-// ck的序号
- sint32 seq=2;
-// ck名称
- string name=3;
-// 是否被锁
- bool lock=4;
-// 出生时间
- sint64 birthTime=5;
-// 投放批次
- string launch=6;
-// 等级
- sint32 level=7;
-// 寿命
- sint32 life=8;
-// 品质
- sint32 quality=9;
-// 血统
- sint32 lineage=10;
-// 力量
- sint32 strength=11;
-// 智力
- sint32 wisdom=12;
-// 敏捷
- sint32 agile=13;
-// 体质
- sint32 health=14;
-// 精神力
- sint32 spirit=15;
-// 运气
- sint32 luck=16;
-// 职能
-repeated sint32 professionList=17;
-// 专长
-repeated sint32 specialtyList=18;
+// 背包模块
+ RespDepot respDepot=9;
 }
 message RespFight {  
 // 战斗结果
@@ -74,29 +34,41 @@ repeated RespBattler battlerList=3;
 // 帧列表
 repeated RespFrame frameList=4;
 // 结算信息
-repeated RespRoleClearing clearingList=5;
+ RespFightClearing fightClearing=5;
 }
 message RespBattler {  
 // 所属阵营
  sint32 camp=1;
 // 玩家的基础信息
- RespRoleBaseInfo roleInfo=2;
+ RespRoleBaseInfo roleBaseInfo=2;
 // ck属性
  RespBattleCk battleCk=3;
 }
 message RespRoleBaseInfo {  
 // id
  string id=1;
-// 服务器id
- string sid=2;
 // 名字
- string name=3;
-// 头像
- sint32 img=4;
+ string name=2;
 // 链类型
- sint32 chain=5;
+ sint32 chain=3;
 // 段位
- sint32 division=6;
+ sint32 division=4;
+// ck的一个基本的结构
+ RespCkCardInfo ckCardInfo=5;
+}
+message RespCkCardInfo {  
+// 玩家ID
+ string rid=1;
+// ck的序号
+ sint32 seq=2;
+// ck等级
+ sint32 lv=3;
+// ck品质
+ sint32 quality=4;
+// ck血统
+ sint32 lineage=5;
+// ck的职能
+repeated sint32 professionList=6;
 }
 message RespBattleCk {  
 // id
@@ -134,17 +106,23 @@ repeated sint32 specialtyList=12;
 // posY
  sint32 posY=17;
 }
+message RespFightClearing {  
+// 胜利阵营
+ sint32 winCamp=1;
+// 结算列表
+repeated RespRoleClearing clearingList=2;
+}
 message RespRoleClearing {  
-// 玩家ID
+// card
  string rid=1;
-// 排名，只有个人战有用
- sint32 rank=2;
-// 输赢：小组赛的时候读取这个
- bool win=3;
+// 阵营：生存赛是6个阵营，小组赛是两个阵营
+ sint32 camp=2;
 // 获得gcke
- sint32 gcke=4;
+ sint32 gcke=3;
 // 积分：可能是负数
- sint32 integral=5;
+ sint32 integral=4;
+// 排名
+ sint32 rank=5;
 }
 message RespFrame {  
 // 当前第几帧
@@ -155,16 +133,18 @@ repeated RespOtherEntityFrameInfo otherEntityFrameList=2;
 repeated RespCkFrameInfo ckFrameInfoList=3;
 }
 message RespOtherEntityFrameInfo {  
+// id
+ sint64 id=1;
 // type
- sint32 type=1;
+ sint32 type=2;
 // 当前坐标
- RespXY posXY=2;
+ RespXY posXY=3;
 // 朝向坐标
- RespXY faceXY=3;
+ RespXY faceXY=4;
 // isAtk
- bool isCreate=4;
+ bool isCreate=5;
 // isDestroy
- bool isDestroy=5;
+ bool isDestroy=6;
 }
 message RespXY {  
 // x
@@ -198,65 +178,35 @@ message RespHit {
 // 伤害值
  sint32 value=4;
 }
-message RespRole {  
-// 玩家完整的信息结构
- RespRoleInfo roleInfo=1;
-// 角色简要信息结构
- RespRoleBaseInfo roleBaseInfo=2;
-// 角色更新结构
- RespRoleOp roleOp=3;
-// 是否创建角色
- RespBoolean createRole=4;
+message RespDepot {  
+// 货币
+repeated RespIntKeyLongVal currencyInfo=1;
+// 计数类型
+repeated RespIntKeyIntVal countItemInfo=2;
+// 货币更新
+repeated RespIntKeyLongVal currencyOp=3;
+// 计数类型更新
+repeated RespIntKeyIntVal countItemOp=4;
+// 奖励
+ RespPrize respPrize=5;
 }
-message RespRoleInfo {  
-// id
- string id=1;
-// 服务器id
- string sid=2;
-// 名字
- string name=3;
-// 头像
- sint32 img=4;
-// email
- string email=5;
-// 段位
- sint32 division=6;
-// 积分
- sint32 integral=7;
-// 服务器时间
- sint64 serverTime=8;
-// 游戏内的cke
- sint32 gcke=9;
-// 已经上链的cke
- sint32 cke=10;
-// 上链的ckt
- sint32 ckt=11;
+message RespPrize {  
+// 货币奖励
+repeated RespIntKeyLongVal currencyPrize=1;
+// 计数物品奖励
+repeated RespIntKeyIntVal countItemPrize=2;
 }
-message RespRoleOp {  
-// cke变化
- RespInt ckeOp=1;
-// ckt变化
- RespInt cktOp=2;
+message RespIntKeyIntVal {  
+// key
+ sint32 key=1;
+// value
+ sint32 value=2;
 }
-message RespInt {  
- sint32 value=1;
-}
-message RespBoolean {  
- bool value=1;
-}
-message RespTeam {  
-// 角色队伍信息组
-repeated RespTeamInfo teamList=1;
-// 队伍信息改变
-repeated RespTeamInfo teamOp=2;
-}
-message RespTeamInfo {  
-// 队伍id
- sint32 id=1;
-// 队伍类型
- sint32 type=2;
-// ckId
- sint32 ckId=3;
+message RespIntKeyLongVal {  
+// key
+ sint32 key=1;
+// value
+ sint64 value=2;
 }
 message RespMail {  
 // 邮件列表
@@ -306,8 +256,49 @@ message RespFunc {
 // param3
  int32 param3=6;
 }
-message RespLong {  
- sint64 value=1;
+message RespRole {  
+// 玩家完整的信息结构
+ RespRoleInfo roleInfo=1;
+// 角色简要信息结构
+ RespRoleBaseInfo roleBaseInfo=2;
+// 角色更新结构
+ RespRoleOp roleOp=3;
+// 是否创建角色
+ RespBoolean createRole=4;
+}
+message RespRoleInfo {  
+// id
+ string id=1;
+// 服务器id
+ string sid=2;
+// 名字
+ string name=3;
+// 头像
+ sint32 img=4;
+// email
+ string email=5;
+// 段位
+ sint32 division=6;
+// 积分
+ sint32 integral=7;
+// 服务器时间
+ sint64 serverTime=8;
+// 游戏内的cke
+ sint32 gcke=9;
+// 已经上链的cke
+ sint32 cke=10;
+// 上链的ckt
+ sint32 ckt=11;
+}
+message RespBoolean {  
+ bool value=1;
+}
+message RespRoleOp {  
+// cke变化
+ RespInt gckeOp=1;
+}
+message RespInt {  
+ sint32 value=1;
 }
 message RespMatch {  
 // 玩家的一些比赛数据
@@ -325,6 +316,16 @@ message RespRoomRole {
 // 玩家信息
  RespRoleBaseInfo roleBaseInfo=2;
 }
+message RespChampionship {  
+// 当前或者即将开的id
+ sint32 cid=1;
+// 小组战是否结束
+ bool teamEnd=2;
+// 自由站是否结束
+ bool survivalEnd=3;
+// 开始时间
+ sint64 startTime=4;
+}
 message RespRoleMatchInfo {  
 // 战斗总次数
  sint32 fightCount=1;
@@ -337,15 +338,57 @@ message RespRoleMatchInfo {
 // 连败
  sint32 loseStreak=5;
 }
-message RespChampionship {  
-// 当前或者即将开的id
- sint32 cid=1;
-// 小组战是否结束
- bool teamEnd=2;
-// 自由站是否结束
- bool survivalEnd=3;
-// 开始时间
- sint64 startTime=4;
+message RespCk {  
+// ck列表
+repeated RespCkInfo roleCks=1;
+// 更新
+repeated RespCkInfo opList=2;
+}
+message RespCkInfo {  
+// id
+ sint32 id=1;
+// ck的序号
+ sint32 seq=2;
+// 是否被锁
+ bool lock=3;
+// 出生时间
+ sint64 birthTime=4;
+// 投放批次
+ string launch=5;
+// 等级
+ sint32 level=6;
+// 寿命
+ sint32 life=7;
+// 最大寿命
+ sint32 maxLife=8;
+// 品质
+ sint32 quality=9;
+// 血统
+ sint32 lineage=10;
+// 力量
+ sint32 strength=11;
+// 智力
+ sint32 wisdom=12;
+// 敏捷
+ sint32 agile=13;
+// 体质
+ sint32 health=14;
+// 精神力
+ sint32 spirit=15;
+// 运气
+ sint32 luck=16;
+// 等级上限
+ sint32 levelLimit=17;
+// 未分配属性点
+ sint32 propertyNum=18;
+// 职能
+repeated sint32 professionList=19;
+// dna自带的专长
+repeated sint32 dnaSpecialtyList=20;
+// 升级获得的专长
+repeated sint32 specialtyList=21;
+// 未选择的专长
+repeated sint32 chooseSpecialtyList=22;
 }
 message RespChat {  
 // 聊天缓存
@@ -364,4 +407,21 @@ message RespChatMsg {
  int64 time=4;
 // 额外参数
 repeated string params=5;
+}
+message RespTeam {  
+// 角色队伍信息组
+repeated RespTeamInfo teamList=1;
+// 队伍信息改变
+repeated RespTeamInfo teamOp=2;
+}
+message RespTeamInfo {  
+// 队伍id
+ sint32 id=1;
+// 队伍类型
+ sint32 type=2;
+// ckId
+ sint32 ckId=3;
+}
+message RespLong {  
+ sint64 value=1;
 }

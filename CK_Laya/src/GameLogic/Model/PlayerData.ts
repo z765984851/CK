@@ -1,3 +1,4 @@
+import { CK_EventCode } from "../Common/CK_EventCode";
 import { TeamType } from "../Common/TeamType";
 
 export class PlayerData {
@@ -8,6 +9,7 @@ export class PlayerData {
 
     public CKE:number;
     public CKT:number;
+    public GCKE:number;
 
     public ID:string;
     public NoramlaTeam:ResponsePackage.RespTeamInfo;
@@ -25,12 +27,11 @@ export class PlayerData {
 
     public HandleData()
     {
-        
         this.BallInPackage = this.data.respCk.roleCks;
         this.CKE = this.data.respRole.roleInfo.cke;
         this.CKT = this.data.respRole.roleInfo.ckt;
+        this.GCKE = this.data.respRole.roleInfo.gcke;
         this.ID = this.data.respRole.roleInfo.id;
-        
         this.teamList=this.data.respTeam.teamList;
         this.UpdateNormalTeam(this.GetTeam(TeamType.NormalTeam));
         this.UpdateRank(this.data.respRole.roleInfo.division,this.data.respRole.roleInfo.integral)
@@ -78,6 +79,61 @@ export class PlayerData {
 
     }
 
+    public UpdatePlayerData(recvData:ResponsePackage.RespFully)
+    {
+        this.UpdateBallData(recvData);
+        this.UpdateRoleInfo(recvData);
+        this.UpdateTeamInfo(recvData);
+    }
 
-    
+    private UpdateBallData(recvData:ResponsePackage.RespFully)
+    {
+        if(recvData.respCk == null)
+            return
+        if(recvData.respCk.opList == null)
+            return
+        recvData.respCk.opList.forEach(element => 
+        {
+            let isHave = false
+            this.BallInPackage.forEach( (ball,idx) =>
+            {
+                if(element.id == ball.id)
+                {
+                    isHave = true;
+                    this.BallInPackage[idx] = element;
+                }
+            });
+            if(!isHave)
+                this.BallInPackage.push(element);
+        });
+    }
+
+    private UpdateRoleInfo(recvData:ResponsePackage.RespFully)
+    {
+        if(recvData.respRole == null)
+            return
+        if(recvData.respRole.roleOp == null)
+            return
+        if(recvData.respRole.roleOp.gckeOp != null && recvData.respRole.roleOp.gckeOp.value != null)
+            this.GCKE = recvData.respRole.roleOp.gckeOp.value;
+        Laya.stage.event(CK_EventCode.UpdateRoleInfo);
+    }
+
+    private UpdateTeamInfo(recvData:ResponsePackage.RespFully)
+    {
+        if(recvData.respTeam == null)
+            return
+        if(recvData.respTeam.teamOp == null)
+            return
+        recvData.respTeam.teamOp.forEach(teamNew => {
+            this.teamList.forEach(teamOld => {
+                if(teamOld.id == teamNew.id)
+                {
+                    teamOld.ckId = teamNew.ckId;
+                    teamOld.type = teamNew.type;
+                }
+            });
+        });
+        this.UpdateNormalTeam(this.GetTeam(TeamType.NormalTeam));
+    }
 }

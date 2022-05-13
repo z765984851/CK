@@ -61,9 +61,9 @@
     "clearReleaseDir": true,
     "compile": true,
     "forceCompile": false,
-    "onlyIndexJS": true,
+    "onlyIndexJS": false,
     "useMinJsLibs": true,
     "es6toes5": false,
     "projectType": "ts",
-    "pubTime": 1650594509580
+    "pubTime": 1652169959757
 }

@@ -7,7 +7,7 @@ import { RequestCMD } from "../Common/RequestCMD";
 import { CK_UIType } from "../FGUI/CK_FGUIConfig";
 import { MainPanelType } from "../FGUI/Panel/FGUI_MainPanel";
 import { EventProperty } from "../Model/LoadProgressProperty";
-import { BallFactory } from "./BallFactory";
+import { BallFactory } from "../Battle/BallFactory";
 import { DataManager } from "./DataManager";
 import { FGUIManager } from "./FGUIManager";
 import { LoginManager } from "./LoginManager";

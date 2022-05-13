@@ -6,17 +6,20 @@ export class CameraComponent {
         this.camera=camera;
     }
     
-    StartFollow(followTarget){
+    SetFollowTarget(followTarget){
 
         this.followTarget=followTarget;
-        Laya.timer.frameLoop(1,this,this.Follow);
+        // Laya.timer.frameLoop(1,this,this.Follow);
     }
 
-    StopFollow(){
-        Laya.timer.clear(this,this.Follow);
-    }
-    private Follow()
+    // StopFollow(){
+    //     Laya.timer.clear(this,this.Follow);
+    // }
+
+
+    public Follow()
     {
+       
         this.camera.transform.position=new Laya.Vector3(this.followTarget.transform.position.x,4,this.followTarget.transform.position.z);
     }
 
